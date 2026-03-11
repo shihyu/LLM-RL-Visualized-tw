@@ -1,0 +1,14 @@
+[book]
+title = "圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜"
+authors = ["余昌葉"]
+language = "zh-TW"
+multilingual = false
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html]
+default-theme = "light"
+git-repository-url = "https://github.com/changyeyu/LLM-RL-Visualized"
