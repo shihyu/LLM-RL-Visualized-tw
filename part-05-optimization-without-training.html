@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第5部分：免訓練的大型模型最佳化技術 - 圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/changyeyu/LLM-RL-Visualized" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第5部分免訓練的大型模型最佳化技術"><a class="header" href="#第5部分免訓練的大型模型最佳化技術">第5部分：免訓練的大型模型最佳化技術</a></h1>
+<h2 id="免訓練的最佳化技術cotchain-of-thought與傳統問答的對比"><a class="header" href="#免訓練的最佳化技術cotchain-of-thought與傳統問答的對比">【免訓練的最佳化技術】CoT（Chain of Thought）與傳統問答的對比</a></h2>
+<ul>
+<li><strong>CoT</strong>（Chain of Thought，<strong>思維鏈</strong>）由Jason Wei等研究者於2022年在Google期間提出，是大型模型領域的一項重要技術創新，並迅速被廣泛應用於學術研究和實際場景。</li>
+<li>其<strong>核心思想</strong>是透過顯式地分步推理，提升模型在複雜推理任務中的表現。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E4%B8%8E%E4%BC%A0%E7%BB%9F%E9%97%AE%E7%AD%94%E7%9A%84%E5%AF%B9%E6%AF%94.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E4%B8%8E%E4%BC%A0%E7%BB%9F%E9%97%AE%E7%AD%94%E7%9A%84%E5%AF%B9%E6%AF%94.png" alt="【免訓練的最佳化技術】CoT與傳統問答的對比" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術cotself-consistency-cottotgot-87"><a class="header" href="#免訓練的最佳化技術cotself-consistency-cottotgot-87">【免訓練的最佳化技術】CoT、Self-consistency CoT、ToT、GoT <sup>[<a href="references.html">87</a>]</sup></a></h2>
+<ul>
+<li>在CoT展現其潛力後，迅速<strong>衍生</strong>出多種相關技術，例如ToT、GoT、Self-consistency CoT、Zero-shot-CoT、Auto-CoT、MoT、XoT等
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E3%80%81Self-consistencyCoT%E3%80%81ToT%E3%80%81GoT.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E3%80%81Self-consistencyCoT%E3%80%81ToT%E3%80%81GoT.png" alt="【免訓練的最佳化技術】CoT、Self-consistencyCoT、ToT、GoT" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術窮舉搜尋exhaustive-search"><a class="header" href="#免訓練的最佳化技術窮舉搜尋exhaustive-search">【免訓練的最佳化技術】窮舉搜尋（Exhaustive Search）</a></h2>
+<ul>
+<li>Token的生成過程可以形象地表示為一個以詞表大小 V=105 為基數的<strong>多叉樹</strong>結構。理論上，採用窮舉搜尋（Exhaustive Search）的方法能夠獲得全域性最優解。然而，窮舉搜尋的計算代價極高。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E7%A9%B7%E4%B8%BE%E6%90%9C%E7%B4%A2%EF%BC%88Exhaustive%20Search%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E7%A9%B7%E4%B8%BE%E6%90%9C%E7%B4%A2%EF%BC%88Exhaustive%20Search%EF%BC%89.png" alt="【免訓練的最佳化技術】窮舉搜尋（Exhaustive Search）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術貪婪搜尋greedy-search"><a class="header" href="#免訓練的最佳化技術貪婪搜尋greedy-search">【免訓練的最佳化技術】貪婪搜尋（Greedy Search）</a></h2>
+<ul>
+<li><strong>貪婪搜尋</strong>（Greedy Search）在生成下一個Token（詞元）時，每次都會選擇當前<strong>機率最高</strong>的一個Token，不考慮生成序列的全域性最優性或多樣性，然後繼續對下一個Token位置執行相同的操作。儘管這種方法簡單快速，但生成的內容可能過早陷入區域性最優，<strong>缺乏多樣性</strong>。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E8%B4%AA%E5%A9%AA%E6%90%9C%E7%B4%A2%EF%BC%88Greedy%20Search%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E8%B4%AA%E5%A9%AA%E6%90%9C%E7%B4%A2%EF%BC%88Greedy%20Search%EF%BC%89.png" alt="【免訓練的最佳化技術】貪婪搜尋（Greedy Search）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術波束搜尋beam-search"><a class="header" href="#免訓練的最佳化技術波束搜尋beam-search">【免訓練的最佳化技術】波束搜尋（Beam Search）</a></h2>
+<ul>
+<li><strong>Beam Search</strong>（波束搜尋）在每一步生成時，不僅僅選擇一個最優Token（詞元），而是保留<strong>多個候選</strong>序列（稱為Beam，即波束），其餘的路徑則被剪枝。這些候選序列會在後續步驟中繼續擴充套件，直到生成結束。</li>
+<li>最終，從所有候選序列中選擇得分<strong>最高</strong>的一條作為最終輸出。Beam的數量（num_beams引數）越大，搜尋空間越廣，生成結果越<strong>接近全域性最優</strong>，但計算成本也隨之增加。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E6%B3%A2%E6%9D%9F%E6%90%9C%E7%B4%A2%EF%BC%88Beam%20Search%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E6%B3%A2%E6%9D%9F%E6%90%9C%E7%B4%A2%EF%BC%88Beam%20Search%EF%BC%89.png" alt="【免訓練的最佳化技術】波束搜尋（Beam Search）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術多項式取樣multinomial-sampling"><a class="header" href="#免訓練的最佳化技術多項式取樣multinomial-sampling">【免訓練的最佳化技術】多項式取樣（Multinomial Sampling）</a></h2>
+<ul>
+<li><strong>多項式取樣</strong>（Multinomial Sampling）是生成式模型中一種常見的<strong>隨機取樣</strong>方法，生成下一個Token時，以模型預測的機率分佈為依據，在機率分佈中“按機率大小”隨機抽取Token（而非等機率隨機抽樣）。</li>
+<li>包含Top-K、Top-P等
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%A4%9A%E9%A1%B9%E5%BC%8F%E9%87%87%E6%A0%B7%EF%BC%88Multinomial%20Sampling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%A4%9A%E9%A1%B9%E5%BC%8F%E9%87%87%E6%A0%B7%EF%BC%88Multinomial%20Sampling%EF%BC%89.png" alt="【免訓練的最佳化技術】多項式取樣（Multinomial Sampling）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術top-k取樣top-k-sampling"><a class="header" href="#免訓練的最佳化技術top-k取樣top-k-sampling">【免訓練的最佳化技術】Top-K取樣（Top-K Sampling）</a></h2>
+<ul>
+<li><strong>Top-K取樣</strong>（Top-K Sampling）是一種在生成任務中常用的策略，類似於<strong>多項式取樣</strong>，但其取樣候選池經過限制。使用Top-K取樣時，每一步生成Token時僅保留模型預測機率最高的<strong>前K個</strong>詞，並從中按機率分佈進行隨機抽樣。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-K%E9%87%87%E6%A0%B7%EF%BC%88Top-K%20Sampling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-K%E9%87%87%E6%A0%B7%EF%BC%88Top-K%20Sampling%EF%BC%89.png" alt="【免訓練的最佳化技術】Top-K取樣（Top-K Sampling）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術top-p取樣top-p-sampling"><a class="header" href="#免訓練的最佳化技術top-p取樣top-p-sampling">【免訓練的最佳化技術】Top-P取樣（Top-P Sampling）</a></h2>
+<ul>
+<li><strong>Top-P取樣</strong>（Top-P Sampling），又稱<strong>核取樣</strong>（Nucleus Sampling），該方法透過動態選擇一個最小候選集合，使得候選詞的機率和達到設定的機率閾值P，然後，在該候選集合中隨機取樣。與Top-K取樣相比，Top-P取樣能夠根據機率累積<strong>動態調整</strong>候選集的大小。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-P%E9%87%87%E6%A0%B7%EF%BC%88Top-P%20Sampling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-P%E9%87%87%E6%A0%B7%EF%BC%88Top-P%20Sampling%EF%BC%89.png" alt="【免訓練的最佳化技術】Top-P取樣（Top-P Sampling）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術rag檢索增強生成retrieval-augmented-generation"><a class="header" href="#免訓練的最佳化技術rag檢索增強生成retrieval-augmented-generation">【免訓練的最佳化技術】RAG（檢索增強生成,Retrieval-Augmented Generation）</a></h2>
+<ul>
+<li><strong>RAG</strong>（Retrieval-Augmented Generation，檢索增強生成）是一種結合資訊檢索與模型生成的技術，透過引入外部知識庫或檢索系統，增強生成式模型的知識範圍和回答準確性。</li>
+<li>Meta（前身為Facebook AI Research）等研究團隊於2020年在其發表的工作中提出了RAG，並顯著提升了知識密集型NLP任務的效能。</li>
+<li>RAG的原理如圖所示，整體可分為兩部分——離線構建環節和線上服務環節。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91RAG%EF%BC%88%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91RAG%EF%BC%88%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%89.png" alt="【免訓練的最佳化技術】RAG（檢索增強生成）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術功能呼叫function-calling"><a class="header" href="#免訓練的最佳化技術功能呼叫function-calling">【免訓練的最佳化技術】功能呼叫（Function Calling）</a></h2>
+<ul>
+<li><strong>功能呼叫</strong>（Function Calling），也稱工具呼叫（Tool Use），是指在基於大型模型完成任務的過程中，Agent透過特定機制呼叫外部物件，獲取返回結果後將其與原始Prompt一起輸入到大型模型，由大型模型進一步推理並完成特定任務。</li>
+<li>被呼叫的物件可以是遠端API、資料庫查詢介面、本地函式或工具外掛（Plugin）等。</li>
+<li>下圖展示了功能與工具呼叫技術的執行流程。其中，Agent是一個本地執行的軟體系統，大型模型是其子模組之一。Agent還包括使用者請求解析模組、引數處理模組、工具呼叫模組、呼叫結果解析模組及與大型模型互動的元件等。</li>
+</ul>
+<p><a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%8A%9F%E8%83%BD%E8%B0%83%E7%94%A8%EF%BC%88Function%20Calling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%8A%9F%E8%83%BD%E8%B0%83%E7%94%A8%EF%BC%88Function%20Calling%EF%BC%89.png" alt="【免訓練的最佳化技術】功能呼叫（Function Calling）" /></a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="part-04-dpo.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="part-06-rl-basics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="part-04-dpo.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="part-06-rl-basics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第8部分：RLHF 與 RLAIF - 圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/changyeyu/LLM-RL-Visualized" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第8部分rlhf-與-rlaif"><a class="header" href="#第8部分rlhf-與-rlaif">第8部分：RLHF 與 RLAIF</a></h1>
+<h2 id="rlhf與rlaif語言模型的強化學習建模"><a class="header" href="#rlhf與rlaif語言模型的強化學習建模">【RLHF與RLAIF】語言模型的強化學習建模</a></h2>
+<ul>
+<li>大型模型（LLM、MLLM、VLM等）為何可以用RL正規化進行訓練？ ——這可能是大型模型RL方向最基礎的一個問題——如何將大型模型的生成過程<strong>建模</strong>為一個強化學習問題？
+如圖所示，以下是生成式語言模型中的一些<strong>關鍵概念</strong>在強化學習正規化下，具體的定義如下：</li>
+<li>（1）<strong>動作</strong>（Action, A）：動作指模型在每個時間步生成的一個Token。例如，當模型從詞表中選擇下一個輸出詞時，這一選擇就是一個動作。</li>
+<li>（2）<strong>動作空間</strong>（Action Space）：動作空間是語言模型的<strong>詞表</strong>（Vocabulary），即所有可能的Token的集合，通常包含約10萬級的詞元。</li>
+<li>（3）<strong>智慧體</strong>（Agent）：智慧體是負責決策的實體，即LLM。它負責接受文字輸入並生成一系列文字或其機率分佈。</li>
+<li>（4）<strong>策略</strong>（Policy）：策略是LLM對應的模型<strong>引數</strong>，決定了模型生成文字的具體規則和行為。</li>
+<li>（5）<strong>狀態</strong>（State, S）：狀態是模型當前的輸入上下文，通常由<strong>已生成</strong>的Token序列構成。例如，在針對Prompt為“你是誰？”的生成過程中，狀態會隨著生成的Token動態更新，形成如“你是誰？”、“你是誰？我”、“你是誰？我是”等狀態。</li>
+<li>（6）<strong>回合</strong>（Episode）：回合是<strong>一次完整</strong>的文字生成過程，從初始輸入（例如一個問題或指令）開始，到模型生成結束（通常以特殊符號<EOS>或<END>表示）。</li>
+<li>（7）<strong>價值</strong>（Value, V）：價值表示在特定狀態下或採取特定動作後，模型未來所能獲得的<strong>預期回報</strong>。它衡量當前動作（Token或詞）的選擇質量及其後續可能動作的潛在影響，通常由單獨的價值網路進行估計。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%BB%BA%E6%A8%A1.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%BB%BA%E6%A8%A1.png" alt="【RLHF與RLAIF】語言模型的強化學習建模" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifrlhf的兩階段式訓練流程"><a class="header" href="#rlhf與rlaifrlhf的兩階段式訓練流程">【RLHF與RLAIF】RLHF的兩階段式訓練流程</a></h2>
+<p>RLHF訓練可以分為<strong>兩個階段</strong>：</p>
+<ul>
+<li>（1）階段一（SFT，<strong>訓練獎勵模型</strong>）：根據使用者輸入（Prompt），生成多種候選回答，並由人工對這些回答進行偏好標註。這些標註資料作為訓練樣本，用於監督學習訓練獎勵模型，使其能夠預測不同回答的偏好得分。</li>
+<li>（2）階段二（RL，基於PPO的<strong>強化學習</strong>）：聯合策略模型、參考模型、獎勵模型和價值模型，基於PPO等RL演算法進行強化學習訓練。透過迭代最佳化，策略模型逐步提升生成內容的質量，更加符合人類的需求和價值觀。
+兩個階段的<strong>樣本</strong>如下：</li>
+<li>（1）獎勵模型樣本：獎勵模型的訓練依賴於<strong>偏好資料集</strong>（Prompt + 回答），其構建和清洗過程詳見《大型模型演算法》3.2.1節和3.2.3節。</li>
+<li>（2）PPO訓練的樣本：該階段的訓練樣本<strong>僅需要Prompt</strong>即可，無需回答。如《大型模型演算法》5.1.1節所述，強化學習透過智慧體與環境的互動進行學習，無需明確的標籤（回答）。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%E7%9A%84%E4%B8%A4%E9%98%B6%E6%AE%B5%E5%BC%8F%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%E7%9A%84%E4%B8%A4%E9%98%B6%E6%AE%B5%E5%BC%8F%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B.png" alt="【RLHF與RLAIF】RLHF的兩階段式訓練流程" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型rm的結構"><a class="header" href="#rlhf與rlaif獎勵模型rm的結構">【RLHF與RLAIF】獎勵模型（RM）的結構</a></h2>
+<ul>
+<li>獎勵模型（Reward Model, <strong>RM</strong>）在RLHF訓練中起著關鍵作用，與價值模型共同指導策略模型的最佳化方向。</li>
+<li>獎勵模型的核心<strong>作用</strong>是為特定Prompt對應的回答結果輸出一個獎勵分數，用於指導策略模型的最佳化。
+通常，獎勵模型是在經過SFT的LLM基礎上進行小幅<strong>改造</strong>而來。由於SFT之後的模型已具備豐富的語言處理能力，直接複用其底層的Transformer結構可以顯著減少訓練時間和資料需求。改造過程如圖所示：</li>
+<li>（1）<strong>共享</strong>底層結構：獎勵模型複用了LLM的底層結構及其權值，包括所有的Transformer Decoder層和Embedding層，從而確保兩者具備一致的隱藏狀態表示能力。這種共享設計不僅<strong>降低</strong>了訓練複雜度，還顯著減少了從零訓練所需的計算資源和資料需求。</li>
+<li>（2）<strong>替換</strong>輸出頭：將LLM原有的頂層線性層（LM Head）<strong>替換</strong>為全新的線性層（Reward Head）。如《大型模型演算法》1.1.3節所述，LLM的最後一層通常是一個線性投影層（LM Head），其輸入維度為隱藏狀態大小（hidden_size），輸出維度為詞表大小（vocab_size），用於生成對應於全詞表的logits值（機率分佈）。而獎勵模型只需輸出一個分數值，因此，LLM的輸出頭被替換為一個全新的線性層，該層的輸出維度為1（out_dim=1），用於生成獎勵分數。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84.png" alt="【RLHF與RLAIF】獎勵模型的結構" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型的輸入輸出"><a class="header" href="#rlhf與rlaif獎勵模型的輸入輸出">【RLHF與RLAIF】獎勵模型的輸入輸出</a></h2>
+<ul>
+<li>獎勵模型輸入由一條Prompt + 其對應的一條回答（Response）<strong>拼接</strong>而成，構成一個完整的序列，如圖所示，包括Prompt（黃色部分），即使用者提供的問題或上下文，以及回答（藍色部分），即模型生成的回答序列。</li>
+<li>圖中，從第一個動作a0=“青”到最後一個<strong>動作</strong>a5= <EOS>，回答序列中的每個Token都被視為一個獨立的動作。</li>
+<li>獎勵模型輸出一組<strong>獎勵分數</strong>r0,r1 , ..., r5，分別對應生成回答序列中每個Token位置，用於表示各位置生成Token的質量評分。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA.png" alt="【RLHF與RLAIF】獎勵模型的輸入輸出" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型預測偏差與loss的關係"><a class="header" href="#rlhf與rlaif獎勵模型預測偏差與loss的關係">【RLHF與RLAIF】獎勵模型預測偏差與Loss的關係</a></h2>
+<ul>
+<li><strong>獎勵模型（RM）<strong>的</strong>目標</strong>是利用偏好資料集訓練出能夠擬合人類反饋的評分函式，以準確評估生成文字的質量。</li>
+<li><strong>Loss</strong>通常採用基於對比的<strong>負對數似然</strong>形式，這與DPO演算法中的獎勵建模過程類似。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E5%81%8F%E5%B7%AE%E4%B8%8ELoss%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E5%81%8F%E5%B7%AE%E4%B8%8ELoss%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【RLHF與RLAIF】獎勵模型預測偏差與Loss的關係" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型的訓練"><a class="header" href="#rlhf與rlaif獎勵模型的訓練">【RLHF與RLAIF】獎勵模型的訓練</a></h2>
+<p>如圖所示，其中，yw和 yl是針對同一個Prompt（圖中的x）生成的<strong>兩個回答</strong>，且 yw 優於 yl ，這包含了人類反饋（偏好）資訊。訓練<strong>步驟</strong>如下：</p>
+<ul>
+<li>（1）<strong>計算獎勵分數</strong>：獎勵模型分別對兩個回答進行推理，得到兩個獎勵評分，即獎勵模型恰好對優質回答yw 的評分更高，這與人類反饋大體一致。</li>
+<li>（2）計算<strong>Loss</strong>：根據兩個獎勵分數的差異，代入式（7.2）計算Loss。</li>
+<li>（3）<strong>梯度更新</strong>：透過反向傳播計算梯度，並更新獎勵模型的引數。</li>
+<li>（4）<strong>重複迭代</strong>多次：讀取下一批偏好樣本，按照上面的流程，重複迭代。隨著引數逐步更新，獎勵模型在所有偏好資料上的評分逐漸與人類的偏好趨於一致。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%AD%E7%BB%83.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%AD%E7%BB%83.png" alt="【RLHF與RLAIF】獎勵模型的訓練" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifppo訓練中四種模型的合作關係"><a class="header" href="#rlhf與rlaifppo訓練中四種模型的合作關係">【RLHF與RLAIF】PPO訓練中四種模型的合作關係</a></h2>
+<p>如圖所示，RLHF的第二階段需要載入<strong>四個模型</strong>進行強化學習訓練。這四種模型的角色和<strong>相互關係</strong>如下：</p>
+<ul>
+<li>（1）<strong>策略模型</strong>（Policy Model, Actor）：RLHF訓練的<strong>核心</strong>，負責根據輸入的Prompt生成回答At。策略模型需平衡兩個目標：一方面，透過獎勵模型和價值模型引導最佳化以符合人類偏好；另一方面，透過參考模型施加KL約束，限制生成內容與初始行為分佈的偏離，避免過度激進或不穩定的回答。</li>
+<li>（2）<strong>參考模型</strong>（Reference Model）：為策略模型提供穩定的行為<strong>基準</strong>，透過計算策略模型與參考模型輸出之間的KL距離，可以在訓練過程中對策略模型施加約束，防止其過度偏離參考模型的機率分佈。這樣可以避免策略模型偏離SFT模型太遠，確保生成行為的穩定性，從而有效防止策略模型因過度追求獎勵而出現“獎勵欺騙”現象。</li>
+<li>（3）<strong>獎勵模型</strong>（Reward Model, RM）：為策略模型生成的回答分配<strong>即時獎勵</strong>Rt，模擬人類偏好反饋。獎勵模型與價值模型協作，共同引導策略模型朝著人類偏好的方向最佳化。如《大型模型演算法》 7.2.1節所述，在RLHF訓練中，有時還會結合多個獎勵模型以增強效果。</li>
+<li>（4）<strong>價值模型</strong>（Value Model, Critic）：<strong>全面評估</strong>策略模型生成的回答，預測在特定狀態下執行某動作的<strong>長期回報</strong>，計算價值估計Vt。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%88%E4%BD%9C%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%88%E4%BD%9C%E5%85%B3%E7%B3%BB.png" alt="【RLHF與RLAIF】PPO訓練中四種模型的合作關係" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifppo訓練中四種模型的結構與初始化通用低成本方案"><a class="header" href="#rlhf與rlaifppo訓練中四種模型的結構與初始化通用低成本方案">【RLHF與RLAIF】PPO訓練中四種模型的結構與初始化（通用&amp;低成本方案）</a></h2>
+<p>通常，在通用&amp;低成本場景下，可以簡化模型設計，RLHF涉及的四種模型擁有類似的結構，主要區別在於各模型的頭部（Head）。這些模型可以基於SFT模型（經過有監督微調後的LLM版本）進行<strong>改造和初始化</strong>，如圖所示：</p>
+<ul>
+<li>（1）<strong>策略模型</strong>：結構與SFT模型<strong>完全一致</strong>，包含N層Transformer Decoder和LM Head（Language Modeling Head）。在引數初始化時，通常直接複製SFT模型的所有引數。在隨後的PPO訓練中，策略模型的引數會<strong>持續更新</strong>。</li>
+<li>（2）<strong>參考模型</strong>：結構與SFT模型一致，包含N層Decoder和LM Head。引數初始化時，同樣直接複製SFT模型的所有引數。但在後續的PPO訓練中，參考模型的引數始終保持<strong>凍結</strong>（不更新）。因此，在PPO訓練的初始時刻，參考模型與策略模型完全一致，在策略模型的最佳化過程中，參考模型為策略模型提供了一個穩定的行為參考基準。</li>
+<li>（3）<strong>獎勵模型</strong>：與SFT模型的底層Decoder部分結構一致，但將頭部結構<strong>替換</strong>為Reward Head（獎勵頭）。在引數初始化時，僅複製SFT模型的底層Decoder（N層），而Reward Head的引數通常隨機初始化。在隨後的PPO訓練中，獎勵模型的引數始終保持<strong>凍結</strong>（不進行更新）。</li>
+<li>（4）<strong>價值模型</strong>：結構類似於獎勵模型，包含N層Decoder和Value Head（價值頭）。在引數初始化時，可以複製獎勵模型的所有引數，有時也可基於SFT模型進行改造。在隨後的PPO訓練中，價值模型的引數會<strong>持續更新</strong>。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96.png" alt="【RLHF與RLAIF】PPO訓練中四種模型的結構與初始化" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif一個雙頭結構的價值模型"><a class="header" href="#rlhf與rlaif一個雙頭結構的價值模型">【RLHF與RLAIF】一個雙頭結構的價值模型</a></h2>
+<ul>
+<li>價值模型與獎勵模型需要為每個Token輸出標量數值。為滿足這一需求，TRL庫實現了AutoModelForCausalLMWithValueHead類，如圖所示，該模型採用了<strong>雙頭</strong>結構，即包含兩個輸出頭部——語言模型頭（LM Head）和價值頭（Value Head）。</li>
+<li>以回答序列長度為3、詞表大小為151936為例，兩個頭部的<strong>輸出</strong>如下：</li>
+<li>（1）<strong>Logits</strong>：形狀為（3, 151936）的矩陣，表示每個Token在詞表中的機率分佈。</li>
+<li>（2）<strong>價值向量</strong>：形狀為（3, 1）的向量，表示每個Token的價值估計。</li>
+<li>為便於理解，本文假設batch_size=1。透過這種雙頭結構設計，模型的核心模組（N層Decoder）僅需執行一次推理，這顯著<strong>降低</strong>了計算成本和視訊記憶體消耗。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E4%B8%80%E4%B8%AA%E5%8F%8C%E5%A4%B4%E7%BB%93%E6%9E%84%E7%9A%84%E4%BB%B7%E5%80%BC%E6%A8%A1%E5%9E%8B.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E4%B8%80%E4%B8%AA%E5%8F%8C%E5%A4%B4%E7%BB%93%E6%9E%84%E7%9A%84%E4%BB%B7%E5%80%BC%E6%A8%A1%E5%9E%8B.png" alt="【RLHF與RLAIF】一個雙頭結構的價值模型" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifrlhf四種模型可以共享同一個底座"><a class="header" href="#rlhf與rlaifrlhf四種模型可以共享同一個底座">【RLHF與RLAIF】RLHF：四種模型可以共享同一個底座</a></h2>
+<ul>
+<li>在RLHF中，透過<strong>共享</strong>同一個底座（N層Decoder），可以顯著<strong>降低</strong>視訊記憶體開銷。這是因為參考模型、獎勵模型、策略模型和價值模型之間具有較高的<strong>相似性</strong>。採用LoRA微調技術（詳見《大型模型演算法》 第2.1.2節），四種模型可以共用同一底座，同時保持底座引數凍結（不更新）。</li>
+<li>具體而言，參考模型僅用於評估對比，<strong>不參與</strong>訓練；獎勵模型在RLHF的第一階段（獎勵建模）中進行訓練；而策略模型和價值模型則在第二階段（策略最佳化）中進行訓練。因此，如圖所示，為獎勵模型、策略模型和價值模型分別配備了<strong>獨立的LoRA</strong>模組（引數），透過組合相應的LoRA模組、Head和共享的底座，即可動態組裝所需的模型。在訓練過程中，僅更新LoRA模組和Head部分的引數。</li>
+<li><strong>四種模型共享</strong>相同的底座（N層Decoder）。該底座引數<strong>常駐GPU</strong>並保持凍結狀態，而LoRA模組和Head部分則根據PPO訓練的不同環節，可動態載入到GPU中或動態swap。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%EF%BC%9A%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E5%8F%AF%E4%BB%A5%E5%85%B1%E4%BA%AB%E5%90%8C%E4%B8%80%E4%B8%AA%E5%BA%95%E5%BA%A7.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%EF%BC%9A%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E5%8F%AF%E4%BB%A5%E5%85%B1%E4%BA%AB%E5%90%8C%E4%B8%80%E4%B8%AA%E5%BA%95%E5%BA%A7.png" alt="【RLHF與RLAIF】RLHF：四種模型可以共享同一個底座" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifppo訓練中各模型的輸入與輸出"><a class="header" href="#rlhf與rlaifppo訓練中各模型的輸入與輸出">【RLHF與RLAIF】PPO訓練中各模型的輸入與輸出</a></h2>
+<ul>
+<li>涉及的四個模型具有不同的<strong>輸入與輸出</strong>（圖中未展示<EOS>等特殊Token），總結如表7.1所示。</li>
+<li>所有四個模型中，只有策略模型執行了<strong>生成</strong>過程。策略模型根據輸入的Prompt（或上下文）生成了三個Token，即三個動作（[你]、[先去]、[。]）（動作與狀態的建模見《大型模型演算法》圖7.1）。其餘三個模型（參考模型、獎勵模型、價值模型）均以Prompt和策略模型生成的回答為基礎，執行相應的計算：</li>
+<li>（1）<strong>參考模型</strong>：輸出回答對應的對數機率（LogProbs），與策略模型輸出的對數機率計算出<strong>KL距離</strong>，確保策略模型不會偏離基準分佈過遠。</li>
+<li>（2）<strong>獎勵模型</strong>：對生成的回答（策略模型的動作）進行逐Token的獎勵打分，生成<strong>即時獎勵</strong>Rt。如7.2.2節所述，通常只使用最後一個Token對應的獎勵分數，即與<EOS> Token對應的獎勵分數。</li>
+<li>（3）<strong>價值模型</strong>：對生成的回答（策略模型的動作）進行逐Token的價值估計，用於評估每個動作的<strong>長期回報</strong>Vt。</li>
+</ul>
+<p>PPO訓練中各模型的輸入與輸出</p>
+<div class="table-wrapper"><table><thead><tr><th>模型</th><th>輸入</th><th>輸出</th></tr></thead><tbody>
+<tr><td>策略模型</td><td>Prompt（或上下文）</td><td>回答及其對應的對數機率（LogProbs）</td></tr>
+<tr><td>參考模型</td><td>Prompt（或上下文） + 回答</td><td>回答對應的對數機率（LogProbs）</td></tr>
+<tr><td>獎勵模型</td><td>Prompt（或上下文） + 回答</td><td>回答對應的每個 token 的獎勵值</td></tr>
+<tr><td>價值模型</td><td>Prompt（或上下文） + 回答</td><td>回答對應的每個 token 的價值估計</td></tr>
+</tbody></table>
+</div>
+<p><a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%90%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%90%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA.png" alt="【RLHF與RLAIF】PPO訓練中各模型的輸入與輸出" /></a></p>
+<h2 id="rlhf與rlaifppo訓練中kl距離的計算過程"><a class="header" href="#rlhf與rlaifppo訓練中kl距離的計算過程">【RLHF與RLAIF】PPO訓練中KL距離的計算過程</a></h2>
+<ul>
+<li>在TRL等框架的實現中，KL距離的作用體現在對<strong>Advantage的計算環節</strong>，透過懲罰獎勵值來達到約束目的。如《大型模型演算法》6.2.3節所述，在基於GAE演算法計算Advantage時，需要用到獎勵模型估計的獎勵分數。在此基礎上，可以對獎勵分數進行調整。</li>
+<li>如圖所示，策略模型和參考模型均會<strong>輸出Logits</strong>，並進一步轉換為<strong>對數機率</strong>（LogProbs），轉換公式可參考《大型模型演算法》第2.2.5節，基於這些對數機率即可完成KL距離的計算。</li>
+<li>策略模型與參考模型的KL距離計算過程如圖所示。為便於理解，這裡假設批次大小（batch_size）為1，詞表大小為7，回答對應的Token序列長度為3。Prompt為“吃飯？”，其Token化後為[吃飯]和[？]。回答為“你先去。”，其Token化後為[你]、[先去]和[。]。此處忽略[EOS]等特殊Token。</li>
+<li>KL計算的詳細<strong>過程</strong>如下：</li>
+<li>（1）策略模型<strong>生成</strong>回答Token：以Prompt（或上下文）作為策略模型的輸入，生成回答（response）以及對應的<strong>Logits</strong>，response包括三個Token：[你]、[先去]和[。]。注意，在實際RLHF訓練中，該步驟已在經驗採集（Make Experience）環節完成。</li>
+<li>（2）計算<strong>對數機率</strong>：在步驟（1）中，策略模型已經生成了Logits，即一個形狀為（序列長度=3，詞表大小=7）的矩陣。進一步，可以將該矩陣轉換為<strong>對數機率</strong>（LogProbs）矩陣。</li>
+<li>（3）<strong>參考模型</strong>生成對數機率：以Prompt和response作為輸入，參考模型推理並生成Logits，<strong>擷取</strong>對應於response部分的Logits，進而可得到參考模型的對數機率矩陣。</li>
+<li>（4）抽取（<strong>Gather</strong>）：以步驟（1）中策略模型生成的三個回答Token為<strong>索引</strong>，在策略模型和參考模型的對數機率矩陣中，分別提取出對應Token的對數機率值。透過這一操作，可以得到三個Token的<strong>對數機率</strong>值——策略模型的logprob和參考模型的ref_logprob。全詞表範圍下的對數機率矩陣形狀為（序列長度=3，詞表大小=7），而抽取後的logprob和ref_logprob形狀為（3，1）。</li>
+<li>（5）<strong>KL距離</strong>計算：如圖所示，對logprob和ref_logprob進行<strong>逐位置相減</strong>，最終得到策略模型和參考模型之間的KL距離。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%ADKL%E8%B7%9D%E7%A6%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%ADKL%E8%B7%9D%E7%A6%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B.png" alt="【RLHF與RLAIF】PPO訓練中KL距離的計算過程" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif基於ppo進行rlhf訓練的原理圖"><a class="header" href="#rlhf與rlaif基於ppo進行rlhf訓練的原理圖">【RLHF與RLAIF】基於PPO進行RLHF訓練的原理圖</a></h2>
+<ul>
+<li>如圖，可以分為<strong>兩個半區</strong>：整體結構主要分為經驗收集和多輪PPO訓練<strong>兩個部分</strong>，即圖中左右兩個半區。在基於PPO演算法進行RLHF訓練時，這兩個部分以<strong>迴圈</strong>的方式進行多次迭代。</li>
+<li><strong>配色</strong>說明：圖中左下角附有顏色說明，不同顏色用於區分不同的內容型別，例如模型、資料、經驗/樣本、計算以及Loss，以便於快速理解。</li>
+<li><strong>緩衝區</strong>：圖中間的緩衝區用於儲存左半區收集的經驗資料。這些資料將被切分成多個<strong>小批次</strong>（mini-batch），以支援右半區進行多次訓練和引數更新。</li>
+<li><strong>模型版本</strong>的區別：左半區的策略模型和價值模型可視為<strong>舊模型</strong>，主要用於生成樣本及相關計算。右半區的策略模型和價值模型則會在訓練過程中進行多次迭代更新，因此可稱為<strong>新模型</strong>。本質上，左右兩個半區的模型（策略模型和價值模型）是同一個模型的<strong>不同狀態版本</strong>，但為了便於理解，圖中額外在右半區重複繪製了策略模型和價值模型。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%9F%BA%E4%BA%8EPPO%E8%BF%9B%E8%A1%8CRLHF%E8%AE%AD%E7%BB%83%E7%9A%84%E5%8E%9F%E7%90%86%E5%9B%BE.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%9F%BA%E4%BA%8EPPO%E8%BF%9B%E8%A1%8CRLHF%E8%AE%AD%E7%BB%83%E7%9A%84%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="【RLHF與RLAIF】基於PPO進行RLHF訓練的原理圖" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif拒絕取樣rejection-sampling微調"><a class="header" href="#rlhf與rlaif拒絕取樣rejection-sampling微調">【RLHF與RLAIF】拒絕取樣（Rejection Sampling）微調</a></h2>
+<ul>
+<li><strong>拒絕取樣</strong>(Rejection Sampling)微調：是一種基於資料<strong>篩選</strong>的模型微調策略，旨在透過人工或模型標註對模型生成的樣本進行篩選，剔除低質量的樣本，僅保留優質樣本用於進一步微調，Anthropic、Meta等公司均曾利用該技術對語言模型進行最佳化。</li>
+<li>該過程可重複多輪進行。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7%E5%BE%AE%E8%B0%83.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7%E5%BE%AE%E8%B0%83.png" alt="【RLHF與RLAIF】拒絕取樣微調" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifrlaif與rlhf的區別"><a class="header" href="#rlhf與rlaifrlaif與rlhf的區別">【RLHF與RLAIF】RLAIF與RLHF的區別</a></h2>
+<ul>
+<li><strong>RLAIF</strong>（Reinforcement Learning from AI Feedback，基於AI反饋的強化學習）是一種以<strong>AI反饋</strong>為基礎的強化學習方法。該方法興起於2022年，可作為RLHF的一種替代方案。</li>
+<li>RLAIF與RLHF在整體流程上具有較高的相似性，如圖所示，其主要<strong>區別</strong>在於偏好樣本的標註環節。RLHF依賴人類進行偏好標註，而RLAIF則透過AI完成此過程。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLAIF%E4%B8%8ERLHF%E7%9A%84%E5%8C%BA%E5%88%AB.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLAIF%E4%B8%8ERLHF%E7%9A%84%E5%8C%BA%E5%88%AB.png" alt="【RLHF與RLAIF】RLAIF與RLHF的區別" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifclaude模型應用的憲法aicai原理"><a class="header" href="#rlhf與rlaifclaude模型應用的憲法aicai原理">【RLHF與RLAIF】Claude模型應用的憲法AI（CAI）原理</a></h2>
+<ul>
+<li><strong>CAI</strong>（Constitutional AI, <strong>基於憲法的AI</strong>）是一種用於大型模型訓練的RLAIF型別的演算法，由<strong>美國AI獨角獸</strong>Anthropic公司於2022年提出[62]，併成功應用於<strong>Claude</strong>、DeepSeek等模型的訓練。</li>
+<li>該演算法以一套預先制定的<strong>憲法原則</strong>為指導，透過結合AI反饋和自我批評機制，得以更加高效地提升模型的有用性和無害性。
+CAI的訓練過程：</li>
+<li>（1）<strong>自我批評與回答修訂</strong>：初始模型（例如RLHF模型）根據輸入的Prompt生成回答，隨後依據隨機選取的一條憲法原則對回答進行<strong>批評與修訂</strong>。模型可以自動識別回答中可能存在的潛在有害、不道德或不合規內容，並根據批評結果對回答進行自我修訂。該過程可以多次迭代，透過逐步最佳化，使生成的回答更加符合預期。</li>
+<li>（2）<strong>訓練監督學習模型（SL-CAI）</strong>：修訂後的回答與人類標註的有用性樣本共同組成監督學習資料集，用於訓練監督學習模型（SL-CAI）。透過對預訓練語言模型進行微調，SL-CAI能夠生成更貼近目標分佈的回答，從而顯著降低後續強化學習階段的探索成本。</li>
+<li>（3）<strong>生成回答與AI標註</strong>：使用SL-CAI模型針對相同的Prompt生成多組候選回答，採用獨立的反饋模型（例如預訓練模型）對這些候選回答進行<strong>AI標註</strong>。反饋模型會基於隨機選取的一條憲法原則為回答打分。此階段的AI標註機制有效降低了對人工標註的依賴。</li>
+<li>（4）<strong>訓練獎勵模型</strong>：將AI標註資料與人工標註資料混合，形成偏好資料集，並以此訓練獎勵模型，或稱為偏好模型（Preference Model，RM）。</li>
+<li>（5）<strong>強化學習最佳化目標模型（RL-CAI）</strong>：在強化學習階段，利用獎勵模型提供獎勵訊號，透過強化學習演算法（例如PPO）對目標模型進行最佳化。此階段逐步增強模型在無害性和有用性上的表現，同時減少模型在敏感問題上的逃避傾向，確保其行為更加透明和可靠。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91Claude%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%AA%E6%B3%95AI%E5%8E%9F%E7%90%86.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91Claude%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%AA%E6%B3%95AI%E5%8E%9F%E7%90%86.png" alt="【RLHF與RLAIF】Claude模型應用的憲法AI原理" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifopenai-rbr基於規則的獎勵"><a class="header" href="#rlhf與rlaifopenai-rbr基於規則的獎勵">【RLHF與RLAIF】OpenAI RBR（基於規則的獎勵）</a></h2>
+<ul>
+<li><strong>RBR</strong>（Rule Based Rewards，基於規則的獎勵）是一種基於規則的偏好建模方法，由<strong>OpenAI</strong>於2024年提出。</li>
+<li>該方法透過人工標註資料訓練出一個RBR獎勵模型，將AI反饋融入傳統的RLHF流程中。</li>
+<li>自GPT-4推出以來，OpenAI就將RBR作為其安全系統的<strong>核心</strong>組成部分，並已應用於包括GPT-4o mini等模型。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91OpenAI%20RBR%EF%BC%88%E5%9F%BA%E4%BA%8E%E8%A7%84%E5%88%99%E7%9A%84%E5%A5%96%E5%8A%B1%EF%BC%89.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91OpenAI%20RBR%EF%BC%88%E5%9F%BA%E4%BA%8E%E8%A7%84%E5%88%99%E7%9A%84%E5%A5%96%E5%8A%B1%EF%BC%89.png" alt="【RLHF與RLAIF】OpenAI RBR（基於規則的獎勵）" /></a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="part-07-policy-optimization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="part-09-reasoning.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="part-07-policy-optimization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="part-09-reasoning.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,1704 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/changyeyu/LLM-RL-Visualized" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="圖解大型模型演算法llm--rl--vlm-核心技術圖譜"><a class="header" href="#圖解大型模型演算法llm--rl--vlm-核心技術圖譜">圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</a></h1>
+<p align="center">
+  <img src="images/banner-zh.svg" alt="圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜" />
+</p>
+<p align="center">
+  <a href="https://github.com/changyeyu/LLM-RL-Visualized/blob/master/src/README_EN.md"><img alt="English Version" src="images/badge-english-version.svg" width="250" height="50" /></a>
+  &nbsp; &nbsp;&nbsp;
+  <a href="https://github.com/changyeyu/LLM-RL-Visualized/blob/master/README.md"><img alt="Chinese 中文版本" src="images/badge-chinese-version.svg" width="250" height="50" /></a>
+</p>
+<h2 id="簡-介"><a class="header" href="#簡-介">簡 介</a></h2>
+<p>🎉 <strong>原創 100+ 架構圖，系統講解大型模型、強化學習</strong>，涵蓋：LLM / VLM 等大型模型原理、訓練演算法（RL、RLHF、GRPO、DPO、SFT 與 CoT 蒸餾等）、效果最佳化與 RAG 等。</p>
+<p>🎉 關於架構圖<strong>更詳細</strong>的解讀可參考：<a href="https://book.douban.com/subject/37331056/">《大型模型演算法：強化學習、微調與對齊》</a> (豆瓣高分，多次京東AI圖書Top 5 ！)</p>
+<p>🎉 本儲存庫<strong>長期勘誤、追加</strong>，歡迎點選儲存庫上方的 <strong>Star ⭐</strong> 關注，感謝鼓勵✨</p>
+<p>🎉 點擊圖片可看高解析度大圖，或瀏覽儲存庫目錄中的 <code>.svg</code> 格式向量圖（活圖，可無限縮放、可選擇文字）</p>
+<div align="center">
+<p><a href="https://hellogithub.com/repository/changyeyu/LLM-RL-Visualized" target="_blank"><img src="images/hellogithub-recommend.svg" alt="Featured｜HelloGitHub" /></a></p>
+</div>
+<hr />
+<h2 id="導航"><a class="header" href="#導航">導航</a></h2>
+<ul>
+<li><a href="part-01-overview.html">第1部分：大型模型、強化學習的技術全景圖</a></li>
+<li><a href="part-02-llm-basics.html">第2部分：大型模型基礎</a></li>
+<li><a href="part-03-sft.html">第3部分：SFT（有監督微調）</a></li>
+<li><a href="part-04-dpo.html">第4部分：DPO（直接偏好最佳化）</a></li>
+<li><a href="part-05-optimization-without-training.html">第5部分：免訓練的大型模型最佳化技術</a></li>
+<li><a href="part-06-rl-basics.html">第6部分：強化學習（RL）基礎</a></li>
+<li><a href="part-07-policy-optimization.html">第7部分：策略最佳化架構及衍生演算法</a></li>
+<li><a href="part-08-rlhf-rlaif.html">第8部分：RLHF 與 RLAIF</a></li>
+<li><a href="part-09-reasoning.html">第9部分：邏輯推理（Reasoning）能力最佳化</a></li>
+<li><a href="part-10-llm-advanced.html">第10部分：大型模型基礎拓展</a></li>
+<li><a href="appendix.html">附錄與引用</a></li>
+<li><a href="references.html">參考文獻</a></li>
+</ul>
+<div align="center">
+  <a href="https://hellogithub.com/repository/changyeyu/LLM-RL-Visualized" target="_blank">
+    <img src="images/hellogithub-recommend.svg" alt="Featured｜HelloGitHub" />
+  </a>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第1部分大型模型強化學習的技術全景圖"><a class="header" href="#第1部分大型模型強化學習的技術全景圖">第1部分：大型模型、強化學習的技術全景圖</a></h1>
+<h2 id="大型模型演算法總體架構以llmvlm為主"><a class="header" href="#大型模型演算法總體架構以llmvlm為主">大型模型演算法總體架構（以LLM、VLM為主）</a></h2>
+<img src="images/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%AE%97%E6%B3%95-%E5%86%85%E5%AE%B9%E6%9E%B6%E6%9E%84-zh.png" alt="大型模型演算法-內容架構">
+<h2 id="強化學習演算法圖譜-rl-algo-mappdf全網最大"><a class="header" href="#強化學習演算法圖譜-rl-algo-mappdf全網最大">強化學習演算法圖譜 (rl-algo-map).pdf——全網最大！</a></h2>
+<ul>
+<li>本人歷時數天、嘔心瀝血之作，點選本儲存庫右上角 ↗ 的 <strong>Star ⭐</strong> ，就是對我最大的鼓勵啦！</li>
+<li>下圖僅為預覽圖，高解析度圖見： <a href="files/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%9B%BE%E8%B0%B1%20%28rl-algo-map%29.pdf"> 強化學習演算法圖譜 (rl-algo-map).pdf </a>
+<a href="files/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%9B%BE%E8%B0%B1%20%28rl-algo-map%29.pdf"><img src="images/rl-algo-map-preview.png" alt="強化學習演算法圖譜 (rl-algo-map).pdf" /></a></li>
+</ul>
+<h2 id="llm基礎llm結構總圖全網最大"><a class="header" href="#llm基礎llm結構總圖全網最大">【LLM基礎】LLM結構總圖——全網最大！</a></h2>
+<ul>
+<li>本人歷時幾十個小時、嘔心瀝血之作，點選本儲存庫右上角 ↗ 的 <strong>Star ⭐</strong> ，就是對我最大的鼓勵啦！</li>
+<li>LLM主要有Decoder-Only（僅解碼器）或MoE（Mixture of Experts, 專家混合模型）兩種形式，兩者在整體架構上較為相似，主要區別為MoE在FFN（前饋網路）部分引入了多個專家網路。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E7%BB%93%E6%9E%84%E5%85%A8%E8%A7%86%E5%9B%BE.svg"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E7%BB%93%E6%9E%84%E5%85%A8%E8%A7%86%E5%9B%BE.svg" alt="【LLM基礎】LLM結構全檢視" /></a></li>
+</ul>
+<h2 id="策略梯度policy-gradient-強化學習ppogrpo等之根基pdf"><a class="header" href="#策略梯度policy-gradient-強化學習ppogrpo等之根基pdf">策略梯度(Policy Gradient)-強化學習(PPO&amp;GRPO等)之根基.pdf</a></h2>
+<ul>
+<li>手撕推導 RL 核心理論之一 ，圖靈獎得主 Sutton 提出。</li>
+<li>大型模型訓練演算法之根基（被ChatGPT、DeepSeek 等廣泛使用的 PPO 和 GRPO 演算法都是基於策略梯度）。</li>
+<li>很重要 但常常被混淆的一部分內容，我重新推導公式、畫原理圖解釋了一下（窄版排版） :
+<a href="files/%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%28Policy%20Gradient%29-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%28PPO%26GRPO%E7%AD%89%29%E4%B9%8B%E6%A0%B9%E5%9F%BA.pdf"> 策略梯度(Policy Gradient)-強化學習(PPO&amp;GRPO等)之根基.pdf </a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第2部分大型模型基礎"><a class="header" href="#第2部分大型模型基礎">第2部分：大型模型基礎</a></h1>
+<h2 id="llm基礎llmlarge-language-model結構"><a class="header" href="#llm基礎llmlarge-language-model結構">【LLM基礎】LLM（Large Language Model）結構</a></h2>
+<ul>
+<li>LLM主要有Decoder-Only（僅解碼器）或MoE（Mixture of Experts, 專家混合模型）<strong>兩種形式</strong>，兩者在整體架構上較為<strong>相似</strong>，主要區別為MoE在FFN（前饋網路）部分引入了多個專家網路。</li>
+<li>一個典型的LLM結構，可分為<strong>三部分</strong>——輸入層、多層Decoder堆疊結構和輸出層（包括語言模型頭與解碼模組）</li>
+</ul>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E7%BB%93%E6%9E%84.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E7%BB%93%E6%9E%84.png" alt="【LLM基礎】LLM結構" /></a></p>
+<h2 id="llm基礎llm生成與解碼decoding過程"><a class="header" href="#llm基礎llm生成與解碼decoding過程">【LLM基礎】LLM生成與解碼（Decoding）過程</a></h2>
+<ul>
+<li><strong>解碼策略</strong>是決定最終輸出文字流暢性、多樣性及整體表現的核心因素。<strong>常見</strong>的解碼演算法包括：貪婪搜尋、波束搜尋（Beam Search）及其衍生演算法、多項式取樣、Top-K取樣、Top-P取樣、對比搜尋（Contrastive Search）、投機解碼（Speculative Decoding）、前瞻解碼（Lookahead Decoding）、DoLa解碼等。</li>
+<li>LLM的輸出層負責根據機率分佈，應用<strong>解碼演算法</strong>確定最終預測的下一個/N個詞元。</li>
+<li>根據機率分佈，應用解碼策略（例如隨機取樣或選擇最大機率）確定最終預測的<strong>下一個</strong>詞元。例如，在貪婪搜尋解碼策略下，選擇機率最高的詞元“我”作為預測結果。</li>
+<li>每一個token（詞元）的生成都需要<strong>重新走一遍</strong>所有層Transformer結構。</li>
+<li>這裡只展示了每次預測一個詞元的方案，也有一次性預測<strong>多個詞元</strong>的方案，詳見《大型模型演算法：強化學習、微調與對齊》第四章。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E7%94%9F%E6%88%90%E4%B8%8E%E8%A7%A3%E7%A0%81%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E7%94%9F%E6%88%90%E4%B8%8E%E8%A7%A3%E7%A0%81%E8%BF%87%E7%A8%8B.png" alt="【LLM基礎】LLM生成與解碼過程" /></a></li>
+</ul>
+<h2 id="llm基礎llm輸入層"><a class="header" href="#llm基礎llm輸入層">【LLM基礎】LLM輸入層</a></h2>
+<ul>
+<li>LLM的輸入層將輸入<strong>文字</strong>轉換為多維<strong>數值矩陣</strong>（Tensor，張量），以便送往模型主體結構進行計算。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E8%BE%93%E5%85%A5%E5%B1%82.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E8%BE%93%E5%85%A5%E5%B1%82.png" alt="【LLM基礎】LLM輸入層" /></a></li>
+</ul>
+<h2 id="llm基礎llm輸出層"><a class="header" href="#llm基礎llm輸出層">【LLM基礎】LLM輸出層</a></h2>
+<p>LLM的輸出層負責根據隱藏狀態（多維數值矩陣）預測下一個詞元（文字）。處理流程如圖所示：</p>
+<ul>
+<li>（1）<strong>輸入隱藏狀態</strong>：Decoder最後一層的隱藏狀態（Hidden States）作為LLM輸出層的輸入。如圖中所示維度為3×896的數值矩陣，包含了字首序列的所有語義資訊。</li>
+<li>（2）<strong>語言模型頭</strong>（LM Head）：通常是一個全連線層，用於將隱藏狀態轉換為Logits（推理時只計算最後一個位置的Logits）。如圖所示，Logits的形狀為3×151936，對應於詞表中每個詞元的得分。</li>
+<li>（3）<strong>提取最後位置的Logits</strong>：預測下一個詞元僅依賴於字首序列最後一個位置的Logits，因此需要從所有位置的Logits中提取最後一個位置的Logits。如圖所示，提取得到一個151936維的向量 [2.0, 3.1, −1.7, ... , −1.7]，用於後續預測。</li>
+<li>（4）<strong>轉換為機率分佈</strong>（Softmax）：透過Softmax函式將Logits轉換為機率分佈，得到詞表中每個詞元的機率。例如，生成的151936維機率向量為[0.01, 0.03, 0.001, ... , 0.001]，該向量內所有機率之和為1。機率值越大，表示該詞元作為下一個詞元的可能性越高。例如，“我”的機率為0.34。</li>
+<li>（5）<strong>解碼（Decoding）</strong>：根據機率分佈，應用解碼策略（例如隨機取樣或選擇最大機率）確定最終預測的下一個詞元。例如，在貪婪搜尋解碼策略下，選擇機率最高的詞元“我”作為預測結果。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E8%BE%93%E5%87%BA%E5%B1%82.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E8%BE%93%E5%87%BA%E5%B1%82.png" alt="【LLM基礎】LLM輸出層" /></a></li>
+</ul>
+<h2 id="llm基礎多模態模型結構vlmmllm-"><a class="header" href="#llm基礎多模態模型結構vlmmllm-">【LLM基礎】多模態模型結構（VLM、MLLM ...）</a></h2>
+<p>多模態模型根據側重不同，通常有以下<strong>多種稱呼</strong>：</p>
+<ul>
+<li><strong>VLM</strong>（Vision-Language Model，視覺語言模型）</li>
+<li><strong>MLLM</strong>（Multimodal Large Language Model，多模態大型語言模型）</li>
+<li><strong>VLA</strong>（Vision-Language-Action Model，視覺語言動作模型）
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84.png" alt="【LLM基礎】多模態模型結構" /></a></li>
+</ul>
+<h2 id="llm基礎llm訓練流程"><a class="header" href="#llm基礎llm訓練流程">【LLM基礎】LLM訓練流程</a></h2>
+<ul>
+<li>大型模型的訓練主要分為<strong>兩個階段</strong>——預訓練（Pre-Training）和後訓練（Post-Training）。在每個階段，所使用的訓練資料、訓練正規化（演算法）、訓練目標和超引數均有所不同。</li>
+<li><strong>預訓練</strong>階段包括初期訓練（基於海量資料的短上下文訓練）、中期訓練（長文字/長上下文訓練）以及退火（Annealing）訓練等。此階段以自監督學習為主，使用的資料量最大，同時也是最消耗算力的環節。</li>
+<li><strong>後訓練</strong>階段則包含多種可選的訓練正規化（演算法），包括但不限於SFT（監督微調）、蒸餾、RSFT（拒絕取樣微調）、RLHF（基於人類反饋的強化學習）、DPO（直接偏好最佳化），以及其他強化學習方法，例如GRPO（群體相對策略最佳化）、PPO（近端策略最佳化）等。其中，某些環節也可進行多輪迭代訓練，例如多輪拒絕取樣微調（Rejection Sampling Fine-Tuning, RSFT）。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E3%80%91LLM%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B.png" alt="【LLM基礎】LLM訓練流程" /></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第3部分sft有監督微調"><a class="header" href="#第3部分sft有監督微調">第3部分：SFT（有監督微調）</a></h1>
+<h2 id="sft微調fine-tuning技術分類"><a class="header" href="#sft微調fine-tuning技術分類">【SFT】微調（Fine-Tuning）技術分類</a></h2>
+<ul>
+<li>可用於SFT的微調技術種類多樣，如下圖的分類圖所示：前兩種方法僅需基於預訓練模型主體進行微調，開發成本較低；而並聯低秩微調和Adapter Tuning則需要<strong>引入額外</strong>的新模組，實施過程相對複雜一些。這些方法均是針對模型引數進行微調，而基於Prompt的微調則另闢蹊徑，從<strong>模型的輸入</strong>著手進行微調。
+<a href="images/%E3%80%90SFT%E3%80%91%E5%BE%AE%E8%B0%83%E6%8A%80%E6%9C%AF%E5%88%86%E7%B1%BB.png"><img src="images/%E3%80%90SFT%E3%80%91%E5%BE%AE%E8%B0%83%E6%8A%80%E6%9C%AF%E5%88%86%E7%B1%BB.png" alt="【SFT】微調技術分類" /></a></li>
+</ul>
+<h2 id="sftlora1-of-2"><a class="header" href="#sftlora1-of-2">【SFT】LoRA（1 of 2）</a></h2>
+<ul>
+<li><strong>LoRA</strong>（Low-Rank Adaptation, 低秩適配微調）由微軟的研究團隊於2021年發表。由於其高效的微調方式和良好的效果，在各類模型中得到廣泛的應用。LoRA的<strong>核心思想</strong>在於——微調前後模型的引數差異∆W具有低秩性。</li>
+<li>一個矩陣具有<strong>低秩性</strong>，意味著它包含較多的冗餘資訊，將其分解為多個低維矩陣後，不會損失過多有用資訊。例如，如圖所示，一個1024×1024的矩陣可以被近似分解為一個1024×2矩陣與一個2×1024矩陣的乘積，從而將引數量約減少至原來的0.4%。</li>
+</ul>
+<p><a href="images/%E3%80%90SFT%E3%80%91LoRA%EF%BC%881%20of%202%EF%BC%89.png"><img src="images/%E3%80%90SFT%E3%80%91LoRA%EF%BC%881%20of%202%EF%BC%89.png" alt="【SFT】LoRA（1 of 2）" /></a></p>
+<h2 id="sftlora2-of-2"><a class="header" href="#sftlora2-of-2">【SFT】LoRA（2 of 2）</a></h2>
+<ul>
+<li>A和B的<strong>初始化</strong>方式：</li>
+<li>（1）矩陣A使用隨機數初始化，如kaiming初始化；</li>
+<li>（2）矩陣B使用全0初始化，或使用極小的隨機數初始化。</li>
+<li><strong>目的</strong>在於——確保在訓練初期，插入的LoRA模組不會對模型整體輸出造成過大的擾動。
+<a href="images/%E3%80%90SFT%E3%80%91LoRA%EF%BC%882%20of%202%EF%BC%89.png"><img src="images/%E3%80%90SFT%E3%80%91LoRA%EF%BC%882%20of%202%EF%BC%89.png" alt="【SFT】LoRA（2 of 2）" /></a></li>
+</ul>
+<h2 id="sftprefix-tuning"><a class="header" href="#sftprefix-tuning">【SFT】Prefix-Tuning</a></h2>
+<ul>
+<li><strong>Prefix-Tuning</strong>由斯坦福大學的研究團隊提出，可以用於對語言模型進行輕量級微調。</li>
+<li>如圖所示，該方法在輸入的起始位置插入一段連續的、可訓練的向量（Embedding），稱為字首（Prefix）。在處理後續的Token時，Transformer將這些向量視為 <strong>虛擬Token</strong>，並參與Attention計算。</li>
+</ul>
+<p><a href="images/%E3%80%90SFT%E3%80%91Prefix-Tuning.png"><img src="images/%E3%80%90SFT%E3%80%91Prefix-Tuning.png" alt="【SFT】Prefix-Tuning" /></a></p>
+<h2 id="sfttokenid與詞元的對映關係"><a class="header" href="#sfttokenid與詞元的對映關係">【SFT】TokenID與詞元的對映關係</a></h2>
+<ul>
+<li>以SFT資料（經過ChatML格式預處理）為例，該資料經過Tokenizer處理後，被轉換為33個Token，對應33個序列位置，如圖所示。</li>
+<li>每個Token ID與相應的詞元<strong>一一對應</strong>。
+<a href="images/%E3%80%90SFT%E3%80%91TokenID%E4%B8%8E%E8%AF%8D%E5%85%83%E7%9A%84%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90SFT%E3%80%91TokenID%E4%B8%8E%E8%AF%8D%E5%85%83%E7%9A%84%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB.png" alt="【SFT】TokenID與詞元的對映關係" /></a></li>
+</ul>
+<h2 id="sftsft的loss交叉熵"><a class="header" href="#sftsft的loss交叉熵">【SFT】SFT的Loss（交叉熵）</a></h2>
+<ul>
+<li>與預訓練階段類似，SFT的Loss也是基於交叉熵（CE，Cross Entropy）
+<a href="images/%E3%80%90SFT%E3%80%91SFT%E7%9A%84Loss%EF%BC%88%E4%BA%A4%E5%8F%89%E7%86%B5%EF%BC%89.png"><img src="images/%E3%80%90SFT%E3%80%91SFT%E7%9A%84Loss%EF%BC%88%E4%BA%A4%E5%8F%89%E7%86%B5%EF%BC%89.png" alt="【SFT】SFT的Loss（交叉熵）" /></a></li>
+</ul>
+<h2 id="sft指令資料的來源"><a class="header" href="#sft指令資料的來源">【SFT】指令資料的來源</a></h2>
+<ul>
+<li><strong>指令資料</strong>（Instructions）是指為模型提供的一組引導性輸入及期望輸出的描述，通常包括問題（或任務提示）及其對應的答案，常用於對模型進行微調訓練。
+<a href="images/%E3%80%90SFT%E3%80%91%E6%8C%87%E4%BB%A4%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9D%A5%E6%BA%90.png"><img src="images/%E3%80%90SFT%E3%80%91%E6%8C%87%E4%BB%A4%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9D%A5%E6%BA%90.png" alt="【SFT】指令資料的來源" /></a></li>
+</ul>
+<h2 id="sft多個數據的拼接packing"><a class="header" href="#sft多個數據的拼接packing">【SFT】多個數據的拼接（Packing）</a></h2>
+<ul>
+<li>模型訓練時通常使用<strong>固定長度</strong>的輸入。當輸入的資料長度不一致時，對於短序列，會在其末尾填充（padding）以匹配最大序列長度，這會導致計算資源的<strong>浪費</strong>。</li>
+<li>因此，正如圖所示，常見的做法是將多條資料拼接（Packing）在一起，填充到一個固定長度的輸入序列中。</li>
+<li>為了確保計算過程中不同資料之間<strong>互不干擾</strong>，通常需要<strong>重設</strong>位置編號（Reset position ID）和注意力掩碼（Reset attention mask），以在計算Attention時保持各條資料的語義獨立性。
+<a href="images/%E3%80%90SFT%E3%80%91%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8B%BC%E6%8E%A5%EF%BC%88Packing%EF%BC%89.png"><img src="images/%E3%80%90SFT%E3%80%91%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8B%BC%E6%8E%A5%EF%BC%88Packing%EF%BC%89.png" alt="【SFT】多個數據的拼接（Packing）" /></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第4部分dpo直接偏好最佳化"><a class="header" href="#第4部分dpo直接偏好最佳化">第4部分：DPO（直接偏好最佳化）</a></h1>
+<h2 id="dporlhf與dpo的訓練架構對比"><a class="header" href="#dporlhf與dpo的訓練架構對比">【DPO】RLHF與DPO的訓練架構對比</a></h2>
+<p>不同於RLHF，DPO以監督學習的訓練方式，大幅簡化了對齊訓練：</p>
+<ul>
+<li><strong>流程簡潔</strong>：DPO直接對策略模型進行最佳化，不需要預先訓練Reward模型（獎勵函式）。DPO只需要基於預先給定的偏好資料進行訓練，<strong>無需</strong>中途取樣。</li>
+<li><strong>穩定性</strong>：DPO是一種監督學習方法，擺脫了強化學習訓練的不穩定性。</li>
+<li><strong>低開銷</strong>：DPO在訓練過程中只需要載入<strong>一個模型</strong>（只需載入策略模型，而對於參考模型，可以將參考模型的輸出結果預先錄製好，然後在訓練時就不需要載入），算力開銷更低，更易於落地實踐。
+<a href="images/%E3%80%90DPO%E3%80%91RLHF%E4%B8%8EDPO%E7%9A%84%E8%AE%AD%E7%BB%83%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94.png"><img src="images/%E3%80%90DPO%E3%80%91RLHF%E4%B8%8EDPO%E7%9A%84%E8%AE%AD%E7%BB%83%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94.png" alt="【DPO】RLHF與DPO的訓練架構對比" /></a></li>
+</ul>
+<h2 id="dpoprompt的收集"><a class="header" href="#dpoprompt的收集">【DPO】Prompt的收集</a></h2>
+<p><a href="images/%E3%80%90DPO%E3%80%91Prompt%E7%9A%84%E6%94%B6%E9%9B%86.png"><img src="images/%E3%80%90DPO%E3%80%91Prompt%E7%9A%84%E6%94%B6%E9%9B%86.png" alt="【DPO】Prompt的收集" /></a></p>
+<h2 id="dpodpodirect-preference-optimization"><a class="header" href="#dpodpodirect-preference-optimization">【DPO】DPO（Direct Preference Optimization）</a></h2>
+<ul>
+<li><strong>DPO</strong>（Direct Preference Optimization，直接偏好最佳化）是由斯坦福大學等研究團隊於2023年提出的一種偏好最佳化演算法，可用於LLM、VLM與MLLM的對齊訓練。</li>
+<li>該演算法在基於PPO的RLHF基礎上進行了大幅<strong>簡化</strong>。</li>
+<li>DPO演算法跳過了訓練獎勵模型這一中間過程，直接（Direct）最佳化策略模型 ——這正是DPO命名中“D（Direct）”的<strong>含義</strong>所在。
+DPO的訓練涉及2個模型——策略模型和參考模型。它們的<strong>初始化</strong>方法如下：</li>
+<li><strong>策略模型</strong>：直接複製SFT模型作為初始化。</li>
+<li><strong>參考模型</strong>：通常也從SFT模型複製。但在某些情況下，可能會選擇從一個比SFT模型更強的模型進行復制。此時，需特別關注參考模型與策略模型的匹配性，主要涉及兩者的KL距離及訓練資料分佈等方面。
+<a href="images/%E3%80%90DPO%E3%80%91DPO%EF%BC%88Direct%20Preference%20Optimization%EF%BC%89.png"><img src="images/%E3%80%90DPO%E3%80%91DPO%EF%BC%88Direct%20Preference%20Optimization%EF%BC%89.png" alt="【DPO】DPO（Direct Preference Optimization）" /></a></li>
+</ul>
+<h2 id="dpodpo訓練全景圖"><a class="header" href="#dpodpo訓練全景圖">【DPO】DPO訓練全景圖</a></h2>
+<ul>
+<li>DPO訓練時，可以選擇<strong>載入</strong>2個模型（策略模型 和參考模型 ），也可以只加載1個模型（策略模型 ）。本文將優先分析載入2個模型的情況。</li>
+<li>DPO的整體訓練流程如圖所示（<strong>藍色</strong>色塊代表偏好資料對中的“優質回答” 及其對應的中間計算結果；<strong>粉色</strong>色塊代表偏好資料對中的“劣質回答” 及其對應的中間計算結果）。
+<a href="images/%E3%80%90DPO%E3%80%91DPO%E8%AE%AD%E7%BB%83%E5%85%A8%E6%99%AF%E5%9B%BE.png"><img src="images/%E3%80%90DPO%E3%80%91DPO%E8%AE%AD%E7%BB%83%E5%85%A8%E6%99%AF%E5%9B%BE.png" alt="【DPO】DPO訓練全景圖" /></a></li>
+</ul>
+<h2 id="dpoβ引數對dpo的影響"><a class="header" href="#dpoβ引數對dpo的影響">【DPO】β引數對DPO的影響</a></h2>
+<ul>
+<li>在DPO中， 引數的作用<strong>類似</strong>於其在RLHF中的作用。
+<a href="images/%E3%80%90DPO%E3%80%91%CE%B2%E5%8F%82%E6%95%B0%E5%AF%B9DPO%E7%9A%84%E5%BD%B1%E5%93%8D.png"><img src="images/%E3%80%90DPO%E3%80%91%CE%B2%E5%8F%82%E6%95%B0%E5%AF%B9DPO%E7%9A%84%E5%BD%B1%E5%93%8D.png" alt="【DPO】β引數對DPO的影響" /></a></li>
+</ul>
+<h2 id="dpo隱式獎勵差異對引數更新幅度的影響"><a class="header" href="#dpo隱式獎勵差異對引數更新幅度的影響">【DPO】隱式獎勵差異對引數更新幅度的影響</a></h2>
+<ul>
+<li>DPO的梯度更新旨在<strong>增加</strong>優質回答的機率，同時<strong>減少</strong>劣質回答的機率。</li>
+<li>更重要的是，梯度中包含一個<strong>動態係數</strong>——優質和劣質回答的隱式獎勵差異。換言之，這個動態係數反映了隱式“獎勵模型”在對偏好順序的判斷上有多大誤差。
+<a href="images/%E3%80%90DPO%E3%80%91%E9%9A%90%E5%BC%8F%E5%A5%96%E5%8A%B1%E5%B7%AE%E5%BC%82%E5%AF%B9%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E5%B9%85%E5%BA%A6%E7%9A%84%E5%BD%B1%E5%93%8D.png"><img src="images/%E3%80%90DPO%E3%80%91%E9%9A%90%E5%BC%8F%E5%A5%96%E5%8A%B1%E5%B7%AE%E5%BC%82%E5%AF%B9%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E5%B9%85%E5%BA%A6%E7%9A%84%E5%BD%B1%E5%93%8D.png" alt="【DPO】隱式獎勵差異對引數更新幅度的影響" /></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第5部分免訓練的大型模型最佳化技術"><a class="header" href="#第5部分免訓練的大型模型最佳化技術">第5部分：免訓練的大型模型最佳化技術</a></h1>
+<h2 id="免訓練的最佳化技術cotchain-of-thought與傳統問答的對比"><a class="header" href="#免訓練的最佳化技術cotchain-of-thought與傳統問答的對比">【免訓練的最佳化技術】CoT（Chain of Thought）與傳統問答的對比</a></h2>
+<ul>
+<li><strong>CoT</strong>（Chain of Thought，<strong>思維鏈</strong>）由Jason Wei等研究者於2022年在Google期間提出，是大型模型領域的一項重要技術創新，並迅速被廣泛應用於學術研究和實際場景。</li>
+<li>其<strong>核心思想</strong>是透過顯式地分步推理，提升模型在複雜推理任務中的表現。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E4%B8%8E%E4%BC%A0%E7%BB%9F%E9%97%AE%E7%AD%94%E7%9A%84%E5%AF%B9%E6%AF%94.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E4%B8%8E%E4%BC%A0%E7%BB%9F%E9%97%AE%E7%AD%94%E7%9A%84%E5%AF%B9%E6%AF%94.png" alt="【免訓練的最佳化技術】CoT與傳統問答的對比" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術cotself-consistency-cottotgot-87"><a class="header" href="#免訓練的最佳化技術cotself-consistency-cottotgot-87">【免訓練的最佳化技術】CoT、Self-consistency CoT、ToT、GoT <sup>[<a href="references.html">87</a>]</sup></a></h2>
+<ul>
+<li>在CoT展現其潛力後，迅速<strong>衍生</strong>出多種相關技術，例如ToT、GoT、Self-consistency CoT、Zero-shot-CoT、Auto-CoT、MoT、XoT等
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E3%80%81Self-consistencyCoT%E3%80%81ToT%E3%80%81GoT.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91CoT%E3%80%81Self-consistencyCoT%E3%80%81ToT%E3%80%81GoT.png" alt="【免訓練的最佳化技術】CoT、Self-consistencyCoT、ToT、GoT" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術窮舉搜尋exhaustive-search"><a class="header" href="#免訓練的最佳化技術窮舉搜尋exhaustive-search">【免訓練的最佳化技術】窮舉搜尋（Exhaustive Search）</a></h2>
+<ul>
+<li>Token的生成過程可以形象地表示為一個以詞表大小 V=105 為基數的<strong>多叉樹</strong>結構。理論上，採用窮舉搜尋（Exhaustive Search）的方法能夠獲得全域性最優解。然而，窮舉搜尋的計算代價極高。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E7%A9%B7%E4%B8%BE%E6%90%9C%E7%B4%A2%EF%BC%88Exhaustive%20Search%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E7%A9%B7%E4%B8%BE%E6%90%9C%E7%B4%A2%EF%BC%88Exhaustive%20Search%EF%BC%89.png" alt="【免訓練的最佳化技術】窮舉搜尋（Exhaustive Search）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術貪婪搜尋greedy-search"><a class="header" href="#免訓練的最佳化技術貪婪搜尋greedy-search">【免訓練的最佳化技術】貪婪搜尋（Greedy Search）</a></h2>
+<ul>
+<li><strong>貪婪搜尋</strong>（Greedy Search）在生成下一個Token（詞元）時，每次都會選擇當前<strong>機率最高</strong>的一個Token，不考慮生成序列的全域性最優性或多樣性，然後繼續對下一個Token位置執行相同的操作。儘管這種方法簡單快速，但生成的內容可能過早陷入區域性最優，<strong>缺乏多樣性</strong>。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E8%B4%AA%E5%A9%AA%E6%90%9C%E7%B4%A2%EF%BC%88Greedy%20Search%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E8%B4%AA%E5%A9%AA%E6%90%9C%E7%B4%A2%EF%BC%88Greedy%20Search%EF%BC%89.png" alt="【免訓練的最佳化技術】貪婪搜尋（Greedy Search）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術波束搜尋beam-search"><a class="header" href="#免訓練的最佳化技術波束搜尋beam-search">【免訓練的最佳化技術】波束搜尋（Beam Search）</a></h2>
+<ul>
+<li><strong>Beam Search</strong>（波束搜尋）在每一步生成時，不僅僅選擇一個最優Token（詞元），而是保留<strong>多個候選</strong>序列（稱為Beam，即波束），其餘的路徑則被剪枝。這些候選序列會在後續步驟中繼續擴充套件，直到生成結束。</li>
+<li>最終，從所有候選序列中選擇得分<strong>最高</strong>的一條作為最終輸出。Beam的數量（num_beams引數）越大，搜尋空間越廣，生成結果越<strong>接近全域性最優</strong>，但計算成本也隨之增加。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E6%B3%A2%E6%9D%9F%E6%90%9C%E7%B4%A2%EF%BC%88Beam%20Search%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E6%B3%A2%E6%9D%9F%E6%90%9C%E7%B4%A2%EF%BC%88Beam%20Search%EF%BC%89.png" alt="【免訓練的最佳化技術】波束搜尋（Beam Search）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術多項式取樣multinomial-sampling"><a class="header" href="#免訓練的最佳化技術多項式取樣multinomial-sampling">【免訓練的最佳化技術】多項式取樣（Multinomial Sampling）</a></h2>
+<ul>
+<li><strong>多項式取樣</strong>（Multinomial Sampling）是生成式模型中一種常見的<strong>隨機取樣</strong>方法，生成下一個Token時，以模型預測的機率分佈為依據，在機率分佈中“按機率大小”隨機抽取Token（而非等機率隨機抽樣）。</li>
+<li>包含Top-K、Top-P等
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%A4%9A%E9%A1%B9%E5%BC%8F%E9%87%87%E6%A0%B7%EF%BC%88Multinomial%20Sampling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%A4%9A%E9%A1%B9%E5%BC%8F%E9%87%87%E6%A0%B7%EF%BC%88Multinomial%20Sampling%EF%BC%89.png" alt="【免訓練的最佳化技術】多項式取樣（Multinomial Sampling）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術top-k取樣top-k-sampling"><a class="header" href="#免訓練的最佳化技術top-k取樣top-k-sampling">【免訓練的最佳化技術】Top-K取樣（Top-K Sampling）</a></h2>
+<ul>
+<li><strong>Top-K取樣</strong>（Top-K Sampling）是一種在生成任務中常用的策略，類似於<strong>多項式取樣</strong>，但其取樣候選池經過限制。使用Top-K取樣時，每一步生成Token時僅保留模型預測機率最高的<strong>前K個</strong>詞，並從中按機率分佈進行隨機抽樣。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-K%E9%87%87%E6%A0%B7%EF%BC%88Top-K%20Sampling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-K%E9%87%87%E6%A0%B7%EF%BC%88Top-K%20Sampling%EF%BC%89.png" alt="【免訓練的最佳化技術】Top-K取樣（Top-K Sampling）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術top-p取樣top-p-sampling"><a class="header" href="#免訓練的最佳化技術top-p取樣top-p-sampling">【免訓練的最佳化技術】Top-P取樣（Top-P Sampling）</a></h2>
+<ul>
+<li><strong>Top-P取樣</strong>（Top-P Sampling），又稱<strong>核取樣</strong>（Nucleus Sampling），該方法透過動態選擇一個最小候選集合，使得候選詞的機率和達到設定的機率閾值P，然後，在該候選集合中隨機取樣。與Top-K取樣相比，Top-P取樣能夠根據機率累積<strong>動態調整</strong>候選集的大小。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-P%E9%87%87%E6%A0%B7%EF%BC%88Top-P%20Sampling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91Top-P%E9%87%87%E6%A0%B7%EF%BC%88Top-P%20Sampling%EF%BC%89.png" alt="【免訓練的最佳化技術】Top-P取樣（Top-P Sampling）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術rag檢索增強生成retrieval-augmented-generation"><a class="header" href="#免訓練的最佳化技術rag檢索增強生成retrieval-augmented-generation">【免訓練的最佳化技術】RAG（檢索增強生成,Retrieval-Augmented Generation）</a></h2>
+<ul>
+<li><strong>RAG</strong>（Retrieval-Augmented Generation，檢索增強生成）是一種結合資訊檢索與模型生成的技術，透過引入外部知識庫或檢索系統，增強生成式模型的知識範圍和回答準確性。</li>
+<li>Meta（前身為Facebook AI Research）等研究團隊於2020年在其發表的工作中提出了RAG，並顯著提升了知識密集型NLP任務的效能。</li>
+<li>RAG的原理如圖所示，整體可分為兩部分——離線構建環節和線上服務環節。
+<a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91RAG%EF%BC%88%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91RAG%EF%BC%88%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%89.png" alt="【免訓練的最佳化技術】RAG（檢索增強生成）" /></a></li>
+</ul>
+<h2 id="免訓練的最佳化技術功能呼叫function-calling"><a class="header" href="#免訓練的最佳化技術功能呼叫function-calling">【免訓練的最佳化技術】功能呼叫（Function Calling）</a></h2>
+<ul>
+<li><strong>功能呼叫</strong>（Function Calling），也稱工具呼叫（Tool Use），是指在基於大型模型完成任務的過程中，Agent透過特定機制呼叫外部物件，獲取返回結果後將其與原始Prompt一起輸入到大型模型，由大型模型進一步推理並完成特定任務。</li>
+<li>被呼叫的物件可以是遠端API、資料庫查詢介面、本地函式或工具外掛（Plugin）等。</li>
+<li>下圖展示了功能與工具呼叫技術的執行流程。其中，Agent是一個本地執行的軟體系統，大型模型是其子模組之一。Agent還包括使用者請求解析模組、引數處理模組、工具呼叫模組、呼叫結果解析模組及與大型模型互動的元件等。</li>
+</ul>
+<p><a href="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%8A%9F%E8%83%BD%E8%B0%83%E7%94%A8%EF%BC%88Function%20Calling%EF%BC%89.png"><img src="images/%E3%80%90%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E3%80%91%E5%8A%9F%E8%83%BD%E8%B0%83%E7%94%A8%EF%BC%88Function%20Calling%EF%BC%89.png" alt="【免訓練的最佳化技術】功能呼叫（Function Calling）" /></a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第6部分強化學習rl基礎"><a class="header" href="#第6部分強化學習rl基礎">第6部分：強化學習（RL）基礎</a></h1>
+<h2 id="強化學習基礎強化學習reinforcement-learning-rl的發展歷程"><a class="header" href="#強化學習基礎強化學習reinforcement-learning-rl的發展歷程">【強化學習基礎】強化學習(Reinforcement Learning, RL)的發展歷程</a></h2>
+<ul>
+<li>強化學習可以追溯至<strong>20世紀50年代</strong>，之後由<strong>Richard S. Sutton</strong>等學者相繼提出了許多關鍵演算法和理論。</li>
+<li>自2012年起，隨著深度學習的迅猛發展，強化學習在多個領域催生了備受關注的應用。</li>
+<li>2022年11月，結合<strong>RLHF</strong>（基於人類反饋的強化學習）訓練的ChatGPT正式釋出。</li>
+<li>隨後在2024年12月，OpenAI推出經過更深入強化學習最佳化的o1模型，這極大地激發了業界基於強化學習對大型模型進行訓練的關注和投入。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B.png" alt="【強化學習基礎】強化學習的發展歷程" /></a></li>
+</ul>
+<h2 id="強化學習基礎三大機器學習正規化"><a class="header" href="#強化學習基礎三大機器學習正規化">【強化學習基礎】三大機器學習正規化</a></h2>
+<ul>
+<li>無監督學習、監督學習和強化學習並列為三大機器學習正規化。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E4%B8%89%E5%A4%A7%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%8C%83%E5%BC%8F.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E4%B8%89%E5%A4%A7%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%8C%83%E5%BC%8F.png" alt="【強化學習基礎】三大機器學習正規化" /></a></li>
+</ul>
+<h2 id="強化學習基礎強化學習的基礎架構"><a class="header" href="#強化學習基礎強化學習的基礎架構">【強化學習基礎】強化學習的基礎架構</a></h2>
+<ul>
+<li>強化學習的執行主要涉及兩個<strong>核心角色</strong>：智慧體（Agent）和環境（Environment）。</li>
+<li><strong>智慧體</strong>透過感知環境的狀態，基於策略選擇並執行動作；</li>
+<li><strong>環境</strong>接收動作後更新狀態並反饋獎勵訊號。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84.png" alt="【強化學習基礎】強化學習的基礎架構" /></a></li>
+</ul>
+<h2 id="強化學習基礎強化學習的執行軌跡"><a class="header" href="#強化學習基礎強化學習的執行軌跡">【強化學習基礎】強化學習的執行軌跡</a></h2>
+<ul>
+<li><strong>一個RL建模示例</strong>：假設未來有一家AGI旅遊公司，提供基於自動駕駛汽車的長途旅遊服務。旅客只需選擇一個旅遊行程，自動駕駛汽車將全程負責行程規劃、駕駛以及接送服務，完成整個旅遊任務。在旅遊專案剛上線時，旅客最喜愛的路線尚未明確，需要透過<strong>多次實際執行</strong>，並結合累計獎勵（旅客評分），基於強化學習訓練旅遊路線規劃模型。目標是逐步最佳化乘客的旅遊體驗，最終確定最受旅客歡迎的最佳路線。</li>
+<li>強化學習中的各個核心<strong>概念對映</strong>如圖：
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BD%A8%E8%BF%B9.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BD%A8%E8%BF%B9.png" alt="【強化學習基礎】強化學習的執行軌跡" /></a></li>
+</ul>
+<h2 id="強化學習基礎馬爾可夫鏈vs馬爾可夫決策過程mdp"><a class="header" href="#強化學習基礎馬爾可夫鏈vs馬爾可夫決策過程mdp">【強化學習基礎】馬爾可夫鏈vs馬爾可夫決策過程（MDP）</a></h2>
+<ul>
+<li>馬爾可夫鏈和馬爾可夫決策過程（MDP）是強化學習領域的重要理論<strong>基礎</strong>。</li>
+<li><strong>馬爾可夫決策過程</strong>（Markov Decision Process, <strong>MDP</strong>）是在馬爾可夫鏈的基礎上引入了動作（A）和獎勵（R）的概念。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BEvs%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BEvs%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B.png" alt="【強化學習基礎】馬爾可夫鏈vs馬爾可夫決策過程" /></a></li>
+</ul>
+<h2 id="強化學習基礎探索與利用問題exploration-and-exploitation"><a class="header" href="#強化學習基礎探索與利用問題exploration-and-exploitation">【強化學習基礎】探索與利用問題（Exploration and Exploitation）</a></h2>
+<ul>
+<li><strong>探索與利用</strong>（Exploration-Exploitation）的平衡是強化學習的核心挑戰之一。</li>
+<li>智慧體在學習過程中需要在“嘗試新動作”（探索）與“選擇當前已知的最優動作”（利用）之間進行<strong>權衡</strong>。過度探索可能導致學習過程緩慢，甚至無法收斂到最優解；而過度利用則可能使智慧體陷入區域性最優，無法達到全域性最優回報。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8%E9%97%AE%E9%A2%98.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8%E9%97%AE%E9%A2%98.png" alt="【強化學習基礎】探索與利用問題" /></a></li>
+</ul>
+<h2 id="強化學習基礎Ɛ-貪婪策略下使用動態的Ɛ值"><a class="header" href="#強化學習基礎Ɛ-貪婪策略下使用動態的Ɛ值">【強化學習基礎】Ɛ-貪婪策略下使用動態的Ɛ值</a></h2>
+<ul>
+<li><strong>Ɛ-貪婪</strong>（Epsilon Greedy）是一種簡單而有效的策略，用於在強化學習中平衡探索與利用。透過引入探索機率因子Ɛ，控制探索與利用的比例。</li>
+<li>在訓練<strong>初期</strong>，可以將Ɛ的值設得比較<strong>大</strong>，隨著訓練的進行，逐步<strong>降低</strong> Ɛ的值，使智慧體在初期更多地進行<strong>探索</strong>，隨著對環境的瞭解加深，逐漸轉向<strong>利用</strong>，從而提高學習效率和最終策略的效能。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%C6%90-%E8%B4%AA%E5%A9%AA%E7%AD%96%E7%95%A5%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E7%9A%84%C6%90%E5%80%BC.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%C6%90-%E8%B4%AA%E5%A9%AA%E7%AD%96%E7%95%A5%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E7%9A%84%C6%90%E5%80%BC.png" alt="【強化學習基礎】Ɛ-貪婪策略下使用動態的Ɛ值" /></a></li>
+</ul>
+<h2 id="強化學習基礎強化學習訓練正規化的對比"><a class="header" href="#強化學習基礎強化學習訓練正規化的對比">【強化學習基礎】強化學習訓練正規化的對比</a></h2>
+<ul>
+<li>同策略（On-policy）、異策略（Off-policy）、線上強化學習（Online RL）和離線強化學習（Offline RL）</li>
+<li>根據經驗收集與策略訓練的方式，主要可以劃分為<strong>四個</strong>核心概念：同策略（On-policy）、異策略（Off-policy）、線上強化學習（Online RL）和離線強化學習（Offline RL）。</li>
+<li><strong>同策略（On-policy）</strong>：當行為策略與目標策略<strong>相同</strong>時，稱為同策略學習。也就是說，智慧體根據當前策略選擇動作，並利用這些經驗來更新當前策略，兩者是<strong>同一個版本</strong>的策略。如圖所示，在同策略下，行為策略和目標策略都是πn。本質上是同一個策略（模型），為了便於理解和對比，圖中繪製了兩個策略的示意圖。例如，策略梯度方法和SARSA演算法都是典型的同策略演算法。</li>
+<li><strong>異策略（Off-policy）</strong>：當行為策略與目標策略<strong>不同</strong>時，稱為異策略學習。智慧體可以使用某種策略進行探索，但學習（訓練）和最佳化的是<strong>另一種</strong>策略，兩者屬於不同版本（或不同型別）的策略。例如，Q-learning、DQN等演算法是典型的異策略演算法，儘管可能使用Ɛ-貪婪策略進行探索，但最終學習的是最優策略。</li>
+<li><strong>線上強化學習（Online RL）</strong>：在訓練過程中，策略持續與環境<strong>互動</strong>並收集經驗，訓練資料來源源不斷地動態生成，目標策略也在透過訓練不斷進化。</li>
+<li><strong>離線強化學習（Offline RL）</strong>：又稱批次強化學習（Batch RL），有時也稱為完全異策略強化學習（Fully Off-policy RL）。在訓練過程中，智慧體完全<strong>不與環境互動</strong>，而是在一個與線上環境隔離的環境中進行訓練，僅依賴預先收集的資料。這些資料可能來源於歷史記錄、其他策略的積累，或是模擬環境生成的樣本。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E8%8C%83%E5%BC%8F%E7%9A%84%E5%AF%B9%E6%AF%94.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E8%8C%83%E5%BC%8F%E7%9A%84%E5%AF%B9%E6%AF%94.png" alt="【強化學習基礎】強化學習訓練正規化的對比" /></a></li>
+</ul>
+<h2 id="強化學習基礎強化學習演算法分類"><a class="header" href="#強化學習基礎強化學習演算法分類">【強化學習基礎】強化學習演算法分類</a></h2>
+<ul>
+<li>根據不同的維度，強化學習演算法<strong>分類</strong>如下圖。</li>
+<li>此外，強化學習還常與監督學習（Supervised Learning, SL）、對比學習（Contrastive Learning, CL）、模仿學習（Imitation Learning, IL）、生成對抗網路（Generative Adversarial Networks, GAN）等技術<strong>結合</strong>，這些結合催生了多種<strong>交叉</strong>型別的演算法，進一步擴充套件了強化學習的應用領域。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB.png" alt="【強化學習基礎】強化學習演算法分類" /></a></li>
+</ul>
+<h2 id="強化學習基礎回報累計獎勵return"><a class="header" href="#強化學習基礎回報累計獎勵return">【強化學習基礎】回報（累計獎勵，Return）</a></h2>
+<ul>
+<li><strong>回報</strong>（Return），常用字母G表示（G是Gain的縮寫，即收益），也稱為未來回報、累計獎勵或累計折扣獎勵，是指從某一時間步開始，未來所有獎勵的累積總和。</li>
+<li>它衡量了從當前時間步開始，智慧體<strong>未來可能</strong>獲得的總獎勵，可用於評估智慧體策略在長期內的優劣。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%9B%9E%E6%8A%A5%EF%BC%88%E7%B4%AF%E8%AE%A1%E5%A5%96%E5%8A%B1%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%9B%9E%E6%8A%A5%EF%BC%88%E7%B4%AF%E8%AE%A1%E5%A5%96%E5%8A%B1%EF%BC%89.png" alt="【強化學習基礎】回報（累計獎勵）" /></a></li>
+</ul>
+<h2 id="強化學習基礎反向迭代並計算回報g"><a class="header" href="#強化學習基礎反向迭代並計算回報g">【強化學習基礎】反向迭代並計算回報G</a></h2>
+<ul>
+<li>引入折扣因子γ，根據經驗資料儲存，從最後一個狀態位置開始計算回報，<strong>反向迭代</strong>計算
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%8F%8D%E5%90%91%E8%BF%AD%E4%BB%A3%E5%B9%B6%E8%AE%A1%E7%AE%97%E5%9B%9E%E6%8A%A5G.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%8F%8D%E5%90%91%E8%BF%AD%E4%BB%A3%E5%B9%B6%E8%AE%A1%E7%AE%97%E5%9B%9E%E6%8A%A5G.png" alt="【強化學習基礎】反向迭代並計算回報G" /></a></li>
+</ul>
+<h2 id="強化學習基礎獎勵reward回報return價值value的關係"><a class="header" href="#強化學習基礎獎勵reward回報return價值value的關係">【強化學習基礎】獎勵（Reward）、回報（Return）、價值（Value）的關係</a></h2>
+<ul>
+<li>獎勵（Reward）、回報（Return）和價值（Value）<strong>三者</strong>的關係如圖所示。需要注意的是，此處假設折扣因子γ=1。</li>
+<li>（1）<strong>獎勵</strong>（Reward）：即時獎勵，是在某一狀態下獲得的區域性收益或<strong>短期</strong>收益。</li>
+<li>（2）<strong>回報</strong>（Return）：未來回報，是從當前狀態st開始計算，之後所有獎勵的累積和，即未來的<strong>總收益</strong>。</li>
+<li>（3）<strong>價值</strong>（Value）：價值是回報的<strong>期望</strong>值，即在所有可能的軌跡中，回報乘以其發生機率後的加權平均值，表示在平均情況下的未來總收益。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%A5%96%E5%8A%B1%E3%80%81%E5%9B%9E%E6%8A%A5%E3%80%81%E4%BB%B7%E5%80%BC%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%A5%96%E5%8A%B1%E3%80%81%E5%9B%9E%E6%8A%A5%E3%80%81%E4%BB%B7%E5%80%BC%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【強化學習基礎】獎勵、回報、價值的關係" /></a></li>
+</ul>
+<h2 id="強化學習基礎價值函式qπ與vπ的關係"><a class="header" href="#強化學習基礎價值函式qπ與vπ的關係">【強化學習基礎】價值函式Qπ與Vπ的關係</a></h2>
+<ul>
+<li><strong>動作價值函式</strong>（Action-Value Function）衡量在策略π下，智慧體在狀態s時採取動作 a後未來所能獲得的回報的期望值，該期望值有時也泛稱為<strong>Q值</strong>（Q-value），通常記為Qπ(s,a)</li>
+<li><strong>狀態價值函式</strong>（State-Value Function），記為Vπ(s)，表示在狀態s下，遵循策略π時，智慧體未來能夠獲得的回報的期望值。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0Q%CF%80%E4%B8%8EV%CF%80%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0Q%CF%80%E4%B8%8EV%CF%80%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【強化學習基礎】價值函式Qπ與Vπ的關係" /></a></li>
+</ul>
+<h2 id="強化學習基礎蒙特卡洛monte-carlomc法預估狀態st的價值"><a class="header" href="#強化學習基礎蒙特卡洛monte-carlomc法預估狀態st的價值">【強化學習基礎】蒙特卡洛（Monte Carlo，MC）法預估狀態St的價值</a></h2>
+<ul>
+<li><strong>蒙特卡洛</strong>（Monte Carlo, <strong>MC</strong>）方法是一種基於<strong>隨機取樣</strong>的計算方法，利用隨機取樣來解決在原則上可能是確定性的難題。</li>
+<li>在強化學習中，蒙特卡洛方法是指透過多次實際執行試驗，獲得多個實際的執行軌跡，根據這些結果來估計價值函式或最佳化策略，特別適用於那些環境模型未知或難以解析的問題。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%B3%95%E9%A2%84%E4%BC%B0%E7%8A%B6%E6%80%81St%E7%9A%84%E4%BB%B7%E5%80%BC.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%B3%95%E9%A2%84%E4%BC%B0%E7%8A%B6%E6%80%81St%E7%9A%84%E4%BB%B7%E5%80%BC.png" alt="【強化學習基礎】蒙特卡洛法預估狀態St的價值" /></a></li>
+</ul>
+<h2 id="強化學習基礎td目標與td誤差的關係td-target-and-td-error"><a class="header" href="#強化學習基礎td目標與td誤差的關係td-target-and-td-error">【強化學習基礎】TD目標與TD誤差的關係（TD target and TD error）</a></h2>
+<ul>
+<li><strong>TD error</strong>（TD誤差）衡量了當前價值估計與TD目標之間的差異，它反映了當前估計與最新資訊的不一致程度，<strong>指導</strong>價值函式的更新方向和幅度。</li>
+<li><strong>TD target</strong> （TD目標）包含了最新的環境反饋資訊rt+1，因此被認為比V(st)<strong>更接近真實值</strong>，通常將TD目標作為價值函式擬合的目標。TD目標與TD誤差的關係如圖所示。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91TD%E7%9B%AE%E6%A0%87%E4%B8%8ETD%E8%AF%AF%E5%B7%AE%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91TD%E7%9B%AE%E6%A0%87%E4%B8%8ETD%E8%AF%AF%E5%B7%AE%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【強化學習基礎】TD目標與TD誤差的關係" /></a></li>
+</ul>
+<h2 id="強化學習基礎td0多步td與蒙特卡洛mc的關係"><a class="header" href="#強化學習基礎td0多步td與蒙特卡洛mc的關係">【強化學習基礎】TD(0)、多步TD與蒙特卡洛（MC）的關係</a></h2>
+<ul>
+<li>TD(0)、多步TD與蒙特卡洛方法之間存在緊密的聯絡。如圖：</li>
+<li>當步數n=1時，多步TD<strong>退化</strong>為TD(0)；</li>
+<li>當步數n趨近於無窮大時，多步TD<strong>退化</strong>為蒙特卡洛方法。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91TD%280%29%E3%80%81%E5%A4%9A%E6%AD%A5TD%E4%B8%8E%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%EF%BC%88MC%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91TD%280%29%E3%80%81%E5%A4%9A%E6%AD%A5TD%E4%B8%8E%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%EF%BC%88MC%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【強化學習基礎】TD(0)、多步TD與蒙特卡洛（MC）的關係" /></a></li>
+</ul>
+<h2 id="強化學習基礎蒙特卡洛方法與td方法的特性"><a class="header" href="#強化學習基礎蒙特卡洛方法與td方法的特性">【強化學習基礎】蒙特卡洛方法與TD方法的特性</a></h2>
+<ul>
+<li>蒙特卡洛方法和TD方法在估計價值時各有<strong>優劣</strong>：蒙特卡洛方法低偏差、高方差；TD方法高偏差、低方差。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95%E4%B8%8ETD%E6%96%B9%E6%B3%95%E7%9A%84%E7%89%B9%E6%80%A7.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95%E4%B8%8ETD%E6%96%B9%E6%B3%95%E7%9A%84%E7%89%B9%E6%80%A7.png" alt="【強化學習基礎】蒙特卡洛方法與TD方法的特性" /></a></li>
+</ul>
+<h2 id="強化學習基礎蒙特卡洛tddp窮舉搜尋的關係-32"><a class="header" href="#強化學習基礎蒙特卡洛tddp窮舉搜尋的關係-32">【強化學習基礎】蒙特卡洛、TD、DP、窮舉搜尋的關係 <sup>[<a href="references.html">32</a>]</sup></a></h2>
+<ul>
+<li>在強化學習中，有<strong>四類方法</strong>可以進行價值估計與策略最佳化：蒙特卡洛、時序差分（Temporal Difference, TD）、動態規劃（Dynamic Programming, DP）以及窮舉搜尋（Brute-Force Search）。</li>
+<li>從深度搜索和廣度搜索的視角看，它們的區別如圖。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E3%80%81TD%E3%80%81DP%E3%80%81%E7%A9%B7%E4%B8%BE%E6%90%9C%E7%B4%A2%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E3%80%81TD%E3%80%81DP%E3%80%81%E7%A9%B7%E4%B8%BE%E6%90%9C%E7%B4%A2%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【強化學習基礎】蒙特卡洛、TD、DP、窮舉搜尋的關係" /></a></li>
+</ul>
+<h2 id="強化學習基礎兩種輸入輸出結構的dqndeep-q-network模型"><a class="header" href="#強化學習基礎兩種輸入輸出結構的dqndeep-q-network模型">【強化學習基礎】兩種輸入輸出結構的DQN（Deep Q-Network）模型</a></h2>
+<p>DQN模型的輸入輸出結構有<strong>兩種</strong>型別：</p>
+<ul>
+<li>（1）輸入為當前狀態（S0）和候選執行的動作（A0），輸出為對應的價值Q0（未來回報的預估）。在實際應用中，也可以批次計算<strong>多個</strong>動作的價值Q。</li>
+<li>（2）輸入為當前狀態（S0），輸出為動作空間中所有動作對應的價值Q。在實際應用中，通常選擇具有<strong>最大價值</strong>的動作執行。</li>
+</ul>
+<p><a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E4%B8%A4%E7%A7%8D%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%84%E7%9A%84DQN%E6%A8%A1%E5%9E%8B.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E4%B8%A4%E7%A7%8D%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%84%E7%9A%84DQN%E6%A8%A1%E5%9E%8B.png" alt="【強化學習基礎】兩種輸入輸出結構的DQN模型" /></a></p>
+<h2 id="強化學習基礎dqn的實際應用示例"><a class="header" href="#強化學習基礎dqn的實際應用示例">【強化學習基礎】DQN的實際應用示例</a></h2>
+<ul>
+<li>訓練完成後，DQN模型可<strong>部署</strong>到線上環境，幫助進行實際決策。</li>
+<li>在推理時，如圖所示，根據輸出的價值Q選擇<strong>最優動作</strong>執行。由於DQN是基於價值的強化學習演算法，輸出的值僅為價值Q，需要進一步<strong>轉換為</strong>實際執行的動作A。常見的方法是從所有價值Q中選取最大值對應的動作，並作為最優動作執行。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91DQN%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91DQN%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B.png" alt="【強化學習基礎】DQN的實際應用示例" /></a></li>
+</ul>
+<h2 id="強化學習基礎dqn的高估問題"><a class="header" href="#強化學習基礎dqn的高估問題">【強化學習基礎】DQN的“高估”問題</a></h2>
+<ul>
+<li>DQN演算法的<strong>兩大核心</strong>問題：（1）“高估”問題; （2）“狗追尾巴”問題。</li>
+<li>（1）<strong>高估</strong>問題：DQN在選擇和評估動作時，動作價值Q常被過高估計，導致策略優化出現偏差，影響最終效能。這主要由於<strong>最大化</strong>操作中包含了高估部分的值，如圖所示，最終目標價值yt中包含了額外高估的部分，並且這種高估會逐步<strong>累積</strong>。此外，這種高估是“非均勻”的，即不同動作的價值Q被高估的程度各不相同。</li>
+<li>（2）<strong>狗追尾巴</strong>問題：也稱為<strong>自舉</strong>問題，如式所示，DQN的訓練過程可以看做一個“迴歸問題”，但是迴歸（要擬合）的目標yt<strong>總是在變</strong>，所以提升了訓練的難度。在DQN中，計算目標價值 和當前狀態st的價值預測值 使用相同的網路權重θ。由於迴歸的目標yt依賴於當前網路的權重θ，當網路權重更新後變為θ′；下一步訓練時，計算出的價值預測值和迴歸的目標yt值將同步變化。這種動態相互依賴關係就像“狗追尾巴”一樣，不斷迴圈，導致最佳化過程容易不穩定，甚至<strong>難以收斂</strong>。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91DQN%E7%9A%84%E2%80%9C%E9%AB%98%E4%BC%B0%E2%80%9D%E9%97%AE%E9%A2%98.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91DQN%E7%9A%84%E2%80%9C%E9%AB%98%E4%BC%B0%E2%80%9D%E9%97%AE%E9%A2%98.png" alt="【強化學習基礎】DQN的“高估”問題" /></a></li>
+</ul>
+<h2 id="強化學習基礎基於價值vs基於策略value-based-vs-policy-based"><a class="header" href="#強化學習基礎基於價值vs基於策略value-based-vs-policy-based">【強化學習基礎】基於價值vs基於策略（Value-Based vs Policy-Based）</a></h2>
+<ul>
+<li>根據<strong>學習物件</strong>的不同：分為基於價值（Value-Based）、基於策略（Policy-Based）以及演員-評委（Actor-Critic）方法。</li>
+<li>基於價值的演算法透過估計各狀態的價值函式（例如V或Q）來間接推匯出<strong>最優策略</strong>；</li>
+<li>基於策略的演算法直接學習和最佳化策略函式π；</li>
+<li>演員-評委方法則同時<strong>結合</strong>了基於價值和基於策略的特點。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BCvs%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BCvs%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5.png" alt="【強化學習基礎】基於價值vs基於策略" /></a></li>
+</ul>
+<h2 id="強化學習基礎策略梯度policy-gradient"><a class="header" href="#強化學習基礎策略梯度policy-gradient">【強化學習基礎】策略梯度（Policy Gradient）</a></h2>
+<ul>
+<li><strong>策略梯度</strong>是強化學習眾多演算法的理論<strong>基石</strong>。例如，PPO演算法、GRPO演算法、DPG演算法以及基於Actor-Critic架構的眾多演算法都建立於策略梯度之上。</li>
+<li><strong>RL之父</strong> Richard S. Sutton等人則在前人基礎上進一步提出了更為嚴謹且系統化的<strong>策略梯度定理</strong>（Policy Gradient Theorem）。</li>
+<li>與基於價值（Value-Based）的方法（例如DQN等）不同，透過<strong>直接最佳化策略</strong>以最大化回報（累積獎勵），直接對策略函式進行引數化，並透過梯度上升或下降的方式最佳化策略引數。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6.png" alt="【強化學習基礎】策略梯度" /></a></li>
+</ul>
+<h2 id="強化學習基礎多智慧體強化學習marlmulti-agent-reinforcement-learning"><a class="header" href="#強化學習基礎多智慧體強化學習marlmulti-agent-reinforcement-learning">【強化學習基礎】多智慧體強化學習（MARL，Multi-agent reinforcement learning）</a></h2>
+<ul>
+<li>多智慧體強化學習（Multi-Agent Reinforcement Learning，MARL）是強化學習的一個重要分支，旨在研究<strong>多個智慧體</strong>在<strong>共享</strong>環境中透過互動（包括競爭與合作）學習最優策略的問題。</li>
+<li>例如，DeepMind的研究團隊開發的AlphaGo、AlphaZero和AlphaStar等，OpenAI開發的OpenAI Five，展示了多智慧體強化學習的強大潛力。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88MARL%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88MARL%EF%BC%89.png" alt="【強化學習基礎】多智慧體強化學習（MARL）" /></a></li>
+</ul>
+<h2 id="強化學習基礎多智慧體ddpg-41"><a class="header" href="#強化學習基礎多智慧體ddpg-41">【強化學習基礎】多智慧體DDPG <sup>[<a href="references.html">41</a>]</sup></a></h2>
+<ul>
+<li><strong>MADDPG</strong>（Multi-Agent DDPG）由OpenAI等研究團隊於2017年發表。</li>
+<li>如圖所示，描述了一個具有<strong>N個智慧體</strong>的環境，包含N個策略網路（π1, π2,…, πN）和N個價值網路（Q1, Q2,…, QN），這些網路各自<strong>獨立</strong>地進行學習。</li>
+<li>價值網路Qi 接收所有智慧體的動作（A1, A2,…, A N）和觀測資訊（O1, O2,…, ON）作為輸入，並輸出對應於第i個智慧體的<strong>Q值</strong>。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93DDPG.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93DDPG.png" alt="【強化學習基礎】多智慧體DDPG" /></a></li>
+</ul>
+<h2 id="強化學習基礎模仿學習ilimitation-learning"><a class="header" href="#強化學習基礎模仿學習ilimitation-learning">【強化學習基礎】模仿學習（IL，Imitation Learning）</a></h2>
+<ul>
+<li><strong>模仿學習</strong>（Imitation Learning，IL）是一種透過觀察並<strong>模仿專家</strong>行為來學習複雜任務的機器學習方法。</li>
+<li>與傳統的強化學習不同，模仿學習<strong>無需</strong>明確的獎勵函式，而是直接從專家的示範中學習策略。這種方法特別適用於那些難以手工設計獎勵函式的任務場景。
+常見的模仿學習演算法主要分為<strong>三類</strong>：</li>
+<li>（1）<strong>行為克隆</strong>（Behavioral Cloning，<strong>BC</strong>）：基於監督學習方法，直接從專家的狀態-動作對中學習對映關係。</li>
+<li>（2）<strong>逆向強化學習</strong>（Inverse Reinforcement Learning，<strong>IRL</strong>）：基於強化學習方法，透過推斷獎勵函式間接學習策略。</li>
+<li>（3）<strong>生成對抗模仿學習</strong>（Generative Adversarial Imitation Learning，<strong>GAIL</strong>）：借鑑生成對抗學習的思想，透過對抗過程最佳化策略。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E6%A8%A1%E4%BB%BF%E5%AD%A6%E4%B9%A0%EF%BC%88IL%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E6%A8%A1%E4%BB%BF%E5%AD%A6%E4%B9%A0%EF%BC%88IL%EF%BC%89.png" alt="【強化學習基礎】模仿學習（IL）" /></a></li>
+</ul>
+<h2 id="強化學習基礎行為克隆bcbehavior-cloning"><a class="header" href="#強化學習基礎行為克隆bcbehavior-cloning">【強化學習基礎】行為克隆（BC，Behavior Cloning）</a></h2>
+<ul>
+<li><strong>行為克隆</strong>（Behavioral Cloning,<strong>BC</strong>）是一種結合了<strong>監督學習</strong>的機器學習方法，透過學習專家在不同狀態（State）下采取的動作（Action）的對映關係來模仿專家的行為。</li>
+<li>行為克隆將問題視為一個<strong>迴歸或分類</strong>問題，輸入為環境的狀態，輸出為相應的動作。透過最小化預測動作與專家動作之間的誤差，模型能夠在類似狀態下采取與專家相似的動作。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%A1%8C%E4%B8%BA%E5%85%8B%E9%9A%86%EF%BC%88BC%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E8%A1%8C%E4%B8%BA%E5%85%8B%E9%9A%86%EF%BC%88BC%EF%BC%89.png" alt="【強化學習基礎】行為克隆（BC）" /></a></li>
+</ul>
+<h2 id="強化學習基礎逆向強化學習irlinverse-rl強化學習rl"><a class="header" href="#強化學習基礎逆向強化學習irlinverse-rl強化學習rl">【強化學習基礎】逆向強化學習（IRL，Inverse RL）、強化學習（RL）</a></h2>
+<ul>
+<li><strong>逆向強化學習</strong>（Inverse Reinforcement Learning, <strong>IRL</strong>）指的是根據專家或智慧體的行為，<strong>推斷</strong>其背後的獎勵函式，然後，基於此獎勵函式學習最優策略。</li>
+<li>這一過程與傳統強化學習（RL）<strong>相反</strong>，後者通常是在已知獎勵函式的情況下學習最優策略，而逆向強化學習則是在已知行為的基礎上<strong>反推</strong>出獎勵函式，再進一步學習策略。</li>
+<li><strong>吳恩達</strong>（Andrew Y. Ng）和Stuart Russell於2000年發表了《Algorithms for Inverse Reinforcement Learning》一文，系統性地闡述了逆強化學習的核心概念。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E9%80%86%E5%90%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88IRL%EF%BC%89%E3%80%81%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88RL%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E9%80%86%E5%90%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88IRL%EF%BC%89%E3%80%81%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88RL%EF%BC%89.png" alt="【強化學習基礎】逆向強化學習（IRL）、強化學習（RL）" /></a></li>
+</ul>
+<h2 id="強化學習基礎有模型model-based無模型model-free"><a class="header" href="#強化學習基礎有模型model-based無模型model-free">【強化學習基礎】有模型（Model-Based）、無模型（Model-Free）</a></h2>
+<ul>
+<li>根據<strong>是否依賴環境</strong>模型：分為有模型（Model-Based）和無模型（Model-Free）的方法。</li>
+<li>有模型的方法利用環境模型進行規劃和決策；無模型的方法則直接透過與環境互動學習策略或價值函式。</li>
+</ul>
+<p><a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E6%9C%89%E6%A8%A1%E5%9E%8B%EF%BC%88Model-Based%EF%BC%89%E3%80%81%E6%97%A0%E6%A8%A1%E5%9E%8B%EF%BC%88Model-Free%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E6%9C%89%E6%A8%A1%E5%9E%8B%EF%BC%88Model-Based%EF%BC%89%E3%80%81%E6%97%A0%E6%A8%A1%E5%9E%8B%EF%BC%88Model-Free%EF%BC%89.png" alt="【強化學習基礎】有模型（Model-Based）、無模型（Model-Free）" /></a></p>
+<h2 id="強化學習基礎封建等級強化學習feudal-rl"><a class="header" href="#強化學習基礎封建等級強化學習feudal-rl">【強化學習基礎】封建等級強化學習（Feudal RL）</a></h2>
+<ul>
+<li><strong>分層強化學習</strong>（Hierarchical Reinforcement Learning, <strong>HRL</strong>）是一種<strong>分而治之</strong>的強化學習框架，透過將複雜的任務分解為多個層次的較小的子任務或<strong>子策略</strong>，使智慧體能夠在不同的抽象層次上學習和決策。</li>
+<li>該領域發展至今，已經湧現出多種經典演算法，例如，封建等級強化學習（Feudal RL）和MAXQ等演算法。</li>
+<li><strong>封建等級強化學習</strong>（Feudal Reinforcement Learning, Feudal RL）最早由<strong>AI巨佬Geoffrey E. Hinton</strong>等人提出，Hinton因其在人工智慧領域的突出貢獻於2024年獲得諾貝爾物理學獎。
+<a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%B0%81%E5%BB%BA%E7%AD%89%E7%BA%A7%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88Feudal%20RL%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%B0%81%E5%BB%BA%E7%AD%89%E7%BA%A7%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88Feudal%20RL%EF%BC%89.png" alt="【強化學習基礎】封建等級強化學習（Feudal RL）" /></a></li>
+</ul>
+<h2 id="強化學習基礎分佈價值強化學習distributional-rl"><a class="header" href="#強化學習基礎分佈價值強化學習distributional-rl">【強化學習基礎】分佈價值強化學習（Distributional RL）</a></h2>
+<ul>
+<li><strong>分佈價值強化學習</strong>（Distributional Reinforcement Learning）指的是直接對回報（累積獎勵）的<strong>分佈</strong>進行建模，而不僅僅是對其期望值進行估計。</li>
+<li>分佈價值模型包含了更豐富的價值資訊，能夠更全面地<strong>捕捉</strong>環境的不確定性，從而在策略最佳化和潛在風險管理等方面提供優勢。</li>
+</ul>
+<p><a href="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%88%86%E5%B8%83%E4%BB%B7%E5%80%BC%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88Distributional%20RL%EF%BC%89.png"><img src="images/%E3%80%90%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E3%80%91%E5%88%86%E5%B8%83%E4%BB%B7%E5%80%BC%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88Distributional%20RL%EF%BC%89.png" alt="【強化學習基礎】分佈價值強化學習（Distributional RL）" /></a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第7部分策略最佳化架構及衍生演算法"><a class="header" href="#第7部分策略最佳化架構及衍生演算法">第7部分：策略最佳化架構及衍生演算法</a></h1>
+<h2 id="策略最佳化架構演算法及其衍生actor-critic架構"><a class="header" href="#策略最佳化架構演算法及其衍生actor-critic架構">【策略最佳化架構演算法及其衍生】Actor-Critic架構</a></h2>
+<ul>
+<li><strong>Actor-Critic</strong>架構（AC架構），即演員-評委架構，是一種應用極為<strong>廣泛</strong>的強化學習架構。知名的PPO、DPG、DDPG、TD3等演算法均基於Actor-Critic架構。</li>
+<li>（1）<strong>Actor（演員）</strong>：對應於<strong>策略模型</strong>π，負責選擇動作，直接輸出策略π(a | s)，即在給定狀態s下選擇動作a的機率分佈。</li>
+<li>（2）<strong>Critic（評委）</strong>：對應於<strong>價值模型</strong>Q，評估Actor執行的動作的好壞，這可以協助Actor逐步最佳化策略模型的引數。</li>
+<li>該架構有效<strong>融合</strong>了基於策略（Policy-Based）和基於價值（Value-Based）的方法，結合了兩種方法的優勢，透過同時學習策略和價值函式來提升學習效率與穩定性，是一種混合型方法。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91Actor-Critic%E6%9E%B6%E6%9E%84.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91Actor-Critic%E6%9E%B6%E6%9E%84.png" alt="【策略最佳化架構演算法及其衍生】Actor-Critic架構" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生引入基線與優勢advantage函式a的作用"><a class="header" href="#策略最佳化架構演算法及其衍生引入基線與優勢advantage函式a的作用">【策略最佳化架構演算法及其衍生】引入基線與優勢（Advantage）函式A的作用</a></h2>
+<ul>
+<li>基礎版本的Actor-Critic架構存在<strong>高方差</strong>等問題。為了解決這些問題，A2C（Advantage Actor-Critic）方法在Actor-Critic的基礎上引入<strong>基線</strong>（Baseline），並進一步構造了<strong>優勢函式</strong>（Advantage Function）。</li>
+<li>（1）引入<strong>基線</strong>：基線通常採用狀態價值函式V(s)，即在狀態s下的預期回報。將基線設為V(s)，相當於在每個狀態s下設定了一個<strong>平均水平</strong>。</li>
+<li>（2）構造<strong>優勢函式</strong>：優勢函式衡量在給定狀態下，採取某一動作相對於“平均水平”的優劣，即某個動作a相對於特定狀態下其他動作的<strong>相對</strong>優勢。優勢函式關注的是執行某個動作的相對優勢，而非動作的絕對價值。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E5%BC%95%E5%85%A5%E5%9F%BA%E7%BA%BF%E4%B8%8E%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0A%E7%9A%84%E4%BD%9C%E7%94%A8.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E5%BC%95%E5%85%A5%E5%9F%BA%E7%BA%BF%E4%B8%8E%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0A%E7%9A%84%E4%BD%9C%E7%94%A8.png" alt="【策略最佳化架構演算法及其衍生】引入基線與優勢函式A的作用" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生gae廣義優勢估計generalized-advantage-estimation演算法"><a class="header" href="#策略最佳化架構演算法及其衍生gae廣義優勢估計generalized-advantage-estimation演算法">【策略最佳化架構演算法及其衍生】GAE（廣義優勢估計,Generalized Advantage Estimation）演算法</a></h2>
+<ul>
+<li><strong>GAE</strong>（Generalized Advantage Estimation, <strong>廣義優勢估計</strong>）演算法由<strong>RL巨佬John Schulman</strong>等發表。該演算法是<strong>PPO</strong>等演算法的關鍵組成部分。</li>
+<li>GAE演算法<strong>借鑑</strong>了TD(λ)演算法的思路，（TD(λ)如《大型模型演算法》5.3.3節所述）。TD(λ)演算法透過調節λ因子在偏差和方差之間取得平衡，GAE演算法也使用λ因子以達到類似的目的。</li>
+<li>GAE演算法計算時，通常採用<strong>遞迴</strong>求解的方式進行。</li>
+<li>GAE演算法的虛擬碼如下。演算法 6.1 GAE 演算法核心實現</li>
+</ul>
+<pre><code class="language-python">import numpy as np
+
+def compute_gae(rewards, values, gamma=0.99, lambda_=0.95):
+    """
+    引數:
+        rewards (list 或 np.ndarray): 每個時間步收集到的獎勵 r，形狀為 (T,)
+        values  (list 或 np.ndarray): 每個狀態的價值估計 V，形狀為 (T+1,)
+        gamma   (float): 折扣因子 γ
+        lambda_ (float): GAE 的衰減引數 λ
+    返回:
+        np.ndarray: 優勢估計 A，形狀為 (T,)。例如對於 T=5，A=[A0, A1, A2, A3, A4]
+    """
+    T = len(rewards)            # 時間步數 T，終止時間步為 t=T-1
+    advantages = np.zeros(T)    # 優勢估計陣列，例如 [A0, A1, A2, A3, A4]
+    gae = 0                     # 初始化 GAE 累計值為 0
+
+    # 反向從時間步 t=T-1 到 t=0 進行迭代計算，總共迭代 T 次
+    for t in reversed(range(T)):
+        # δ_t = r_t + γ * V(s_{t+1}) - V(s_t)
+        delta = rewards[t] + gamma * values[t + 1] - values[t]
+        # A_t = δ_t + γ * λ * A_{t+1}
+        gae = delta + gamma * lambda_ * gae
+        advantages[t] = gae
+
+    return advantages
+</code></pre>
+<p><a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GAE%EF%BC%88%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF%E4%BC%B0%E8%AE%A1%EF%BC%89%E7%AE%97%E6%B3%95.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GAE%EF%BC%88%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF%E4%BC%B0%E8%AE%A1%EF%BC%89%E7%AE%97%E6%B3%95.png" alt="【策略最佳化架構演算法及其衍生】GAE（廣義優勢估計）演算法" /></a></p>
+<h2 id="策略最佳化架構演算法及其衍生ppoproximal-policy-optimization演算法的演進"><a class="header" href="#策略最佳化架構演算法及其衍生ppoproximal-policy-optimization演算法的演進">【策略最佳化架構演算法及其衍生】PPO（Proximal Policy Optimization）演算法的演進</a></h2>
+<ul>
+<li><strong>PPO</strong>（Proximal Policy Optimization，近端策略最佳化），有多種<strong>變體</strong>，例如PPO-Penalty和PPO-Clip，這些演算法繼承了部分<strong>TRPO</strong>演算法的思想。</li>
+<li><strong>PPO-Clip</strong>因其更優的效果而獲得了更多關注和應用，因此<strong>通常</strong>所說的PPO即指<strong>PPO-Clip</strong>。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E7%AE%97%E6%B3%95%E7%9A%84%E6%BC%94%E8%BF%9B.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E7%AE%97%E6%B3%95%E7%9A%84%E6%BC%94%E8%BF%9B.png" alt="【策略最佳化架構演算法及其衍生】PPO演算法的演進" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生trpotrust-region-policy-optimization及其置信域"><a class="header" href="#策略最佳化架構演算法及其衍生trpotrust-region-policy-optimization及其置信域">【策略最佳化架構演算法及其衍生】TRPO（Trust Region Policy Optimization）及其置信域</a></h2>
+<ul>
+<li><strong>TRPO</strong>（Trust Region Policy Optimization，置信域策略最佳化），可以說是<strong>PPO的前身</strong>。</li>
+<li>該演算法是對策略梯度演算法的改進，基於<strong>兩個核心</strong>概念：置信域和重要性取樣（Importance Sampling）。雖然這兩個概念並非在TRPO中首次提出，但TRPO將它們與策略梯度演算法相結合，顯著提升了演算法的效果。</li>
+<li>TRPO的核心<strong>思想</strong>是在最大化目標函式J(θ)的同時，限制新舊策略之間的差異。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91TRPO%E5%8F%8A%E5%85%B6%E7%BD%AE%E4%BF%A1%E5%9F%9F.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91TRPO%E5%8F%8A%E5%85%B6%E7%BD%AE%E4%BF%A1%E5%9F%9F.png" alt="【策略最佳化架構演算法及其衍生】TRPO及其置信域" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生重要性取樣importance-sampling"><a class="header" href="#策略最佳化架構演算法及其衍生重要性取樣importance-sampling">【策略最佳化架構演算法及其衍生】重要性取樣（Importance sampling）</a></h2>
+<ul>
+<li>重要性取樣在諸如TRPO和PPO等強化學習演算法中具有關鍵作用，其主要功能是<strong>修正</strong>新舊策略之間的分佈差異，使得可以利用舊策略所採集的資料來最佳化新策略。</li>
+<li><strong>重要性取樣</strong>（Importance Sampling）是一種基於<strong>蒙特卡洛</strong>取樣思想的方法，經常被用於估計期望值和積分。該方法基於輔助分佈進行取樣，並透過重要性權重對估計值進行修正，從而提高取樣和估計的效率。</li>
+<li>重要性取樣需滿足該<strong>條件</strong>：如果在某個x上p(x)的機率值大於0，那麼p'(x)在同一個位置的機率也必須大於0（p'(x)不能為零，意味著該位置在p'(x)中也有可能性）。這是<strong>因為</strong>如果在p(x)非零的地方p'(x)= 0，那麼在這些x上的貢獻就無法透過p'(x)來取樣計算，一些x的取值會在積分中丟失。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7.png" alt="【策略最佳化架構演算法及其衍生】重要性取樣" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生ppo-clip"><a class="header" href="#策略最佳化架構演算法及其衍生ppo-clip">【策略最佳化架構演算法及其衍生】PPO-Clip</a></h2>
+<ul>
+<li>通常所說的PPO即指PPO-Clip（近端策略最佳化-剪裁）。</li>
+<li>PO-Clip的<strong>目標</strong>是最大化未來回報的期望，具體來說，透過最大化目標函式J(θ)來最佳化策略，PPO-Clip的目標函式如下圖。</li>
+<li>clip與min操作的<strong>意義</strong>：意義如下圖的曲線圖，為清晰起見，對式中的部分項用兩種縮放係數進行替換，可以分別稱為“線性”縮放係數和“剪裁”縮放<strong>係數</strong>。</li>
+</ul>
+<p><a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO-Clip.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO-Clip.png" alt="【策略最佳化架構演算法及其衍生】PPO-Clip" /></a></p>
+<h2 id="策略最佳化架構演算法及其衍生ppo訓練中策略模型的更新過程"><a class="header" href="#策略最佳化架構演算法及其衍生ppo訓練中策略模型的更新過程">【策略最佳化架構演算法及其衍生】PPO訓練中策略模型的更新過程</a></h2>
+<ul>
+<li>如圖簡要展示了通用場景下PPO的訓練流程及策略模型（Actor）引數θ的更新過程，其中價值模型（Critic）未在圖中展示。PPO的訓練流程主要包括以下<strong>兩個階段</strong>：</li>
+<li>（1）<strong>樣本收集</strong>：基於舊策略收集樣本，生成多條軌跡（經驗），並存入<strong>回放緩衝區</strong>，供後續訓練使用。</li>
+<li>（2）<strong>多輪PPO訓練</strong>：將回放緩衝區中的所有樣本隨機打散，並劃分為多個<strong>小批次</strong>（mini-batches），以便進行小批次訓練。針對每個小批次（圖中的“批次 1”、“批次 2”），分別進行一次訓練與引數更新，總計完成mini_batch次訓練。如果設定的ppo_epochs &gt; 1，則重複利用回放緩衝區中的所有樣本，再次隨機打散並切分為小批次，重複上述訓練過程ppo_epochs輪（圖中的“第 1 輪”、“第 2 輪”）。透過對這一大批次樣本的多輪訓練，顯著提升了樣本的重複利用率。在第二階段中，總計完成ppo_epochs×mini_batch次訓練與引數更新。</li>
+<li>以上兩個階段不斷<strong>迴圈</strong>執行，每一次迴圈稱為一個迭代（iteration）。經過多次迭代，直至完成所有PPO訓練任務。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E7%AD%96%E7%95%A5%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E7%AD%96%E7%95%A5%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B.png" alt="【策略最佳化架構演算法及其衍生】PPO訓練中策略模型的更新過程" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生ppo的虛擬碼"><a class="header" href="#策略最佳化架構演算法及其衍生ppo的虛擬碼">【策略最佳化架構演算法及其衍生】PPO的虛擬碼</a></h2>
+<pre><code class="language-python">### 簡寫 R:rewards, V:values, Adv:advantages, J:objective, P:probability
+for iteration in range(num_iterations):  # 進行num_iterations個訓練迭代
+    #【1/2】收集樣本(prompt, response_old, logP_old, Adv, V_target)
+    prompt_batch, response_old_batch = [], []
+    logP_old_batch, Adv_batch, V_target_batch = [], [], []
+    for _ in range(num_examples):
+        logP_old, response_old  = actor_model(prompt)
+        V_old    = critic_model(prompt, response_old)
+        R        = reward_model(prompt, response_old)[-1]
+        logP_ref = ref_model(prompt, response_old)
+        
+        # KL距離懲罰。注意：上面的R只取了最後一個token對應的獎勵分數
+        KL = logP_old - logP_ref
+        R_with_KL = R - scale_factor * KL
+
+        # 透過GAE演算法計算優勢Adv
+        Adv = GAE_Advantage(R_with_KL, V_old, gamma, λ)
+        V_target = Adv + V_old
+
+        prompt_batch        += prompt
+        response_old_batch  += response_old
+        logP_old_batch      += logP_old
+        Adv_batch           += Adv
+        V_target_batch      += V_target
+
+    # 【2/2】多輪PPO訓練，多次引數更新
+    for _ in range(ppo_epochs):
+        mini_batches = shuffle_split( (prompt_batch, response_old_batch, 
+            logP_old_batch, Adv_batch, V_target_batch), mini_batch_size )
+        
+        for prompt, response_old, logP_old, Adv, V_target in mini_batches:
+            logits, logP_new = actor_model(prompt, response_old)
+            V_new            = critic_model(prompt, response_old)
+
+            # 策略機率比: ratio(θ) = π_θ(a|s) / π_θ_old (a|s)
+            ratios = exp(logP_new - logP_old)
+
+            # 計算策略模型Loss
+            L_clip = -mean( min( ratios * Adv,
+                                clip(ratios, 1 - ε, 1 + ε) * Adv ) )
+            
+            S_entropy = mean( compute_entropy(logits) )  # 計算策略的熵
+
+            Loss_V = mean((V_new - V_target) ** 2)   # 計算價值模型Loss
+
+            Loss = L_clip + C1 * Loss_V - C2 * S_entropy # 總損失
+            backward_update(Loss, L_clip, Loss_V) # 反向傳播; 更新模型引數
+</code></pre>
+<h2 id="策略最佳化架構演算法及其衍生ppo與grpogroup-relative-policy-optimization-72"><a class="header" href="#策略最佳化架構演算法及其衍生ppo與grpogroup-relative-policy-optimization-72">【策略最佳化架構演算法及其衍生】PPO與GRPO（Group Relative Policy Optimization） <sup>[<a href="references.html">72</a>]</sup></a></h2>
+<ul>
+<li><strong>GRPO</strong>（Group Relative Policy Optimization, 群體相對策略最佳化）是一種基於策略的強化學習演算法，由<strong>DeepSeek</strong>團隊提出，並已在DeepSeek、Qwen等模型的訓練中得到應用。</li>
+<li>傳統的PPO方法除了訓練策略模型外，還需額外構建一個規模相近的價值網路，這會顯著增加計算和視訊記憶體的<strong>開銷</strong>。</li>
+<li>如圖所示，GRPO<strong>摒棄</strong>了單獨的價值網路，並透過多項改進，在保留PPO核心思想的基礎上，顯著降低了訓練所需資源，同時確保了策略更新的高效性和穩定性。</li>
+<li>GRPO的<strong>核心思想</strong>在於利用群體相對優勢估計來取代傳統的價值模型。具體來說，GRPO透過取樣一組候選輸出，並將這些輸出的平均獎勵作為基線，來計算各個輸出的優勢值。這種方法不僅避免了對額外價值模型的依賴，同時也充分發揮了獎勵模型的比較特性，從而提高了訓練的效率和穩定性。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GRPO%26PPO.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GRPO%26PPO.png" alt="【策略最佳化架構演算法及其衍生】GRPO&amp;PPO" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生確定性策略vs隨機性策略deterministic-policy-vs-stochastic-policy"><a class="header" href="#策略最佳化架構演算法及其衍生確定性策略vs隨機性策略deterministic-policy-vs-stochastic-policy">【策略最佳化架構演算法及其衍生】確定性策略vs隨機性策略（Deterministic policy vs. Stochastic policy）</a></h2>
+<ul>
+<li>強化學習的策略型別可以<strong>分為</strong>：確定性策略（Deterministic Policy）和隨機性策略（Stochastic Policy）。</li>
+<li>確定性策略：在每個狀態下，策略都會輸出一個<strong>確定</strong>的動作。</li>
+<li>隨機性策略：在每個狀態下，策略輸出的是動作的<strong>機率分佈</strong>。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5vs%E9%9A%8F%E6%9C%BA%E6%80%A7%E7%AD%96%E7%95%A5.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5vs%E9%9A%8F%E6%9C%BA%E6%80%A7%E7%AD%96%E7%95%A5.png" alt="【策略最佳化架構演算法及其衍生】確定性策略vs隨機性策略" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生確定性策略梯度dpg"><a class="header" href="#策略最佳化架構演算法及其衍生確定性策略梯度dpg">【策略最佳化架構演算法及其衍生】確定性策略梯度（DPG）</a></h2>
+<ul>
+<li><strong>確定性策略梯度</strong>（Deterministic Policy Gradient, <strong>DPG</strong>）演算法由<strong>RL大佬David Silver</strong>在DeepMind期間與其他研究者於2014年發表的論文中系統性闡述，該演算法旨在解決連續動作空間中的強化學習問題。</li>
+<li>DPG採用確定性策略，將狀態直接對映到具體的動作。</li>
+<li>DPG採用了演員-評委（Actor-Critic）架構。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%EF%BC%88DPG%EF%BC%89.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%EF%BC%88DPG%EF%BC%89.png" alt="【策略最佳化架構演算法及其衍生】確定性策略梯度（DPG）" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生ddpgdeep-deterministic-policy-gradient"><a class="header" href="#策略最佳化架構演算法及其衍生ddpgdeep-deterministic-policy-gradient">【策略最佳化架構演算法及其衍生】DDPG（Deep Deterministic Policy Gradient）</a></h2>
+<ul>
+<li><strong>深度確定性策略梯度</strong>（Deep Deterministic Policy Gradient, <strong>DDPG</strong>）是確定性策略梯度（DPG）演算法的改進版本，<strong>結合</strong>了深度Q網路（DQN）的思想，由DeepMind的研究團隊發表。</li>
+<li>DDPG在訓練過程中需要載入<strong>4個模型</strong>——包括2個策略網路（Actor）和2個評估網路（Critic）。</li>
+<li>知名的<strong>TD3</strong> ：雙延遲深度確定性策略梯度（Twin Delayed Deep Deterministic Policy Gradient, TD3）演算法是對DDPG（Deep Deterministic Policy Gradient）的顯著改進。在TD3的訓練過程中，需要載入<strong>6個模型</strong>——包括2個策略網路（Actor）和4個評估網路（Critic）。這些網路分工明確、相互配合，透過延遲更新目標網路等技巧，有效提升了訓練的穩定性和效能。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91DDPG.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91DDPG.png" alt="【策略最佳化架構演算法及其衍生】DDPG" /></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第8部分rlhf-與-rlaif"><a class="header" href="#第8部分rlhf-與-rlaif">第8部分：RLHF 與 RLAIF</a></h1>
+<h2 id="rlhf與rlaif語言模型的強化學習建模"><a class="header" href="#rlhf與rlaif語言模型的強化學習建模">【RLHF與RLAIF】語言模型的強化學習建模</a></h2>
+<ul>
+<li>大型模型（LLM、MLLM、VLM等）為何可以用RL正規化進行訓練？ ——這可能是大型模型RL方向最基礎的一個問題——如何將大型模型的生成過程<strong>建模</strong>為一個強化學習問題？
+如圖所示，以下是生成式語言模型中的一些<strong>關鍵概念</strong>在強化學習正規化下，具體的定義如下：</li>
+<li>（1）<strong>動作</strong>（Action, A）：動作指模型在每個時間步生成的一個Token。例如，當模型從詞表中選擇下一個輸出詞時，這一選擇就是一個動作。</li>
+<li>（2）<strong>動作空間</strong>（Action Space）：動作空間是語言模型的<strong>詞表</strong>（Vocabulary），即所有可能的Token的集合，通常包含約10萬級的詞元。</li>
+<li>（3）<strong>智慧體</strong>（Agent）：智慧體是負責決策的實體，即LLM。它負責接受文字輸入並生成一系列文字或其機率分佈。</li>
+<li>（4）<strong>策略</strong>（Policy）：策略是LLM對應的模型<strong>引數</strong>，決定了模型生成文字的具體規則和行為。</li>
+<li>（5）<strong>狀態</strong>（State, S）：狀態是模型當前的輸入上下文，通常由<strong>已生成</strong>的Token序列構成。例如，在針對Prompt為“你是誰？”的生成過程中，狀態會隨著生成的Token動態更新，形成如“你是誰？”、“你是誰？我”、“你是誰？我是”等狀態。</li>
+<li>（6）<strong>回合</strong>（Episode）：回合是<strong>一次完整</strong>的文字生成過程，從初始輸入（例如一個問題或指令）開始，到模型生成結束（通常以特殊符號<EOS>或<END>表示）。</li>
+<li>（7）<strong>價值</strong>（Value, V）：價值表示在特定狀態下或採取特定動作後，模型未來所能獲得的<strong>預期回報</strong>。它衡量當前動作（Token或詞）的選擇質量及其後續可能動作的潛在影響，通常由單獨的價值網路進行估計。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%BB%BA%E6%A8%A1.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%BB%BA%E6%A8%A1.png" alt="【RLHF與RLAIF】語言模型的強化學習建模" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifrlhf的兩階段式訓練流程"><a class="header" href="#rlhf與rlaifrlhf的兩階段式訓練流程">【RLHF與RLAIF】RLHF的兩階段式訓練流程</a></h2>
+<p>RLHF訓練可以分為<strong>兩個階段</strong>：</p>
+<ul>
+<li>（1）階段一（SFT，<strong>訓練獎勵模型</strong>）：根據使用者輸入（Prompt），生成多種候選回答，並由人工對這些回答進行偏好標註。這些標註資料作為訓練樣本，用於監督學習訓練獎勵模型，使其能夠預測不同回答的偏好得分。</li>
+<li>（2）階段二（RL，基於PPO的<strong>強化學習</strong>）：聯合策略模型、參考模型、獎勵模型和價值模型，基於PPO等RL演算法進行強化學習訓練。透過迭代最佳化，策略模型逐步提升生成內容的質量，更加符合人類的需求和價值觀。
+兩個階段的<strong>樣本</strong>如下：</li>
+<li>（1）獎勵模型樣本：獎勵模型的訓練依賴於<strong>偏好資料集</strong>（Prompt + 回答），其構建和清洗過程詳見《大型模型演算法》3.2.1節和3.2.3節。</li>
+<li>（2）PPO訓練的樣本：該階段的訓練樣本<strong>僅需要Prompt</strong>即可，無需回答。如《大型模型演算法》5.1.1節所述，強化學習透過智慧體與環境的互動進行學習，無需明確的標籤（回答）。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%E7%9A%84%E4%B8%A4%E9%98%B6%E6%AE%B5%E5%BC%8F%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%E7%9A%84%E4%B8%A4%E9%98%B6%E6%AE%B5%E5%BC%8F%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B.png" alt="【RLHF與RLAIF】RLHF的兩階段式訓練流程" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型rm的結構"><a class="header" href="#rlhf與rlaif獎勵模型rm的結構">【RLHF與RLAIF】獎勵模型（RM）的結構</a></h2>
+<ul>
+<li>獎勵模型（Reward Model, <strong>RM</strong>）在RLHF訓練中起著關鍵作用，與價值模型共同指導策略模型的最佳化方向。</li>
+<li>獎勵模型的核心<strong>作用</strong>是為特定Prompt對應的回答結果輸出一個獎勵分數，用於指導策略模型的最佳化。
+通常，獎勵模型是在經過SFT的LLM基礎上進行小幅<strong>改造</strong>而來。由於SFT之後的模型已具備豐富的語言處理能力，直接複用其底層的Transformer結構可以顯著減少訓練時間和資料需求。改造過程如圖所示：</li>
+<li>（1）<strong>共享</strong>底層結構：獎勵模型複用了LLM的底層結構及其權值，包括所有的Transformer Decoder層和Embedding層，從而確保兩者具備一致的隱藏狀態表示能力。這種共享設計不僅<strong>降低</strong>了訓練複雜度，還顯著減少了從零訓練所需的計算資源和資料需求。</li>
+<li>（2）<strong>替換</strong>輸出頭：將LLM原有的頂層線性層（LM Head）<strong>替換</strong>為全新的線性層（Reward Head）。如《大型模型演算法》1.1.3節所述，LLM的最後一層通常是一個線性投影層（LM Head），其輸入維度為隱藏狀態大小（hidden_size），輸出維度為詞表大小（vocab_size），用於生成對應於全詞表的logits值（機率分佈）。而獎勵模型只需輸出一個分數值，因此，LLM的輸出頭被替換為一個全新的線性層，該層的輸出維度為1（out_dim=1），用於生成獎勵分數。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84.png" alt="【RLHF與RLAIF】獎勵模型的結構" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型的輸入輸出"><a class="header" href="#rlhf與rlaif獎勵模型的輸入輸出">【RLHF與RLAIF】獎勵模型的輸入輸出</a></h2>
+<ul>
+<li>獎勵模型輸入由一條Prompt + 其對應的一條回答（Response）<strong>拼接</strong>而成，構成一個完整的序列，如圖所示，包括Prompt（黃色部分），即使用者提供的問題或上下文，以及回答（藍色部分），即模型生成的回答序列。</li>
+<li>圖中，從第一個動作a0=“青”到最後一個<strong>動作</strong>a5= <EOS>，回答序列中的每個Token都被視為一個獨立的動作。</li>
+<li>獎勵模型輸出一組<strong>獎勵分數</strong>r0,r1 , ..., r5，分別對應生成回答序列中每個Token位置，用於表示各位置生成Token的質量評分。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA.png" alt="【RLHF與RLAIF】獎勵模型的輸入輸出" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型預測偏差與loss的關係"><a class="header" href="#rlhf與rlaif獎勵模型預測偏差與loss的關係">【RLHF與RLAIF】獎勵模型預測偏差與Loss的關係</a></h2>
+<ul>
+<li><strong>獎勵模型（RM）<strong>的</strong>目標</strong>是利用偏好資料集訓練出能夠擬合人類反饋的評分函式，以準確評估生成文字的質量。</li>
+<li><strong>Loss</strong>通常採用基於對比的<strong>負對數似然</strong>形式，這與DPO演算法中的獎勵建模過程類似。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E5%81%8F%E5%B7%AE%E4%B8%8ELoss%E7%9A%84%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E5%81%8F%E5%B7%AE%E4%B8%8ELoss%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="【RLHF與RLAIF】獎勵模型預測偏差與Loss的關係" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif獎勵模型的訓練"><a class="header" href="#rlhf與rlaif獎勵模型的訓練">【RLHF與RLAIF】獎勵模型的訓練</a></h2>
+<p>如圖所示，其中，yw和 yl是針對同一個Prompt（圖中的x）生成的<strong>兩個回答</strong>，且 yw 優於 yl ，這包含了人類反饋（偏好）資訊。訓練<strong>步驟</strong>如下：</p>
+<ul>
+<li>（1）<strong>計算獎勵分數</strong>：獎勵模型分別對兩個回答進行推理，得到兩個獎勵評分，即獎勵模型恰好對優質回答yw 的評分更高，這與人類反饋大體一致。</li>
+<li>（2）計算<strong>Loss</strong>：根據兩個獎勵分數的差異，代入式（7.2）計算Loss。</li>
+<li>（3）<strong>梯度更新</strong>：透過反向傳播計算梯度，並更新獎勵模型的引數。</li>
+<li>（4）<strong>重複迭代</strong>多次：讀取下一批偏好樣本，按照上面的流程，重複迭代。隨著引數逐步更新，獎勵模型在所有偏好資料上的評分逐漸與人類的偏好趨於一致。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%AD%E7%BB%83.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%AD%E7%BB%83.png" alt="【RLHF與RLAIF】獎勵模型的訓練" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifppo訓練中四種模型的合作關係"><a class="header" href="#rlhf與rlaifppo訓練中四種模型的合作關係">【RLHF與RLAIF】PPO訓練中四種模型的合作關係</a></h2>
+<p>如圖所示，RLHF的第二階段需要載入<strong>四個模型</strong>進行強化學習訓練。這四種模型的角色和<strong>相互關係</strong>如下：</p>
+<ul>
+<li>（1）<strong>策略模型</strong>（Policy Model, Actor）：RLHF訓練的<strong>核心</strong>，負責根據輸入的Prompt生成回答At。策略模型需平衡兩個目標：一方面，透過獎勵模型和價值模型引導最佳化以符合人類偏好；另一方面，透過參考模型施加KL約束，限制生成內容與初始行為分佈的偏離，避免過度激進或不穩定的回答。</li>
+<li>（2）<strong>參考模型</strong>（Reference Model）：為策略模型提供穩定的行為<strong>基準</strong>，透過計算策略模型與參考模型輸出之間的KL距離，可以在訓練過程中對策略模型施加約束，防止其過度偏離參考模型的機率分佈。這樣可以避免策略模型偏離SFT模型太遠，確保生成行為的穩定性，從而有效防止策略模型因過度追求獎勵而出現“獎勵欺騙”現象。</li>
+<li>（3）<strong>獎勵模型</strong>（Reward Model, RM）：為策略模型生成的回答分配<strong>即時獎勵</strong>Rt，模擬人類偏好反饋。獎勵模型與價值模型協作，共同引導策略模型朝著人類偏好的方向最佳化。如《大型模型演算法》 7.2.1節所述，在RLHF訓練中，有時還會結合多個獎勵模型以增強效果。</li>
+<li>（4）<strong>價值模型</strong>（Value Model, Critic）：<strong>全面評估</strong>策略模型生成的回答，預測在特定狀態下執行某動作的<strong>長期回報</strong>，計算價值估計Vt。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%88%E4%BD%9C%E5%85%B3%E7%B3%BB.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%88%E4%BD%9C%E5%85%B3%E7%B3%BB.png" alt="【RLHF與RLAIF】PPO訓練中四種模型的合作關係" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifppo訓練中四種模型的結構與初始化通用低成本方案"><a class="header" href="#rlhf與rlaifppo訓練中四種模型的結構與初始化通用低成本方案">【RLHF與RLAIF】PPO訓練中四種模型的結構與初始化（通用&amp;低成本方案）</a></h2>
+<p>通常，在通用&amp;低成本場景下，可以簡化模型設計，RLHF涉及的四種模型擁有類似的結構，主要區別在於各模型的頭部（Head）。這些模型可以基於SFT模型（經過有監督微調後的LLM版本）進行<strong>改造和初始化</strong>，如圖所示：</p>
+<ul>
+<li>（1）<strong>策略模型</strong>：結構與SFT模型<strong>完全一致</strong>，包含N層Transformer Decoder和LM Head（Language Modeling Head）。在引數初始化時，通常直接複製SFT模型的所有引數。在隨後的PPO訓練中，策略模型的引數會<strong>持續更新</strong>。</li>
+<li>（2）<strong>參考模型</strong>：結構與SFT模型一致，包含N層Decoder和LM Head。引數初始化時，同樣直接複製SFT模型的所有引數。但在後續的PPO訓練中，參考模型的引數始終保持<strong>凍結</strong>（不更新）。因此，在PPO訓練的初始時刻，參考模型與策略模型完全一致，在策略模型的最佳化過程中，參考模型為策略模型提供了一個穩定的行為參考基準。</li>
+<li>（3）<strong>獎勵模型</strong>：與SFT模型的底層Decoder部分結構一致，但將頭部結構<strong>替換</strong>為Reward Head（獎勵頭）。在引數初始化時，僅複製SFT模型的底層Decoder（N層），而Reward Head的引數通常隨機初始化。在隨後的PPO訓練中，獎勵模型的引數始終保持<strong>凍結</strong>（不進行更新）。</li>
+<li>（4）<strong>價值模型</strong>：結構類似於獎勵模型，包含N層Decoder和Value Head（價值頭）。在引數初始化時，可以複製獎勵模型的所有引數，有時也可基於SFT模型進行改造。在隨後的PPO訓練中，價值模型的引數會<strong>持續更新</strong>。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%BB%93%E6%9E%84%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96.png" alt="【RLHF與RLAIF】PPO訓練中四種模型的結構與初始化" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif一個雙頭結構的價值模型"><a class="header" href="#rlhf與rlaif一個雙頭結構的價值模型">【RLHF與RLAIF】一個雙頭結構的價值模型</a></h2>
+<ul>
+<li>價值模型與獎勵模型需要為每個Token輸出標量數值。為滿足這一需求，TRL庫實現了AutoModelForCausalLMWithValueHead類，如圖所示，該模型採用了<strong>雙頭</strong>結構，即包含兩個輸出頭部——語言模型頭（LM Head）和價值頭（Value Head）。</li>
+<li>以回答序列長度為3、詞表大小為151936為例，兩個頭部的<strong>輸出</strong>如下：</li>
+<li>（1）<strong>Logits</strong>：形狀為（3, 151936）的矩陣，表示每個Token在詞表中的機率分佈。</li>
+<li>（2）<strong>價值向量</strong>：形狀為（3, 1）的向量，表示每個Token的價值估計。</li>
+<li>為便於理解，本文假設batch_size=1。透過這種雙頭結構設計，模型的核心模組（N層Decoder）僅需執行一次推理，這顯著<strong>降低</strong>了計算成本和視訊記憶體消耗。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E4%B8%80%E4%B8%AA%E5%8F%8C%E5%A4%B4%E7%BB%93%E6%9E%84%E7%9A%84%E4%BB%B7%E5%80%BC%E6%A8%A1%E5%9E%8B.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E4%B8%80%E4%B8%AA%E5%8F%8C%E5%A4%B4%E7%BB%93%E6%9E%84%E7%9A%84%E4%BB%B7%E5%80%BC%E6%A8%A1%E5%9E%8B.png" alt="【RLHF與RLAIF】一個雙頭結構的價值模型" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifrlhf四種模型可以共享同一個底座"><a class="header" href="#rlhf與rlaifrlhf四種模型可以共享同一個底座">【RLHF與RLAIF】RLHF：四種模型可以共享同一個底座</a></h2>
+<ul>
+<li>在RLHF中，透過<strong>共享</strong>同一個底座（N層Decoder），可以顯著<strong>降低</strong>視訊記憶體開銷。這是因為參考模型、獎勵模型、策略模型和價值模型之間具有較高的<strong>相似性</strong>。採用LoRA微調技術（詳見《大型模型演算法》 第2.1.2節），四種模型可以共用同一底座，同時保持底座引數凍結（不更新）。</li>
+<li>具體而言，參考模型僅用於評估對比，<strong>不參與</strong>訓練；獎勵模型在RLHF的第一階段（獎勵建模）中進行訓練；而策略模型和價值模型則在第二階段（策略最佳化）中進行訓練。因此，如圖所示，為獎勵模型、策略模型和價值模型分別配備了<strong>獨立的LoRA</strong>模組（引數），透過組合相應的LoRA模組、Head和共享的底座，即可動態組裝所需的模型。在訓練過程中，僅更新LoRA模組和Head部分的引數。</li>
+<li><strong>四種模型共享</strong>相同的底座（N層Decoder）。該底座引數<strong>常駐GPU</strong>並保持凍結狀態，而LoRA模組和Head部分則根據PPO訓練的不同環節，可動態載入到GPU中或動態swap。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%EF%BC%9A%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E5%8F%AF%E4%BB%A5%E5%85%B1%E4%BA%AB%E5%90%8C%E4%B8%80%E4%B8%AA%E5%BA%95%E5%BA%A7.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLHF%EF%BC%9A%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%9E%8B%E5%8F%AF%E4%BB%A5%E5%85%B1%E4%BA%AB%E5%90%8C%E4%B8%80%E4%B8%AA%E5%BA%95%E5%BA%A7.png" alt="【RLHF與RLAIF】RLHF：四種模型可以共享同一個底座" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifppo訓練中各模型的輸入與輸出"><a class="header" href="#rlhf與rlaifppo訓練中各模型的輸入與輸出">【RLHF與RLAIF】PPO訓練中各模型的輸入與輸出</a></h2>
+<ul>
+<li>涉及的四個模型具有不同的<strong>輸入與輸出</strong>（圖中未展示<EOS>等特殊Token），總結如表7.1所示。</li>
+<li>所有四個模型中，只有策略模型執行了<strong>生成</strong>過程。策略模型根據輸入的Prompt（或上下文）生成了三個Token，即三個動作（[你]、[先去]、[。]）（動作與狀態的建模見《大型模型演算法》圖7.1）。其餘三個模型（參考模型、獎勵模型、價值模型）均以Prompt和策略模型生成的回答為基礎，執行相應的計算：</li>
+<li>（1）<strong>參考模型</strong>：輸出回答對應的對數機率（LogProbs），與策略模型輸出的對數機率計算出<strong>KL距離</strong>，確保策略模型不會偏離基準分佈過遠。</li>
+<li>（2）<strong>獎勵模型</strong>：對生成的回答（策略模型的動作）進行逐Token的獎勵打分，生成<strong>即時獎勵</strong>Rt。如7.2.2節所述，通常只使用最後一個Token對應的獎勵分數，即與<EOS> Token對應的獎勵分數。</li>
+<li>（3）<strong>價值模型</strong>：對生成的回答（策略模型的動作）進行逐Token的價值估計，用於評估每個動作的<strong>長期回報</strong>Vt。</li>
+</ul>
+<p>PPO訓練中各模型的輸入與輸出</p>
+<div class="table-wrapper"><table><thead><tr><th>模型</th><th>輸入</th><th>輸出</th></tr></thead><tbody>
+<tr><td>策略模型</td><td>Prompt（或上下文）</td><td>回答及其對應的對數機率（LogProbs）</td></tr>
+<tr><td>參考模型</td><td>Prompt（或上下文） + 回答</td><td>回答對應的對數機率（LogProbs）</td></tr>
+<tr><td>獎勵模型</td><td>Prompt（或上下文） + 回答</td><td>回答對應的每個 token 的獎勵值</td></tr>
+<tr><td>價值模型</td><td>Prompt（或上下文） + 回答</td><td>回答對應的每個 token 的價值估計</td></tr>
+</tbody></table>
+</div>
+<p><a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%90%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%90%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA.png" alt="【RLHF與RLAIF】PPO訓練中各模型的輸入與輸出" /></a></p>
+<h2 id="rlhf與rlaifppo訓練中kl距離的計算過程"><a class="header" href="#rlhf與rlaifppo訓練中kl距離的計算過程">【RLHF與RLAIF】PPO訓練中KL距離的計算過程</a></h2>
+<ul>
+<li>在TRL等框架的實現中，KL距離的作用體現在對<strong>Advantage的計算環節</strong>，透過懲罰獎勵值來達到約束目的。如《大型模型演算法》6.2.3節所述，在基於GAE演算法計算Advantage時，需要用到獎勵模型估計的獎勵分數。在此基礎上，可以對獎勵分數進行調整。</li>
+<li>如圖所示，策略模型和參考模型均會<strong>輸出Logits</strong>，並進一步轉換為<strong>對數機率</strong>（LogProbs），轉換公式可參考《大型模型演算法》第2.2.5節，基於這些對數機率即可完成KL距離的計算。</li>
+<li>策略模型與參考模型的KL距離計算過程如圖所示。為便於理解，這裡假設批次大小（batch_size）為1，詞表大小為7，回答對應的Token序列長度為3。Prompt為“吃飯？”，其Token化後為[吃飯]和[？]。回答為“你先去。”，其Token化後為[你]、[先去]和[。]。此處忽略[EOS]等特殊Token。</li>
+<li>KL計算的詳細<strong>過程</strong>如下：</li>
+<li>（1）策略模型<strong>生成</strong>回答Token：以Prompt（或上下文）作為策略模型的輸入，生成回答（response）以及對應的<strong>Logits</strong>，response包括三個Token：[你]、[先去]和[。]。注意，在實際RLHF訓練中，該步驟已在經驗採集（Make Experience）環節完成。</li>
+<li>（2）計算<strong>對數機率</strong>：在步驟（1）中，策略模型已經生成了Logits，即一個形狀為（序列長度=3，詞表大小=7）的矩陣。進一步，可以將該矩陣轉換為<strong>對數機率</strong>（LogProbs）矩陣。</li>
+<li>（3）<strong>參考模型</strong>生成對數機率：以Prompt和response作為輸入，參考模型推理並生成Logits，<strong>擷取</strong>對應於response部分的Logits，進而可得到參考模型的對數機率矩陣。</li>
+<li>（4）抽取（<strong>Gather</strong>）：以步驟（1）中策略模型生成的三個回答Token為<strong>索引</strong>，在策略模型和參考模型的對數機率矩陣中，分別提取出對應Token的對數機率值。透過這一操作，可以得到三個Token的<strong>對數機率</strong>值——策略模型的logprob和參考模型的ref_logprob。全詞表範圍下的對數機率矩陣形狀為（序列長度=3，詞表大小=7），而抽取後的logprob和ref_logprob形狀為（3，1）。</li>
+<li>（5）<strong>KL距離</strong>計算：如圖所示，對logprob和ref_logprob進行<strong>逐位置相減</strong>，最終得到策略模型和參考模型之間的KL距離。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%ADKL%E8%B7%9D%E7%A6%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%ADKL%E8%B7%9D%E7%A6%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B.png" alt="【RLHF與RLAIF】PPO訓練中KL距離的計算過程" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif基於ppo進行rlhf訓練的原理圖"><a class="header" href="#rlhf與rlaif基於ppo進行rlhf訓練的原理圖">【RLHF與RLAIF】基於PPO進行RLHF訓練的原理圖</a></h2>
+<ul>
+<li>如圖，可以分為<strong>兩個半區</strong>：整體結構主要分為經驗收集和多輪PPO訓練<strong>兩個部分</strong>，即圖中左右兩個半區。在基於PPO演算法進行RLHF訓練時，這兩個部分以<strong>迴圈</strong>的方式進行多次迭代。</li>
+<li><strong>配色</strong>說明：圖中左下角附有顏色說明，不同顏色用於區分不同的內容型別，例如模型、資料、經驗/樣本、計算以及Loss，以便於快速理解。</li>
+<li><strong>緩衝區</strong>：圖中間的緩衝區用於儲存左半區收集的經驗資料。這些資料將被切分成多個<strong>小批次</strong>（mini-batch），以支援右半區進行多次訓練和引數更新。</li>
+<li><strong>模型版本</strong>的區別：左半區的策略模型和價值模型可視為<strong>舊模型</strong>，主要用於生成樣本及相關計算。右半區的策略模型和價值模型則會在訓練過程中進行多次迭代更新，因此可稱為<strong>新模型</strong>。本質上，左右兩個半區的模型（策略模型和價值模型）是同一個模型的<strong>不同狀態版本</strong>，但為了便於理解，圖中額外在右半區重複繪製了策略模型和價值模型。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%9F%BA%E4%BA%8EPPO%E8%BF%9B%E8%A1%8CRLHF%E8%AE%AD%E7%BB%83%E7%9A%84%E5%8E%9F%E7%90%86%E5%9B%BE.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E5%9F%BA%E4%BA%8EPPO%E8%BF%9B%E8%A1%8CRLHF%E8%AE%AD%E7%BB%83%E7%9A%84%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="【RLHF與RLAIF】基於PPO進行RLHF訓練的原理圖" /></a></li>
+</ul>
+<h2 id="rlhf與rlaif拒絕取樣rejection-sampling微調"><a class="header" href="#rlhf與rlaif拒絕取樣rejection-sampling微調">【RLHF與RLAIF】拒絕取樣（Rejection Sampling）微調</a></h2>
+<ul>
+<li><strong>拒絕取樣</strong>(Rejection Sampling)微調：是一種基於資料<strong>篩選</strong>的模型微調策略，旨在透過人工或模型標註對模型生成的樣本進行篩選，剔除低質量的樣本，僅保留優質樣本用於進一步微調，Anthropic、Meta等公司均曾利用該技術對語言模型進行最佳化。</li>
+<li>該過程可重複多輪進行。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7%E5%BE%AE%E8%B0%83.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7%E5%BE%AE%E8%B0%83.png" alt="【RLHF與RLAIF】拒絕取樣微調" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifrlaif與rlhf的區別"><a class="header" href="#rlhf與rlaifrlaif與rlhf的區別">【RLHF與RLAIF】RLAIF與RLHF的區別</a></h2>
+<ul>
+<li><strong>RLAIF</strong>（Reinforcement Learning from AI Feedback，基於AI反饋的強化學習）是一種以<strong>AI反饋</strong>為基礎的強化學習方法。該方法興起於2022年，可作為RLHF的一種替代方案。</li>
+<li>RLAIF與RLHF在整體流程上具有較高的相似性，如圖所示，其主要<strong>區別</strong>在於偏好樣本的標註環節。RLHF依賴人類進行偏好標註，而RLAIF則透過AI完成此過程。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLAIF%E4%B8%8ERLHF%E7%9A%84%E5%8C%BA%E5%88%AB.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91RLAIF%E4%B8%8ERLHF%E7%9A%84%E5%8C%BA%E5%88%AB.png" alt="【RLHF與RLAIF】RLAIF與RLHF的區別" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifclaude模型應用的憲法aicai原理"><a class="header" href="#rlhf與rlaifclaude模型應用的憲法aicai原理">【RLHF與RLAIF】Claude模型應用的憲法AI（CAI）原理</a></h2>
+<ul>
+<li><strong>CAI</strong>（Constitutional AI, <strong>基於憲法的AI</strong>）是一種用於大型模型訓練的RLAIF型別的演算法，由<strong>美國AI獨角獸</strong>Anthropic公司於2022年提出[62]，併成功應用於<strong>Claude</strong>、DeepSeek等模型的訓練。</li>
+<li>該演算法以一套預先制定的<strong>憲法原則</strong>為指導，透過結合AI反饋和自我批評機制，得以更加高效地提升模型的有用性和無害性。
+CAI的訓練過程：</li>
+<li>（1）<strong>自我批評與回答修訂</strong>：初始模型（例如RLHF模型）根據輸入的Prompt生成回答，隨後依據隨機選取的一條憲法原則對回答進行<strong>批評與修訂</strong>。模型可以自動識別回答中可能存在的潛在有害、不道德或不合規內容，並根據批評結果對回答進行自我修訂。該過程可以多次迭代，透過逐步最佳化，使生成的回答更加符合預期。</li>
+<li>（2）<strong>訓練監督學習模型（SL-CAI）</strong>：修訂後的回答與人類標註的有用性樣本共同組成監督學習資料集，用於訓練監督學習模型（SL-CAI）。透過對預訓練語言模型進行微調，SL-CAI能夠生成更貼近目標分佈的回答，從而顯著降低後續強化學習階段的探索成本。</li>
+<li>（3）<strong>生成回答與AI標註</strong>：使用SL-CAI模型針對相同的Prompt生成多組候選回答，採用獨立的反饋模型（例如預訓練模型）對這些候選回答進行<strong>AI標註</strong>。反饋模型會基於隨機選取的一條憲法原則為回答打分。此階段的AI標註機制有效降低了對人工標註的依賴。</li>
+<li>（4）<strong>訓練獎勵模型</strong>：將AI標註資料與人工標註資料混合，形成偏好資料集，並以此訓練獎勵模型，或稱為偏好模型（Preference Model，RM）。</li>
+<li>（5）<strong>強化學習最佳化目標模型（RL-CAI）</strong>：在強化學習階段，利用獎勵模型提供獎勵訊號，透過強化學習演算法（例如PPO）對目標模型進行最佳化。此階段逐步增強模型在無害性和有用性上的表現，同時減少模型在敏感問題上的逃避傾向，確保其行為更加透明和可靠。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91Claude%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%AA%E6%B3%95AI%E5%8E%9F%E7%90%86.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91Claude%E6%A8%A1%E5%9E%8B%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%AA%E6%B3%95AI%E5%8E%9F%E7%90%86.png" alt="【RLHF與RLAIF】Claude模型應用的憲法AI原理" /></a></li>
+</ul>
+<h2 id="rlhf與rlaifopenai-rbr基於規則的獎勵"><a class="header" href="#rlhf與rlaifopenai-rbr基於規則的獎勵">【RLHF與RLAIF】OpenAI RBR（基於規則的獎勵）</a></h2>
+<ul>
+<li><strong>RBR</strong>（Rule Based Rewards，基於規則的獎勵）是一種基於規則的偏好建模方法，由<strong>OpenAI</strong>於2024年提出。</li>
+<li>該方法透過人工標註資料訓練出一個RBR獎勵模型，將AI反饋融入傳統的RLHF流程中。</li>
+<li>自GPT-4推出以來，OpenAI就將RBR作為其安全系統的<strong>核心</strong>組成部分，並已應用於包括GPT-4o mini等模型。
+<a href="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91OpenAI%20RBR%EF%BC%88%E5%9F%BA%E4%BA%8E%E8%A7%84%E5%88%99%E7%9A%84%E5%A5%96%E5%8A%B1%EF%BC%89.png"><img src="images/%E3%80%90RLHF%E4%B8%8ERLAIF%E3%80%91OpenAI%20RBR%EF%BC%88%E5%9F%BA%E4%BA%8E%E8%A7%84%E5%88%99%E7%9A%84%E5%A5%96%E5%8A%B1%EF%BC%89.png" alt="【RLHF與RLAIF】OpenAI RBR（基於規則的獎勵）" /></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第9部分邏輯推理reasoning能力最佳化"><a class="header" href="#第9部分邏輯推理reasoning能力最佳化">第9部分：邏輯推理（Reasoning）能力最佳化</a></h1>
+<h2 id="邏輯推理能力最佳化基於cot的知識蒸餾knowledge-distillation"><a class="header" href="#邏輯推理能力最佳化基於cot的知識蒸餾knowledge-distillation">【邏輯推理能力最佳化】基於CoT的知識蒸餾（Knowledge Distillation）</a></h2>
+<ul>
+<li><strong>知識蒸餾</strong>（Knowledge Distillation, KD）是一種模型<strong>壓縮</strong>技術，由<strong>深度學習之父</strong>Geoffrey Hinton等人於2015年提出。</li>
+<li>強大型模型（例如OpenAI的o系列模型、DeepSeek、Qwen等）生成CoT推理鏈和回答結果，並將其作為訓練資料用於對<strong>較弱</strong>模型進行<strong>蒸餾訓練</strong>。</li>
+<li>需要注意的是，此處的方法與傳統知識蒸餾略<strong>有區別</strong>。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E5%9F%BA%E4%BA%8ECoT%E7%9A%84%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E5%9F%BA%E4%BA%8ECoT%E7%9A%84%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F.png" alt="【邏輯推理能力最佳化】基於CoT的知識蒸餾" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化基於deepseek進行蒸餾"><a class="header" href="#邏輯推理能力最佳化基於deepseek進行蒸餾">【邏輯推理能力最佳化】基於DeepSeek進行蒸餾</a></h2>
+<ul>
+<li>為了降低模型體積和部署開銷，可以採用蒸餾技術，將效能較強的模型（例如DeepSeek）的部分能力<strong>遷移</strong>到體積更小的模型中。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E5%9F%BA%E4%BA%8EDeepSeek%E8%BF%9B%E8%A1%8C%E8%92%B8%E9%A6%8F.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E5%9F%BA%E4%BA%8EDeepSeek%E8%BF%9B%E8%A1%8C%E8%92%B8%E9%A6%8F.png" alt="【邏輯推理能力最佳化】基於DeepSeek進行蒸餾" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化orm和prm結果獎勵模型和過程獎勵模型"><a class="header" href="#邏輯推理能力最佳化orm和prm結果獎勵模型和過程獎勵模型">【邏輯推理能力最佳化】ORM和PRM（結果獎勵模型和過程獎勵模型）</a></h2>
+<ul>
+<li><strong>結果獎勵模型</strong>（Outcome Reward Model, <strong>ORM</strong>）：對於給定的Prompt及模型生成的回答y，結果獎勵模型僅對<strong>最終</strong>輸出的結果進行整體驗證和獎勵評分。</li>
+<li><strong>過程獎勵模型</strong>（Process Reward Model, <strong>PRM</strong>）：過程獎勵模型對推理過程中的每個中間<strong>步驟</strong>逐一進行驗證和獎勵評分，從而提供更<strong>精細</strong>的反饋，能夠有效指導模型關注推理過程的質量。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91ORM%E5%92%8CPRM.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91ORM%E5%92%8CPRM.png" alt="【邏輯推理能力最佳化】ORM和PRM" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化mcts每次迭代的四個關鍵步驟"><a class="header" href="#邏輯推理能力最佳化mcts每次迭代的四個關鍵步驟">【邏輯推理能力最佳化】MCTS每次迭代的四個關鍵步驟</a></h2>
+<ul>
+<li><strong>MCTS</strong>每次迭代的<strong>四個關鍵步驟</strong>： MCTS演算法透過構建決策樹逐步探索問題的解空間，其核心思想是從當前狀態出發，透過<strong>模擬</strong>或推演評估狀態的價值，並利用評估結果指導後續的搜尋方向。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91MCTS%E6%AF%8F%E6%AC%A1%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%9B%9B%E4%B8%AA%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91MCTS%E6%AF%8F%E6%AC%A1%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%9B%9B%E4%B8%AA%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4.png" alt="【邏輯推理能力最佳化】MCTS每次迭代的四個關鍵步驟" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化mcts的執行過程"><a class="header" href="#邏輯推理能力最佳化mcts的執行過程">【邏輯推理能力最佳化】MCTS的執行過程</a></h2>
+<ul>
+<li>MCTS透過<strong>重複迭代</strong>上述四個步驟，不斷擴充套件和完善搜尋樹，進而逐步提升對各狀態的評估精度。隨著推演迭代次數的增加，演算法<strong>逐漸</strong>傾向於選擇更優的路徑，從而不斷最佳化決策質量。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91MCTS%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91MCTS%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B.png" alt="【邏輯推理能力最佳化】MCTS的執行過程" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化語言場景下的搜尋樹示例"><a class="header" href="#邏輯推理能力最佳化語言場景下的搜尋樹示例">【邏輯推理能力最佳化】語言場景下的搜尋樹示例</a></h2>
+<ul>
+<li>搜尋樹中的每個節點代表句子或段落級別的內容（一個推理步驟）。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E8%AF%AD%E8%A8%80%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E6%90%9C%E7%B4%A2%E6%A0%91%E7%A4%BA%E4%BE%8B.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E8%AF%AD%E8%A8%80%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E6%90%9C%E7%B4%A2%E6%A0%91%E7%A4%BA%E4%BE%8B.png" alt="【邏輯推理能力最佳化】語言場景下的搜尋樹示例" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化bonbest-of-n取樣"><a class="header" href="#邏輯推理能力最佳化bonbest-of-n取樣">【邏輯推理能力最佳化】BoN（Best-of-N）取樣</a></h2>
+<ul>
+<li>由模型（通常為參考模型）生成多個候選輸出（例如N個），然後依據某種評價標準，從中<strong>挑選</strong>出質量<strong>最優</strong>的一個作為最終輸出。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91BoN%EF%BC%88Best-of-N%EF%BC%89%E9%87%87%E6%A0%B7.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91BoN%EF%BC%88Best-of-N%EF%BC%89%E9%87%87%E6%A0%B7.png" alt="【邏輯推理能力最佳化】BoN（Best-of-N）取樣" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化多數投票majority-vote方法"><a class="header" href="#邏輯推理能力最佳化多數投票majority-vote方法">【邏輯推理能力最佳化】多數投票（Majority Vote）方法</a></h2>
+<ul>
+<li><strong>多數投票</strong>（Majority Vote）的核心思想是：針對一個給定的Prompt，模型進行多次推理，生成多條不同的推理路徑，每條路徑可能產生一個最終答案，透過統計最終答案的出現頻率，將<strong>頻率最高</strong>的答案作為最終輸出。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E5%A4%9A%E6%95%B0%E6%8A%95%E7%A5%A8%EF%BC%88Majority%20Vote%EF%BC%89%E6%96%B9%E6%B3%95.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91%E5%A4%9A%E6%95%B0%E6%8A%95%E7%A5%A8%EF%BC%88Majority%20Vote%EF%BC%89%E6%96%B9%E6%B3%95.png" alt="【邏輯推理能力最佳化】多數投票（Majority Vote）方法" /></a></li>
+</ul>
+<h2 id="邏輯推理能力最佳化alphagozero在訓練時的效能增長趨勢-179"><a class="header" href="#邏輯推理能力最佳化alphagozero在訓練時的效能增長趨勢-179">【邏輯推理能力最佳化】AlphaGoZero在訓練時的效能增長趨勢 <sup>[<a href="references.html">179</a>]</sup></a></h2>
+<ul>
+<li><strong>AlphaGo</strong> Zero展現出最強的效能，Elo評分高達5185。在推理過程中，如<strong>不使用MCTS</strong>進行預搜尋，其Elo評分僅為3055。這一對比直觀地揭示了：<strong>推理時搜尋</strong>與計算能夠顯著提升模型的效能表現。
+<a href="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91AlphaGoZero%E5%9C%A8%E8%AE%AD%E7%BB%83%E6%97%B6%E7%9A%84%E6%80%A7%E8%83%BD%E5%A2%9E%E9%95%BF%E8%B6%8B%E5%8A%BF.png"><img src="images/%E3%80%90%E9%80%BB%E8%BE%91%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%BC%98%E5%8C%96%E3%80%91AlphaGoZero%E5%9C%A8%E8%AE%AD%E7%BB%83%E6%97%B6%E7%9A%84%E6%80%A7%E8%83%BD%E5%A2%9E%E9%95%BF%E8%B6%8B%E5%8A%BF.png" alt="【邏輯推理能力最佳化】AlphaGoZero在訓練時的效能增長趨勢" /></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第10部分大型模型基礎拓展"><a class="header" href="#第10部分大型模型基礎拓展">第10部分：大型模型基礎拓展</a></h1>
+<h2 id="llm基礎拓展大型模型效能最佳化技術圖譜"><a class="header" href="#llm基礎拓展大型模型效能最佳化技術圖譜">【LLM基礎拓展】大型模型效能最佳化技術圖譜</a></h2>
+<ul>
+<li>如圖所示，在訓練和推理階段，大型模型的最佳化技術可大致分為<strong>五個層次</strong>：服務層、模型層、框架層、系統編譯層和硬體通訊層。</li>
+<li>圖中各層內的細分技術為最佳化提供了明確的方向和實踐路徑。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E5%9B%BE%E8%B0%B1.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E5%9B%BE%E8%B0%B1.png" alt="【LLM基礎拓展】大型模型效能最佳化技術圖譜" /></a></li>
+</ul>
+<h2 id="llm基礎拓展alibi位置編碼"><a class="header" href="#llm基礎拓展alibi位置編碼">【LLM基礎拓展】ALiBi位置編碼</a></h2>
+<ul>
+<li>RoPE已成主流，ALiBi逐漸被拋棄
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91ALiBi%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91ALiBi%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81.png" alt="【LLM基礎拓展】ALiBi位置編碼" /></a></li>
+</ul>
+<h2 id="llm基礎拓展傳統的知識蒸餾"><a class="header" href="#llm基礎拓展傳統的知識蒸餾">【LLM基礎拓展】傳統的知識蒸餾</a></h2>
+<ul>
+<li><strong>知識蒸餾</strong>（Knowledge Distillation）：透過將訓練好的<strong>教師模型</strong>輸出的<strong>軟標籤</strong>（soft labels）轉移給更小的<strong>學生模型</strong>進行訓練，使學生模型學習教師的輸出分佈資訊，從而在<strong>模型壓縮</strong>和<strong>推理效率</strong>上獲得顯著提升。</li>
+<li>最早由<strong>深度學習之父</strong>Geoffrey Hinton等人在論文《Distilling the Knowledge in a Neural Network》中提出。</li>
+</ul>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F.png" alt="【LLM基礎拓展】傳統的知識蒸餾" /></a></p>
+<h2 id="llm基礎拓展數值表示量化quantization"><a class="header" href="#llm基礎拓展數值表示量化quantization">【LLM基礎拓展】數值表示、量化（Quantization）</a></h2>
+<ul>
+<li>AI中常用的數值型別如圖，它們的數值實現如下表。</li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th>型別</th><th>總位數</th><th>符號位</th><th>指數位</th><th>尾數位 / 整數位</th></tr></thead><tbody>
+<tr><td>FP64</td><td>64</td><td>1</td><td>11</td><td>52 (尾數)</td></tr>
+<tr><td>FP32</td><td>32</td><td>1</td><td>8</td><td>23 (尾數)</td></tr>
+<tr><td>TF32</td><td>19</td><td>1</td><td>8</td><td>10 (尾數)</td></tr>
+<tr><td>BF16</td><td>16</td><td>1</td><td>8</td><td>7 (尾數)</td></tr>
+<tr><td>FP16</td><td>16</td><td>1</td><td>5</td><td>10 (尾數)</td></tr>
+<tr><td>INT64</td><td>64</td><td>1</td><td>–</td><td>63 (整數值)</td></tr>
+<tr><td>INT32</td><td>32</td><td>1</td><td>–</td><td>31 (整數值)</td></tr>
+<tr><td>INT8</td><td>8</td><td>1</td><td>–</td><td>7 (整數值)</td></tr>
+<tr><td>UINT8</td><td>8</td><td>0</td><td>–</td><td>8 (整數值)</td></tr>
+<tr><td>INT4</td><td>4</td><td>1</td><td>–</td><td>3 (整數值)</td></tr>
+</tbody></table>
+</div>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E6%95%B0%E5%80%BC%E8%A1%A8%E7%A4%BA%E3%80%81%E9%87%8F%E5%8C%96.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E6%95%B0%E5%80%BC%E8%A1%A8%E7%A4%BA%E3%80%81%E9%87%8F%E5%8C%96.png" alt="【LLM基礎拓展】數值表示、量化" /></a></p>
+<h2 id="llm基礎拓展常規訓練時前向和反向過程"><a class="header" href="#llm基礎拓展常規訓練時前向和反向過程">【LLM基礎拓展】常規訓練時前向和反向過程</a></h2>
+<p>這張圖展示了神經網路在常規訓練中的前向傳播（Forward）和反向傳播（Backward）流程：</p>
+<ul>
+<li>上半部分是<strong>前向傳播</strong>：輸入依次透過各層（Layer 1~4），每層的<strong>啟用值</strong>（Activation）會被快取，用於後續計算梯度。</li>
+<li>下半部分是<strong>反向傳播</strong>：從最終的損失（Loss）開始，逐層計算梯度（Gradient 4 → 1），並利用前向快取的啟用值進行<strong>鏈式求導</strong>。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E5%B8%B8%E8%A7%84%E8%AE%AD%E7%BB%83%E6%97%B6%E5%89%8D%E5%90%91%E5%92%8C%E5%8F%8D%E5%90%91%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E5%B8%B8%E8%A7%84%E8%AE%AD%E7%BB%83%E6%97%B6%E5%89%8D%E5%90%91%E5%92%8C%E5%8F%8D%E5%90%91%E8%BF%87%E7%A8%8B.png" alt="【LLM基礎拓展】常規訓練時前向和反向過程" /></a></li>
+</ul>
+<h2 id="llm基礎拓展梯度累積gradient-accumulation訓練"><a class="header" href="#llm基礎拓展梯度累積gradient-accumulation訓練">【LLM基礎拓展】梯度累積（Gradient Accumulation）訓練</a></h2>
+<p>這張圖對比了常規訓練與梯度累積（Gradient Accumulation）訓練的差異：</p>
+<ul>
+<li><strong>常規訓練</strong>（上方）：每個 batch（如 Batch 1）執行一次前向 &amp; 反向傳播，立刻計算梯度並更新模型引數，更新<strong>頻繁</strong>，對視訊記憶體要求較低，但 batch size 不能太大。</li>
+<li><strong>梯度累積</strong>訓練（下方）：多個 batch（如 Batch 1~3）分別計算梯度，不立刻更新，而是將<strong>多個梯度累加後統一更新一次</strong>，等效於更大的 batch size，適合視訊記憶體受限的情況。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E6%A2%AF%E5%BA%A6%E7%B4%AF%E7%A7%AF%EF%BC%88Gradient%20Accumulation%EF%BC%89%E8%AE%AD%E7%BB%83.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E6%A2%AF%E5%BA%A6%E7%B4%AF%E7%A7%AF%EF%BC%88Gradient%20Accumulation%EF%BC%89%E8%AE%AD%E7%BB%83.png" alt="【LLM基礎拓展】梯度累積（Gradient Accumulation）訓練" /></a></li>
+</ul>
+<h2 id="llm基礎拓展gradient-checkpoint梯度重計算"><a class="header" href="#llm基礎拓展gradient-checkpoint梯度重計算">【LLM基礎拓展】Gradient Checkpoint（梯度重計算）</a></h2>
+<p>這張圖對比了常規訓練與梯度重計算（Gradient Checkpoint）訓練的不同：</p>
+<ul>
+<li><strong>常規訓練</strong>（上方）：每層的啟用值（Activation）都<strong>完整儲存</strong>，便於反向傳播時直接使用，但視訊記憶體佔用大，不適合大型模型。</li>
+<li><strong>梯度重計算</strong>（下方）：只儲存<strong>關鍵層</strong>的啟用值（如 Activation 1 和 3），在反向傳播時，對中間未儲存的啟用值（如 2 和 4）進行重新前向計算，以此節省視訊記憶體。</li>
+<li>總結：梯度重計算（Gradient Checkpointing）透過以<strong>多算換空間</strong>的方式降低視訊記憶體使用，適合訓練大型模型時節省資源，但代價是訓練時間略有增加。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Gradient%20Checkpoint%EF%BC%88%E6%A2%AF%E5%BA%A6%E9%87%8D%E8%AE%A1%E7%AE%97%EF%BC%89.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Gradient%20Checkpoint%EF%BC%88%E6%A2%AF%E5%BA%A6%E9%87%8D%E8%AE%A1%E7%AE%97%EF%BC%89.png" alt="【LLM基礎拓展】Gradient Checkpoint（梯度重計算）" /></a></li>
+</ul>
+<h2 id="llm基礎拓展full-recomputation完全重計算"><a class="header" href="#llm基礎拓展full-recomputation完全重計算">【LLM基礎拓展】Full recomputation(完全重計算)</a></h2>
+<ul>
+<li><strong>完全重計算</strong>（Full Recomputation），即在反向傳播階段<strong>不保留任何</strong>啟用值，而是每次需要時從輸入開始重新執行前向計算獲取中間啟用。</li>
+<li>這種方式極大地節省了視訊記憶體，非常適合在記憶體受限場景下訓練大型模型，但會<strong>顯著增加</strong>計算量和訓練時間。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Full%20recomputation%28%E5%AE%8C%E5%85%A8%E9%87%8D%E8%AE%A1%E7%AE%97%29.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Full%20recomputation%28%E5%AE%8C%E5%85%A8%E9%87%8D%E8%AE%A1%E7%AE%97%29.png" alt="【LLM基礎拓展】Full recomputation(完全重計算)" /></a></li>
+</ul>
+<h2 id="llm基礎拓展llm-benchmark"><a class="header" href="#llm基礎拓展llm-benchmark">【LLM基礎拓展】LLM Benchmark</a></h2>
+<ul>
+<li>LLM的評分（Benchmark）有多種，例如MMLU、C-eval等等，其實現原理都較為類似，如下圖所示。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91LLM%20Benchmark.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91LLM%20Benchmark.png" alt="【LLM基礎拓展】LLM Benchmark" /></a></li>
+</ul>
+<h2 id="llm基礎拓展mhagqamqamla"><a class="header" href="#llm基礎拓展mhagqamqamla">【LLM基礎拓展】MHA、GQA、MQA、MLA</a></h2>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91MHA%E3%80%81GQA%E3%80%81MQA%E3%80%81MLA.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91MHA%E3%80%81GQA%E3%80%81MQA%E3%80%81MLA.png" alt="【LLM基礎拓展】MHA、GQA、MQA、MLA" /></a></p>
+<h2 id="llm基礎拓展rnnrecurrent-neural-network"><a class="header" href="#llm基礎拓展rnnrecurrent-neural-network">【LLM基礎拓展】RNN（Recurrent Neural Network）</a></h2>
+<ul>
+<li><strong>RNN</strong>（Recurrent Neural Network）：一種專門處理<strong>序列資料</strong>的神經網路，透過<strong>迴圈連線</strong>在每個時間步保留並更新前一時刻的<strong>隱藏狀態</strong>，使網路具有記憶能力。</li>
+<li>優點：結構<strong>簡單</strong>、能夠捕捉<strong>短期依賴</strong>；缺點：易出現<strong>梯度消失/爆炸</strong>，難以學習<strong>長距離依賴</strong>。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RNN.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RNN.png" alt="【LLM基礎拓展】RNN" /></a></li>
+</ul>
+<h2 id="llm基礎拓展pre-norm和post-norm"><a class="header" href="#llm基礎拓展pre-norm和post-norm">【LLM基礎拓展】Pre-norm和Post-norm</a></h2>
+<ul>
+<li><strong>Pre-norm</strong>：在<strong>子層</strong>（如自注意力或前饋網路）<strong>輸入前</strong>先執行<strong>LayerNorm</strong>，然後經過子層並與原始輸入進行<strong>殘差連線</strong>，可提升<strong>梯度流動</strong>和深層模型的<strong>訓練穩定性</strong></li>
+<li><strong>Post-norm</strong>：在子層輸出後與原始輸入進行<strong>殘差連線</strong>，再執行<strong>LayerNorm</strong>，是<strong>Transformer</strong>的經典結構，但在深層網路中可能導致<strong>梯度衰減</strong>和訓練不穩定</li>
+</ul>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Pre-norm%E5%92%8CPost-norm.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Pre-norm%E5%92%8CPost-norm.png" alt="【LLM基礎拓展】Pre-norm和Post-norm" /></a></p>
+<h2 id="llm基礎拓展batchnorm和layernorm"><a class="header" href="#llm基礎拓展batchnorm和layernorm">【LLM基礎拓展】BatchNorm和LayerNorm</a></h2>
+<ul>
+<li><strong>BatchNorm</strong>（批次歸一化）：對每個<strong>小批次</strong>中的每個<strong>通道</strong>進行<strong>標準化</strong>（減去均值、除以標準差），再加上可學習的<strong>縮放</strong>和<strong>偏移</strong>引數。</li>
+<li><strong>LayerNorm</strong>（層歸一化）：對每個<strong>樣本</strong>的所有<strong>特徵維度</strong>進行<strong>標準化</strong>（減去均值、除以標準差），同樣使用可學習的<strong>縮放</strong>和<strong>偏移</strong>引數。</li>
+</ul>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91BatchNorm%E5%92%8CLayerNorm.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91BatchNorm%E5%92%8CLayerNorm.png" alt="【LLM基礎拓展】BatchNorm和LayerNorm" /></a></p>
+<h2 id="llm基礎拓展rmsnorm"><a class="header" href="#llm基礎拓展rmsnorm">【LLM基礎拓展】RMSNorm</a></h2>
+<ul>
+<li>RMSNorm（Root Mean Square Layer Normalization）是一種歸一化方法，僅基於輸入特徵的均方根值（RMS）進行規範化，<strong>不計算均值偏移</strong>。</li>
+<li>對每個樣本的特徵向量 (x)，先計算 (\mathrm{RMS}(x)=\sqrt{\tfrac{1}{d}\sum_i x_i^2})，再做縮放：(\hat{x}=x / \mathrm{RMS}(x)\times \gamma + \beta)。</li>
+<li>相較於 LayerNorm，它省略了減均值步驟，計算更高效且在多種 Transformer 架構中表現相近或更優。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RMSNorm.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RMSNorm.png" alt="【LLM基礎拓展】RMSNorm" /></a></li>
+</ul>
+<h2 id="llm基礎拓展prune剪枝"><a class="header" href="#llm基礎拓展prune剪枝">【LLM基礎拓展】Prune（剪枝）</a></h2>
+<ul>
+<li>模型剪枝（Model Pruning）是一種壓縮深度神經網路的方法，透過移除冗餘或不重要的權重、神經元或通道，減少模型引數量和計算量。</li>
+<li>可以在儘量保持原始精度的前提下，提升模型的推理速度、降低記憶體佔用。</li>
+<li>典型流程包括：評估重要性 → 標記待剪引數 → 重訓練（Fine-tuning）→ 驗證效能。<br />
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Prune%EF%BC%88%E5%89%AA%E6%9E%9D%EF%BC%89.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91Prune%EF%BC%88%E5%89%AA%E6%9E%9D%EF%BC%89.png" alt="【LLM基礎拓展】Prune（剪枝）" /></a></li>
+</ul>
+<h2 id="llm基礎拓展溫度係數的作用"><a class="header" href="#llm基礎拓展溫度係數的作用">【LLM基礎拓展】溫度係數的作用</a></h2>
+<ul>
+<li>在生成階段，溫度係數 (T) 透過放縮模型輸出的 logits 分佈來控制取樣<strong>多樣性</strong>。</li>
+<li>當 (T &lt; 1) 時，分佈“尖銳”，模型更傾向於選擇機率<strong>最高</strong>的 token，回答更固定。</li>
+<li>當 (T &gt; 1) 時，分佈“平坦”，取樣結果更具<strong>隨機性</strong>。</li>
+<li>適當調整溫度可以在準確性和創造性之間取得平衡——低溫度提升確定性，高溫度增強多樣性。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E6%B8%A9%E5%BA%A6%E7%B3%BB%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91%E6%B8%A9%E5%BA%A6%E7%B3%BB%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8.png" alt="【LLM基礎拓展】溫度係數的作用" /></a></li>
+</ul>
+<h2 id="llm基礎拓展swiglu"><a class="header" href="#llm基礎拓展swiglu">【LLM基礎拓展】SwiGLU</a></h2>
+<ul>
+<li>基本結構：SwiGLU 是 Gated Linear Unit（GLU）的變體，將輸入向量透過<strong>兩條</strong>線性對映，一路直接輸出，一路經過 SiLU（Swish）啟用後作為門控訊號，兩者逐元素相乘得到最終輸出。</li>
+<li>啟用<strong>優勢</strong>：用 SiLU（Swish-1）替換原 GLU 中的 sigmoid，使門控更平滑、梯度更穩定，有助於加速訓練收斂並提升下游任務表現。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91SwiGLU.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91SwiGLU.png" alt="【LLM基礎拓展】SwiGLU" /></a></li>
+</ul>
+<h2 id="llm基礎拓展aucprf1precisionrecall"><a class="header" href="#llm基礎拓展aucprf1precisionrecall">【LLM基礎拓展】AUC、PR、F1、Precision、Recall</a></h2>
+<p>被面試者、工程師經常混淆的演算法常用指標，我畫了一張圖來對比總結，區別一目瞭然。</p>
+<ul>
+<li><strong>AUC</strong>（Area Under the ROC Curve）：衡量二分類模型在所有可能閾值下區分正負樣本的能力，ROC（Receiver Operating Characteristic）曲線以假正例率（FPR）為橫軸、真正例率（TPR）為縱軸，AUC 值越接近 1 越好；若 AUC≈0.5 則相當於隨機猜測。</li>
+<li><strong>PR Curve</strong>（Precision–Recall Curve）：模型在不同召回率（Recall）下的精確率（Precision）變化趨勢。可透過曲線下面積來綜合評估模型對正類的檢出能力。</li>
+<li><strong>Precision（精確率）</strong>：在所有被預測為正例的樣本中，實際為正例的比例，衡量誤報率高低，適用於誤報成本高的場景，個人認為“查準率”的翻譯更貼切。Precision = TP / (TP + FP)</li>
+<li><strong>Recall （召回率）</strong>：在所有真實為正例的樣本中，被正確預測為正例的比例，衡量漏報率高低，適用於漏報成本高的場景，個人認為“查全率”的翻譯更貼切。Recall = TP / (TP + FN)</li>
+<li><strong>F1 Score</strong> （F1 值）：Precision 與 Recall 的調和平均，當兩者平衡時取得最高分。F1 Score = 2 * (Precision * Recall) / (Precision + Recall)</li>
+<li><strong>Accuracy （準確率）</strong>：在所有樣本中，預測正確的比例，適用於類別分佈較為均衡時的整體效能評估。Accuracy = (TP + TN) / (TP + TN + FP + FN)</li>
+<li><strong>BLEU</strong>（Bilingual Evaluation Understudy；機器翻譯評估指標）：基於 n-gram 重疊率評估翻譯結果與參考的相似程度。</li>
+<li><strong>ROUGE</strong>（Recall-Oriented Understudy for Gisting Evaluation；摘要評估指標）：生成摘要與參考在 n-gram、最長公共子序列或詞重疊方面的匹配情況，關注召回效能。</li>
+</ul>
+<p><a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91AUC%E3%80%81PR%E3%80%81F1%E3%80%81Precision%E3%80%81Recall.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91AUC%E3%80%81PR%E3%80%81F1%E3%80%81Precision%E3%80%81Recall.png" alt="【LLM基礎拓展】AUC、PR、F1、Precision、Recall" /></a></p>
+<h2 id="llm基礎拓展rope位置編碼"><a class="header" href="#llm基礎拓展rope位置編碼">【LLM基礎拓展】RoPE位置編碼</a></h2>
+<ul>
+<li>RoPE，Rotary Position Embedding，<strong>旋轉</strong>位置編碼，由蘇劍林提出</li>
+<li>原理：對 Transformer 中的 Query 和 Key 隱藏向量應用旋轉變換（基於正弦、餘弦函式），將位置資訊編碼為向量的<strong>相位差</strong>。</li>
+<li>相對位置：旋轉操作天然地保留了向量之間的相對角度差異，使模型能夠捕捉<strong>相對位置</strong>資訊而不依賴絕對位置索引。</li>
+<li>優點：無需額外引數、計算<strong>開銷低</strong>；在長序列場景下相較於傳統絕對位置編碼具有更好的泛化和效能。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RoPE%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RoPE%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81.png" alt="【LLM基礎拓展】RoPE位置編碼" /></a></li>
+</ul>
+<h2 id="llm基礎拓展rope對各序列位置各維度的作用"><a class="header" href="#llm基礎拓展rope對各序列位置各維度的作用">【LLM基礎拓展】RoPE對各序列位置、各維度的作用</a></h2>
+<ul>
+<li>RoPE原理、Base與θ值、作用機制詳見：<a href="files/RoPE-theta-base.xlsx">RoPE-theta-base.xlsx</a></li>
+<li>維度成對旋轉：將嵌入向量按奇偶索引<strong>兩兩分組</strong>，對每一對子向量應用一個二維旋轉矩陣，旋轉角度隨位置和維度頻率共同決定。
+<strong>高頻</strong>維度：對應下圖左半區、角速度大的那些維度。旋轉角度隨位置變化快，對相鄰 token 的位置微小差異非常敏感，擅長捕捉<strong>短距離</strong>的區域性相對位置資訊。
+<strong>低頻</strong>維度：對應下圖右半區、角速度小的那些維度。旋轉角度隨位置變化慢，能夠區分較<strong>遠距離</strong>的相對位置資訊，擅長建模全域性或長距離依賴。
+<a href="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RoPE%E5%AF%B9%E5%90%84%E5%BA%8F%E5%88%97%E4%BD%8D%E7%BD%AE%E3%80%81%E5%90%84%E7%BB%B4%E5%BA%A6%E7%9A%84%E4%BD%9C%E7%94%A8.png"><img src="images/%E3%80%90LLM%E5%9F%BA%E7%A1%80%E6%8B%93%E5%B1%95%E3%80%91RoPE%E5%AF%B9%E5%90%84%E5%BA%8F%E5%88%97%E4%BD%8D%E7%BD%AE%E3%80%81%E5%90%84%E7%BB%B4%E5%BA%A6%E7%9A%84%E4%BD%9C%E7%94%A8.png" alt="【LLM基礎拓展】RoPE對各序列位置、各維度的作用" /></a></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附錄與引用"><a class="header" href="#附錄與引用">附錄與引用</a></h1>
+<h2 id="本倉圖片的文字詳解更多圖見大型模型演算法強化學習微調與對齊"><a class="header" href="#本倉圖片的文字詳解更多圖見大型模型演算法強化學習微調與對齊">本倉圖片的文字詳解、更多圖見：《大型模型演算法：強化學習、微調與對齊》</a></h2>
+<h3 id="書籍目錄"><a class="header" href="#書籍目錄">書籍目錄</a></h3>
+<h4 id=""><a class="header" href="#"></a></h4>
+<details>
+<summary>摺疊 / 展開目錄</summary>
+<pre><code class="language-python">第1章 大模型原理與技術概要
+    1.1 圖解大模型結構
+        1.1.1 大語言模型（LLM）結構全景圖
+        1.1.2 輸入層：分詞、Token對映與向量生成
+        1.1.3 輸出層：Logits、機率分佈與解碼
+        1.1.4 多模態語言模型（MLLM）與視覺語言模型（VLM）
+    1.2 大模型訓練全景圖
+    1.3 Scaling Law（效能的四大擴充套件規律）
+第2章 SFT（監督微調）
+    2.1 多種微調技術圖解
+        2.1.1 全引數微調、部分引數微調
+        2.1.2 LoRA（低秩適配微調）——四兩撥千斤
+        2.1.3 LoRA衍生：QLoRA、AdaLoRA、PiSSA等
+        2.1.4 基於提示的微調：Prefix-Tuning、Prompt Tuning等
+        2.1.5 Adapter Tuning
+        2.1.6 微調技術對比
+        2.1.7 如何選擇微調技術
+    2.2 SFT原理深入解析
+        2.2.1 SFT資料與ChatML格式化
+        2.2.2 Logits與Token機率計算
+        2.2.3 SFT的Label
+        2.2.4 SFT的Loss圖解
+        2.2.5 對數機率（LogProbs）與LogSoftmax
+    2.3 指令收集和處理
+        2.3.1 收集指令的渠道和方法
+        2.3.2 清洗指令的四要素
+        2.3.3 資料預處理及常用工具
+    2.4 SFT實踐指南
+        2.4.1 如何緩解SFT引入的幻覺？
+        2.4.2 Token級Batch Size的換算
+        2.4.3 Batch Size與學習率的Scaling Law
+        2.4.4 SFT的七個技巧
+第3章 DPO（直接偏好最佳化）
+    3.1 DPO的核心思想
+        3.1.1 DPO的提出背景與意義
+        3.1.2 隱式的獎勵模型
+        3.1.3 Loss和最佳化目標
+    3.2 偏好資料集的構建
+        3.2.1 構建流程總覽
+        3.2.2 Prompt的收集
+        3.2.3 問答資料對的清洗
+        3.2.4 封裝和預處理
+    3.3 圖解DPO的實現與訓練
+        3.3.1 模型的初始化
+        3.3.2 DPO訓練全景圖
+        3.3.3 DPO核心程式碼的提煉和解讀
+    3.4 DPO實踐經驗
+        3.4.1 β引數如何調節
+        3.4.2 DPO對模型能力的多維度影響
+    3.5 DPO進階
+        3.5.1 DPO和RLHF（PPO）的對比
+        3.5.2 理解DPO的梯度
+第4章 免訓練的效果最佳化技術
+    4.1 提示工程
+        4.1.1 Zero-Shot、One-Shot、Few-Shot
+        4.1.2 Prompt設計的原則
+    4.2 CoT（思維鏈）
+        4.2.1 CoT原理圖解
+        4.2.2 ToT、GoT、XoT等衍生方法
+        4.2.3 CoT的應用技巧
+        4.2.4 CoT在多模態領域的應用
+    4.3 生成控制和解碼策略
+        4.3.1 解碼的原理與分類
+        4.3.2 貪婪搜尋
+        4.3.3 Beam Search（波束搜尋）：圖解、衍生方法
+        4.3.4 Top-K、Top-P等取樣方法圖解
+        4.3.5 其他解碼策略
+        4.3.6 多種生成控制引數
+    4.4 RAG（檢索增強生成）
+        4.4.1 RAG技術全景圖
+        4.4.2 RAG相關框架
+    4.5 功能與工具呼叫（Function Calling）
+        4.5.1 功能呼叫全景圖
+        4.5.2 功能呼叫的分類
+第5章 強化學習基礎
+    5.1 強化學習核心
+        5.1.1 強化學習：定義與區分
+        5.1.2 強化學習的基礎架構、核心概念
+        5.1.3 馬爾可夫決策過程（MDP）
+        5.1.4 探索與利用、ε-貪婪策略
+        5.1.5 同策略（On-policy）、異策略（Off-policy）
+        5.1.6 線上/離線強化學習（Online/Offline RL）
+        5.1.7 強化學習分類圖
+    5.2 價值函式、回報預估
+        5.2.1 獎勵、回報、折扣因子（R、G、γ）
+        5.2.2 反向計算回報
+        5.2.3 四種價值函式：Qπ、Vπ、V*、Q*
+        5.2.4 獎勵、回報、價值的區別
+        5.2.5 貝爾曼方程——強化學習的基石
+        5.2.6 Q和V的轉換關係、轉換圖
+        5.2.7 蒙特卡洛方法（MC）
+    5.3 時序差分（TD）
+        5.3.1 時序差分方法
+        5.3.2 TD-Target和TD-Error
+        5.3.3 TD(λ)、多步TD
+        5.3.4 蒙特卡洛、TD、DP、窮舉搜尋的區別
+    5.4 基於價值的演算法
+        5.4.1 Q-learning演算法
+        5.4.2 DQN
+        5.4.3 DQN的Loss、訓練過程
+        5.4.4 DDQN、Dueling DQN等衍生演算法
+    5.5 策略梯度演算法
+        5.5.1 策略梯度（Policy Gradient）
+        5.5.2 策略梯度定理
+        5.5.3 REINFORCE和Actor-Critic：策略梯度的應用
+    5.6 多智慧體強化學習（MARL）
+        5.6.1 MARL的原理與架構
+        5.6.2 MARL的建模
+        5.6.3 MARL的典型演算法
+    5.7 模仿學習（IL）
+        5.7.1 模仿學習的定義、分類
+        5.7.2 行為克隆（BC）
+        5.7.3 逆向強化學習（IRL）
+        5.7.4 生成對抗模仿學習（GAIL）
+    5.8 強化學習高階拓展
+        5.8.1 基於環境模型（Model-Based）的方法
+        5.8.2 分層強化學習（HRL）
+        5.8.3 分佈價值強化學習（Distributional RL）
+第6章 策略最佳化演算法
+    6.1 Actor-Critic（演員-評委）架構
+        6.1.1 從策略梯度到Actor-Critic
+        6.1.2 Actor-Critic架構圖解
+    6.2 優勢函式與A2C
+        6.2.1 優勢函式（Advantage）
+        6.2.2 A2C、A3C、SAC演算法
+        6.2.3 GAE（廣義優勢估計）演算法
+        6.2.4 γ和λ的調節作用
+    6.3 PPO及其相關演算法
+        6.3.1 PPO演算法的演進
+        6.3.2 TRPO（置信域策略最佳化）
+        6.3.3 重要性取樣（Importance Sampling）
+        6.3.4 PPO-Penalty
+        6.3.5 PPO-Clip
+        6.3.6 PPO的Loss的擴充套件
+        6.3.7 TRPO與PPO的區別
+        6.3.8 圖解策略模型的訓練
+        6.3.9 深入解析PPO的本質
+    6.4 GRPO演算法
+        6.4.1 GRPO的原理
+        6.4.2 GRPO與PPO的區別
+    6.5 確定性策略梯度（DPG）
+        6.5.1 確定性策略vs隨機性策略
+        6.5.2 DPG、DDPG、TD3演算法
+第7章 RLHF與RLAIF
+    7.1 RLHF（基於人類反饋的強化學習）概要
+        7.1.1 RLHF的背景、發展
+        7.1.2 語言模型的強化學習建模
+        7.1.3 RLHF的訓練樣本、總流程
+    7.2 階段一：圖解獎勵模型的設計與訓練
+        7.2.1 獎勵模型（Reward Model）的結構
+        7.2.2 獎勵模型的輸入與獎勵分數
+        7.2.3 獎勵模型的Loss解析
+        7.2.4 獎勵模型訓練全景圖
+        7.2.5 獎勵模型的Scaling Law
+    7.3 階段二：多模型聯動的PPO訓練
+        7.3.1 四種模型的角色圖解
+        7.3.2 各模型的結構、初始化、實踐技巧
+        7.3.3 各模型的輸入、輸出
+        7.3.4 基於KL散度的策略約束
+        7.3.5 基於PPO的RLHF核心實現
+        7.3.6 全景圖：基於PPO的訓練
+    7.4 RLHF實踐技巧
+        7.4.1 獎勵欺騙（Reward Hacking）的挑戰與應對
+        7.4.2 拒絕取樣（Rejection Sampling）微調
+        7.4.3 強化學習與RLHF的訓練框架
+        7.4.4 RLHF的超引數
+        7.4.5 RLHF的關鍵監控指標
+    7.5 基於AI反饋的強化學習
+        7.5.1 RLAIF的原理圖解
+        7.5.2 CAI：基於憲法的強化學習
+        7.5.3 RBR：基於規則的獎勵
+第8章 邏輯推理能力最佳化
+    8.1 邏輯推理（Reasoning）相關技術概覽
+        8.1.1 推理時計算與搜尋
+        8.1.2 基於CoT的蒸餾
+        8.1.3 過程獎勵模型與結果獎勵模型（PRM/ORM）
+        8.1.4 資料合成
+    8.2 推理路徑搜尋與最佳化
+        8.2.1 MCTS（蒙特卡洛樹搜尋）
+        8.2.2 A*搜尋
+        8.2.3 BoN取樣與蒸餾
+        8.2.4 其他搜尋方法
+    8.3 強化學習訓練
+        8.3.1 強化學習的多種應用
+        8.3.2 自博弈（Self-Play）與自我進化
+        8.3.3 強化學習的多維創新
+第9章 綜合實踐與效能最佳化
+    9.1 實踐全景圖
+    9.2 訓練與部署
+        9.2.1 資料與環境準備
+        9.2.2 超引數如何設定
+        9.2.3 SFT訓練
+        9.2.4 對齊訓練：DPO訓練、RLHF訓練
+        9.2.5 推理與部署
+    9.3 DeepSeek的訓練與本地部署
+        9.3.1 DeepSeek的蒸餾與GRPO訓練
+        9.3.2 DeepSeek的本地部署與使用
+    9.4 效果評估
+        9.4.1 評估方法分類
+        9.4.2 LLM與VLM的評測框架
+    9.5 大模型效能最佳化技術圖譜
+</code></pre>
+</details>
+<img src="images/Book_Cover.png" alt="Book Cover" width="750">
+<h2 id="參考文獻"><a class="header" href="#參考文獻">參考文獻</a></h2>
+<ul>
+<li>《大型模型演算法：強化學習、微調與對齊》原書的參考文獻詳見： <a href="references.html">參考文獻</a></li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="參考文獻-1"><a class="header" href="#參考文獻-1">參考文獻</a></h1>
+<div align="center">
+<h1 id="參考文獻references"><a class="header" href="#參考文獻references">參考文獻（References）</a></h1>
+</div>
+<p>[1] Understanding Reference Policies in Direct Preference Optimization：https://arxiv.org/pdf/2407.13709</p>
+<p>[2] Is DPO Superior to PPO for LLM Alignment? A Comprehensive Study：https://arxiv.org/pdf/2404.10719v2</p>
+<p>[3] Prefix-Tuning：https://arxiv.org/pdf/2101.00190</p>
+<p>[4] P-Tuning：https://arxiv.org/pdf/2103.10385</p>
+<p>[5] Prompt Tuning：https://arxiv.org/pdf/2104.08691</p>
+<p>[6] P-Tuning v2：https://arxiv.org/pdf/2110.07602</p>
+<p>[7] LoRA：https://arxiv.org/pdf/2106.09685</p>
+<p>[8] AdaLoRA：https://arxiv.org/pdf/2303.10512</p>
+<p>[9] PiSSA：https://arxiv.org/abs/2404.02948</p>
+<p>[10] OLoRA： https://arxiv.org/pdf/2406.01775</p>
+<p>[11] LoHa：https://arxiv.org/pdf/2108.06098</p>
+<p>[12] LoKr：https://arxiv.org/pdf/2309.14859</p>
+<p>[13] QLoRA：https://arxiv.org/abs/2305.14314</p>
+<p>[14] LoftQ：https://arxiv.org/pdf/2310.08659</p>
+<p>[15] DoRA：https://arxiv.org/pdf/2402.09353</p>
+<p>[16] Adapter tuning：https://arxiv.org/pdf/1902.00751</p>
+<p>[17] LLM finetuning：https://arxiv.org/pdf/2402.17193</p>
+<p>[18] DPO SFT：https://arxiv.org/pdf/2406.04879</p>
+<p>[19] DEEPSEEK DPO：https://arxiv.org/pdf/2401.02954</p>
+<p>[20] LLaMA Factory：https://github.com/hiyouga/LLaMA-Factory</p>
+<p>[21] Qwen：https://huggingface.co/Qwen/Qwen2-0.5B-Instruct</p>
+<p>[22] LIMA：https://arxiv.org/pdf/2305.11206</p>
+<p>[23] InsTag：https://arxiv.org/pdf/2308.07074</p>
+<p>[24] IFD：https://arxiv.org/pdf/2308.12032v5</p>
+<p>[25] WizardLM: Empowering Large Language Models to Follow Complex Instructions：https://arxiv.org/pdf/2304.12244</p>
+<p>[26] LESS: Selecting Influential Data for Targeted Instruction Tuning：https://arxiv.org/pdf/2402.04333</p>
+<p>[27] DEITA：https://arxiv.org/pdf/2312.15685</p>
+<p>[28] DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model：https://arxiv.org/pdf/2405.04434</p>
+<p>[29] Does Fine-Tuning LLMs on New Knowledge Encourage Hallucinations?：https://arxiv.org/pdf/2405.05904</p>
+<p>[30] Knowledge Verification to Nip Hallucination in the Bud：https://arxiv.org/pdf/2401.10768</p>
+<p>[31] OpenAI, Parameter Space Noise for Exploration：https://arxiv.org/pdf/1706.01905</p>
+<p>[32] Reinforcement Learning: An Introduction, 2nd Edition, Richard S. Sutton：http://incompleteideas.net/book/the-book-2nd.html</p>
+<p>[33] MuZero：https://arxiv.org/pdf/1911.08265</p>
+<p>[34] DPG：https://proceedings.mlr.press/v32/silver14.pdf</p>
+<p>[35] DDPG：https://arxiv.org/pdf/1509.02971</p>
+<p>[36] TD3：https://arxiv.org/pdf/1802.09477</p>
+<p>[37] Dec-POMDP：https://arxiv.org/pdf/1301.3836</p>
+<p>[38] MAPPO：https://arxiv.org/pdf/2103.01955</p>
+<p>[39] QMIX：https://arxiv.org/pdf/1803.11485</p>
+<p>[40] COMA：https://arxiv.org/pdf/1705.08926</p>
+<p>[41] MADDPG：https://arxiv.org/pdf/1706.02275</p>
+<p>[42] MAXQ：https://www.jair.org/index.php/jair/article/view/10266/24463</p>
+<p>[43] Feudal Reinforcement Learning：https://www.cs.toronto.edu/~fritz/absps/dh93.pdf</p>
+<p>[44] Dyna-Q：http://www.incompleteideas.net/papers/sutton-90.pdf</p>
+<p>[45] POMDP：Optimal control of Markov processes with incomplete state information, https://core.ac.uk/download/pdf/82498456.pdf</p>
+<p>[46] DPO：https://arxiv.org/pdf/2305.18290</p>
+<p>[47] AC架構：http://www.derongliu.org/adp/adp-cdrom/Barto1983.pdf</p>
+<p>[48] SAC：https://arxiv.org/pdf/1801.01290</p>
+<p>[49] A3C：https://arxiv.org/pdf/1602.01783</p>
+<p>[50] GAE：https://arxiv.org/pdf/1506.02438</p>
+<p>[51] TRPO：https://arxiv.org/pdf/1502.05477</p>
+<p>[52] PPO：https://arxiv.org/abs/1707.06347</p>
+<p>[53] John Schulman：https://www.technologyreview.com/2023/03/03/1069311/inside-story-oral-history-how-chatgpt-built-openai/</p>
+<p>[54] Deep Reinforcement Learning from Human Preferences：https://arxiv.org/pdf/1706.03741</p>
+<p>[55] Fine-Tuning Language Models from Human Preferences：https://arxiv.org/pdf/1909.08593</p>
+<p>[56] InstructGPT: Training language models to follow instructions with human feedback：https://arxiv.org/pdf/2203.02155</p>
+<p>[57] LlaMA2：https://arxiv.org/pdf/2307.09288</p>
+<p>[58] LlaMA3：https://arxiv.org/abs/2407.21783</p>
+<p>[59] Scaling Laws for Reward Model Overoptimization：https://arxiv.org/pdf/2210.10760</p>
+<p>[60] TRL：https://github.com/huggingface/trl</p>
+<p>[61] 吳恩達IRL，Algorithms for Inverse Reinforcement Learning：https://ai.stanford.edu/~ang/papers/icml00-irl.pdf</p>
+<p>[62] CAI：https://arxiv.org/pdf/2212.08073</p>
+<p>[63] RLAIF-V：https://arxiv.org/pdf/2405.17220</p>
+<p>[64] Claude’s Constitution：https://www.anthropic.com/news/claudes-constitution</p>
+<p>[65] RLlib：https://docs.ray.io/en/latest/rllib/index.html</p>
+<p>[66] Stable Baselines3（SB3）：https://stable-baselines3.readthedocs.io/en/master/</p>
+<p>[67] OpenRLHF：https://openrlhf.readthedocs.io/en/latest/</p>
+<p>[68] lilianweng：https://lilianweng.github.io/posts/2024-11-28-reward-hacking/</p>
+<p>[69] SEAL：https://arxiv.org/abs/2408.10270</p>
+<p>[70] Reward hacking：https://arxiv.org/abs/2201.03544</p>
+<p>[71] Anthropic, Rejection Sampling：https://arxiv.org/pdf/2204.05862</p>
+<p>[72] GRPO：https://arxiv.org/pdf/2402.03300</p>
+<p>[73] OpenAI RBR：https://openai.com/index/improving-model-safety-behavior-with-rule-based-rewards/</p>
+<p>[74] Contrastive Search：https://arxiv.org/pdf/2202.06417</p>
+<p>[75] Lookahead Decoding：https://arxiv.org/pdf/2402.02057</p>
+<p>[76] Phi-4：https://arxiv.org/pdf/2412.08905</p>
+<p>[77] DoLa：https://arxiv.org/abs/2309.03883</p>
+<p>[78] Transformers：https://huggingface.co/docs/transformers/index</p>
+<p>[79] Prompt Engineering Guide：https://www.promptingguide.ai/</p>
+<p>[80] OpenAI Prompt：https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api</p>
+<p>[81] OpenAI Prompt：https://platform.openai.com/docs/guides/prompt-engineering#six-strategies-for-getting-better-results</p>
+<p>[82] CoT：https://arxiv.org/pdf/2201.11903</p>
+<p>[83] ToT：https://arxiv.org/pdf/2305.10601</p>
+<p>[84] Auto-CoT：https://arxiv.org/pdf/2210.03493</p>
+<p>[85] Self-Consistency with CoT：https://arxiv.org/pdf/2203.11171</p>
+<p>[86] XoT：https://arxiv.org/pdf/2311.04254</p>
+<p>[87] GoT：https://arxiv.org/pdf/2308.09687</p>
+<p>[88] MoT：https://arxiv.org/pdf/2305.05181</p>
+<p>[89] Multimodal CoT：https://arxiv.org/pdf/2302.00923</p>
+<p>[90] VLM CoT：https://arxiv.org/pdf/2410.16198</p>
+<p>[91] Zero-shot-CoT：https://arxiv.org/pdf/2205.11916</p>
+<p>[92] langchain：https://python.langchain.com/docs/</p>
+<p>[93] Contextual RAG：https://www.anthropic.com/news/contextual-retrieval</p>
+<p>[94] RAGFlow：https://ragflow.io/</p>
+<p>[95] TD：http://incompleteideas.net/papers/sutton-88-with-erratum.pdf</p>
+<p>[96] Hugging Face  PEFT：https://huggingface.co/docs/peft/index</p>
+<p>[97] Byte Latent Transformer：https://arxiv.org/pdf/2412.09871</p>
+<p>[98] OpenAI Scaling Law：https://arxiv.org/pdf/2001.08361</p>
+<p>[99] DeepMind Chinchilla Scaling Law：https://arxiv.org/pdf/2203.15556</p>
+<p>[100] OpenAI o1 Scaling Law：https://openai.com/index/learning-to-reason-with-llms/</p>
+<p>[101] VLMEvalKit：https://github.com/open-compass/VLMEvalKit</p>
+<p>[102] opencompass：https://github.com/open-compass/opencompass</p>
+<p>[103] ollama：https://github.com/ollama/ollama</p>
+<p>[104] mlc-llm：https://github.com/mlc-ai/mlc-llm</p>
+<p>[105] llama.cpp：https://github.com/ggerganov/llama.cpp</p>
+<p>[106] text-generation-inference：https://github.com/huggingface/text-generation-inference</p>
+<p>[107] langgraph：https://github.com/langchain-ai/langgraph</p>
+<p>[108] Qwen2.5：https://arxiv.org/pdf/2412.15115</p>
+<p>[109] DQN：https://arxiv.org/pdf/1312.5602</p>
+<p>[110] Q-learning：https://www.cs.rhul.ac.uk/~chrisw/new_thesis.pdf</p>
+<p>[111] Policy Gradient&amp;REINFORCE：https://people.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf</p>
+<p>[112] Policy Gradient Theorem：https://proceedings.neurips.cc/paper_files/paper/1999/file/464d828b85b0bed98e80ade0a5c43b0f-Paper.pdf</p>
+<p>[113] Hugging Face：https://huggingface.co/</p>
+<p>[114] Diverse Beam Search：https://arxiv.org/pdf/1610.02424</p>
+<p>[115] Constrained Beam Search：https://arxiv.org/pdf/1612.00576</p>
+<p>[116] Top-P：https://arxiv.org/pdf/1904.09751</p>
+<p>[117] Top-K：https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf</p>
+<p>[118] Speculative Sampling：https://arxiv.org/pdf/2302.01318</p>
+<p>[119] UCB：https://homes.di.unimi.it/~cesabian/Pubblicazioni/ml-02.pdf</p>
+<p>[120] Rainbow：https://arxiv.org/pdf/1710.02298</p>
+<p>[121] Prioritized Experience Replay：https://arxiv.org/pdf/1511.05952</p>
+<p>[122] Dueling DQN：https://arxiv.org/pdf/1511.06581</p>
+<p>[123] Double DQN：https://arxiv.org/pdf/1509.06461</p>
+<p>[124] DQN + Target Network：https://web.stanford.edu/class/psych209/Readings/MnihEtAlHassibis15NatureControlDeepRL.pdf</p>
+<p>[125] POSG：https://www.khoury.northeastern.edu/home/camato/publications/aaai-SS-04.pdf</p>
+<p>[126] IQL：https://web.media.mit.edu/~cynthiab/Readings/tan-MAS-reinfLearn.pdf</p>
+<p>[127] BC：https://proceedings.neurips.cc/paper/1988/file/812b4ba287f5ee0bc9d43bbf5bbe87fb-Paper.pdf</p>
+<p>[128] GAIL：https://arxiv.org/pdf/1606.03476</p>
+<p>[129] MCTS：https://www.davidsilver.uk/wp-content/uploads/2020/03/pomcp.pdf</p>
+<p>[130] HRL：https://proceedings.neurips.cc/paper_files/paper/1997/file/5ca3e9b122f61f8f06494c97b1afccf3-Paper.pdf</p>
+<p>[131] Distributional RL：https://arxiv.org/pdf/1707.06887</p>
+<p>[132] Chatbot Arena：https://www.lmarena.ai/</p>
+<p>[133] Teacher Forcing：https://gwern.net/doc/ai/nn/rnn/1989-williams-2.pdf</p>
+<p>[134] GPT-1：https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf</p>
+<p>[135] Attention Is All You Need：https://arxiv.org/pdf/1706.03762</p>
+<p>[136] Ilya Sutskever, seq2seq, LSTM：https://arxiv.org/pdf/1409.3215</p>
+<p>[137] MoE, Switch Transformers：https://arxiv.org/pdf/2101.03961</p>
+<p>[138] RoPE，蘇劍林：https://arxiv.org/pdf/2104.09864</p>
+<p>[139] ResNet，何愷明：https://arxiv.org/pdf/1512.03385</p>
+<p>[140] DriveVLM，清華，理想汽車：https://arxiv.org/pdf/2402.12289</p>
+<p>[141] ELMo：https://arxiv.org/pdf/1802.05365</p>
+<p>[142] Generative Verifiers：https://arxiv.org/pdf/2408.15240</p>
+<p>[143] rStar：https://arxiv.org/pdf/2408.06195</p>
+<p>[144] Scaling LLM Test-Time Compute：https://arxiv.org/pdf/2408.03314v1</p>
+<p>[145] LoRA：https://github.com/microsoft/LoRA</p>
+<p>[146] GPT-3：https://arxiv.org/pdf/2005.14165</p>
+<p>[147] RAG：https://arxiv.org/pdf/2005.11401</p>
+<p>[148] Richard S. Sutton：http://incompleteideas.net/</p>
+<p>[149] The Bitter Lesson：http://incompleteideas.net/IncIdeas/BitterLesson.html</p>
+<p>[150] Yarn：https://arxiv.org/pdf/2309.00071</p>
+<p>[151] Qwen2.5：https://arxiv.org/pdf/2412.15115</p>
+<p>[152] DeepSeek-V3：https://github.com/deepseek-ai/DeepSeek-V3/blob/main/DeepSeek_V3.pdf</p>
+<p>[153] Speculative Decoding：https://arxiv.org/pdf/2211.17192</p>
+<p>[154] MCTS：https://inria.hal.science/inria-00116992/document</p>
+<p>[155] UCT：http://ggp.stanford.edu/readings/uct.pdf</p>
+<p>[156] AlphaGo：https://www.davidsilver.uk/wp-content/uploads/2020/03/unformatted_final_mastering_go.pdf</p>
+<p>[157] About BoN：https://arxiv.org/pdf/2009.01325</p>
+<p>[158] BOND：https://arxiv.org/pdf/2407.14622</p>
+<p>[159] DVTS：https://huggingface.co/spaces/HuggingFaceH4/blogpost-scaling-test-time-compute</p>
+<p>[160] A Survey on KD of LLM：https://arxiv.org/pdf/2402.13116</p>
+<p>[161] Investigating Mysteries of CoT-Augmented Distillation：https://arxiv.org/pdf/2406.14511</p>
+<p>[162] TTT：https://ekinakyurek.github.io/papers/ttt.pdf</p>
+<p>[163] RESET：https://arxiv.org/pdf/2409.14586</p>
+<p>[164] OpenAI，Let’s Verify Step by Step：https://arxiv.org/pdf/2305.20050</p>
+<p>[165] DeepMind，Google，OmegaPRM：https://arxiv.org/pdf/2406.06592</p>
+<p>[166] DeepMind，PRM：https://arxiv.org/pdf/2211.14275</p>
+<p>[167] Epoch AI, Will we run out of data：https://arxiv.org/pdf/2211.04325v2</p>
+<p>[168] Epoch AI：https://epoch.ai/blog/will-we-run-out-of-data-limits-of-llm-scaling-based-on-human-generated-data</p>
+<p>[169] A Survey on Data Synthesis and Augmentation：https://arxiv.org/pdf/2410.12896</p>
+<p>[170] OLMo 2：https://arxiv.org/pdf/2501.00656</p>
+<p>[171] TÜLU 3：https://arxiv.org/pdf/2411.15124</p>
+<p>[172] ReFT：https://arxiv.org/pdf/2401.08967</p>
+<p>[173] Reinforcement Fine-Tuning：https://openai.com/12-days/</p>
+<p>[174] rStar-Math：https://arxiv.org/pdf/2501.04519</p>
+<p>[175] A* search：https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf</p>
+<p>[176] Meta-CoT：https://arxiv.org/pdf/2501.04682</p>
+<p>[177] Best-first：https://arxiv.org/pdf/2407.01476</p>
+<p>[178] AlphaZero：https://arxiv.org/pdf/1712.01815</p>
+<p>[179] AlphaGo Zero：https://discovery.ucl.ac.uk/id/eprint/10045895/1/agz_unformatted_nature.pdf</p>
+<p>[180] Self-Rewarding：https://arxiv.org/pdf/2401.10020</p>
+<p>[181] Meta，Meta-Rewarding：https://arxiv.org/pdf/2407.19594</p>
+<p>[182] DeepMind，SCoRe：https://arxiv.org/pdf/2409.12917</p>
+<p>[183] OpenAI ，Deliberative Alignment: https://arxiv.org/pdf/2412.16339</p>
+<p>[184] Distillation：https://arxiv.org/pdf/1503.02531</p>
+<p>[185] DeepSeek-R1：https://arxiv.org/pdf/2501.12948</p>
+<p>[186] Approximating KL Divergence：http://joschu.net/blog/kl-approx.html</p>
+<p>[187] Li Fei-Fei, s1：https://arxiv.org/pdf/2501.19393</p>
+<p>[188] BitNet b1.58：https://arxiv.org/pdf/2402.17764</p>
+<p>[189] Unsloth：https://unsloth.ai/</p>
+<p>[190] GRPO Trainer：https://huggingface.co/docs/trl/main/en/grpo_trainer</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="交流討論"><a class="header" href="#交流討論">交流討論</a></h1>
+<h2 id="交流討論-1"><a class="header" href="#交流討論-1">交流討論</a></h2>
+<ul>
+<li>本人的 公眾號 / 知乎 / B站 ，均可<strong>私信</strong>交流。</li>
+<li>💚<strong>公眾號</strong>：<strong>葉子哥AI</strong>，掃碼關注：  <a href="images/WeChat.jpg"><img src="images/WeChat.jpg" alt="WeChat" width="80" height="80" align="middle"></a></li>
+<li>📘<strong>知乎</strong>（葉子哥AI）：<a href="https://www.zhihu.com/people/yezibro">https://www.zhihu.com/people/yezibro</a></li>
+<li>📺<strong>B 站</strong>（葉子哥AI）：<a href="https://space.bilibili.com/3546693609982728">https://space.bilibili.com/3546693609982728</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="歡迎建議"><a class="header" href="#歡迎建議">歡迎建議</a></h1>
+<h2 id="歡迎建議-1"><a class="header" href="#歡迎建議-1">歡迎建議</a></h2>
+<ul>
+<li>歡迎為本專案提交糾錯與修正或其他任何改進！繪圖模板示例：<a href="./files/images-template.pptx">images-template.pptx</a></li>
+<li>提交步驟：（1）Fork： 點選頁面上的"Fork" 按鈕，在你的主頁建立獨立的子儲存庫 → （2）Clone：將你Fork後的子儲存庫Clone到本地 → （3）本地新建分支 → （4）修改提交 → （5）Push到遠端子儲存庫 → （6）提交PR：回到Github頁面，在你的子儲存庫介面點選“Compare &amp; pull request”發起PR，等待維護者稽核&amp;合併到母儲存庫。</li>
+<li>繪圖配色以這些顏色為主： <span style="display:inline-block;width:12px;height:12px;background-color:#71CCF5;border-radius:2px;margin-right:8px;"></span>淺藍（編碼<code>#71CCF5</code>） ;   <span style="display:inline-block;width:12px;height:12px;background-color:#FFE699;border-radius:2px;margin-right:8px;"></span>淺黃（編碼<code>#FFE699</code>）; <span style="display:inline-block;width:12px;height:12px;background-color:#C0BFDE;border-radius:2px;margin-right:8px;"></span>藍紫（編碼<code>#C0BFDE</code>） ; <span style="display:inline-block;width:12px;height:12px;background-color:#F0ADB7;border-radius:2px;margin-right:8px;"></span> 粉紅（編碼<code>#F0ADB7</code>）。</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="使用條款"><a class="header" href="#使用條款">使用條款</a></h1>
+<h2 id="使用條款-1"><a class="header" href="#使用條款-1">使用條款</a></h2>
+<p>本儲存庫內所有圖片均依據 <a href="LICENSE">LICENSE</a> 進行授權。只要遵守下方條款，你就可以自由地使用、修改及二次創作這些材料：</p>
+<ul>
+<li>分享 —— 你可以複製並以任何媒介或格式重新發布這些材料。</li>
+<li>修改 —— 你可以對材料進行混合、轉換，並基於其創作衍生作品。</li>
+</ul>
+<p>同時，你必須遵守以下條款：</p>
+<ul>
+<li><strong>如果用於網路</strong> —— 如果將材料用於帖子、部落格等網路內容，請務必保留圖片中已包含的原創作者+本儲存庫地址資訊。</li>
+<li><strong>如果用於論文、書籍等出版物</strong> —— 如果將材料用於論文、書籍等正式出版物，請按照本儲存庫規定的<a href="citation.html">引用格式</a>在參考文獻中註明出處；在這種情況下，圖片中原有的原創作者資訊可以刪除。</li>
+<li><strong>非商業性使用</strong> —— 你不得將這些材料用於任何直接的商業用途.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="引用格式"><a class="header" href="#引用格式">引用格式</a></h1>
+<h2 id="引用格式-1"><a class="header" href="#引用格式-1">引用格式</a></h2>
+<ul>
+<li>如果你在論文、著作或報告中使用了本儲存庫/本書中的圖片等內容，請按以下格式引用：</li>
+</ul>
+<h2 id="-用於參考文獻"><a class="header" href="#-用於參考文獻">📌 用於參考文獻</a></h2>
+<ul>
+<li>中文引用格式（推薦）：</li>
+</ul>
+<pre><code>餘昌葉. 大模型演算法：強化學習、微調與對齊[M]. 北京: 電子工業出版社, 2025. https://github.com/changyeyu/LLM-RL-Visualized
+</code></pre>
+<ul>
+<li>英文(English)引用格式：</li>
+</ul>
+<pre><code>Yu, Changye. Large Model Algorithms: Reinforcement Learning, Fine-Tuning, and Alignment. 
+Beijing: Publishing House of Electronics Industry, 2025. https://github.com/changyeyu/LLM-RL-Visualized
+</code></pre>
+<h2 id="-bibtex-引用格式"><a class="header" href="#-bibtex-引用格式">📌 BibTeX 引用格式</a></h2>
+<p>中文 BibTeX（推薦）：</p>
+<pre><code class="language-bibtex">@book{yu2025largemodel,
+  title     = {大模型演算法：強化學習、微調與對齊},
+  author    = {餘昌葉},
+  publisher = {電子工業出版社},
+  year      = {2025},
+  address   = {北京},
+  isbn      = {9787121500725},
+  url       = {https://github.com/changyeyu/LLM-RL-Visualized},
+  language  = {zh}
+}
+</code></pre>
+<p>英文(English) BibTeX：</p>
+<pre><code class="language-bibtex">@book{yu2025largemodel_en,
+  title     = {Large Model Algorithms: Reinforcement Learning, Fine-Tuning, and Alignment},
+  author    = {Yu, Changye},
+  publisher = {Publishing House of Electronics Industry},
+  year      = {2025},
+  address   = {Beijing},
+  isbn      = {9787121500725},
+  url       = {https://github.com/changyeyu/LLM-RL-Visualized},
+  language  = {en}
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="star-增長趨勢"><a class="header" href="#star-增長趨勢">Star 增長趨勢</a></h1>
+<h2 id="-star-增長趨勢-changyeyullm-rl-visualized-"><a class="header" href="#-star-增長趨勢-changyeyullm-rl-visualized-">⭐ Star 增長趨勢（ <a href="https://github.com/changyeyu/LLM-RL-Visualized">changyeyu/LLM-RL-Visualized</a> ）</a></h2>
+<p><a href="https://star-history.com/#changyeyu/LLM-RL-Visualized&amp;Date"><img src="images/star-history.svg" alt="Star History Chart" /></a></p>
+<hr />
+<div align="center">
+以上圖片<strong>更詳細</strong>的解讀可參考：<a href="https://book.douban.com/subject/37331056/">《大型模型演算法：強化學習、微調與對齊》</a>
+<p>歡迎點選儲存庫上方的 <strong>Star ⭐</strong> 關注， 感謝鼓勵✨</p>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

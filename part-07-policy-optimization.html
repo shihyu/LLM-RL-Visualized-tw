@@ -1,0 +1,412 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第7部分：策略最佳化架構及衍生演算法 - 圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">圖解大型模型演算法：LLM / RL / VLM 核心技術圖譜</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/changyeyu/LLM-RL-Visualized" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第7部分策略最佳化架構及衍生演算法"><a class="header" href="#第7部分策略最佳化架構及衍生演算法">第7部分：策略最佳化架構及衍生演算法</a></h1>
+<h2 id="策略最佳化架構演算法及其衍生actor-critic架構"><a class="header" href="#策略最佳化架構演算法及其衍生actor-critic架構">【策略最佳化架構演算法及其衍生】Actor-Critic架構</a></h2>
+<ul>
+<li><strong>Actor-Critic</strong>架構（AC架構），即演員-評委架構，是一種應用極為<strong>廣泛</strong>的強化學習架構。知名的PPO、DPG、DDPG、TD3等演算法均基於Actor-Critic架構。</li>
+<li>（1）<strong>Actor（演員）</strong>：對應於<strong>策略模型</strong>π，負責選擇動作，直接輸出策略π(a | s)，即在給定狀態s下選擇動作a的機率分佈。</li>
+<li>（2）<strong>Critic（評委）</strong>：對應於<strong>價值模型</strong>Q，評估Actor執行的動作的好壞，這可以協助Actor逐步最佳化策略模型的引數。</li>
+<li>該架構有效<strong>融合</strong>了基於策略（Policy-Based）和基於價值（Value-Based）的方法，結合了兩種方法的優勢，透過同時學習策略和價值函式來提升學習效率與穩定性，是一種混合型方法。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91Actor-Critic%E6%9E%B6%E6%9E%84.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91Actor-Critic%E6%9E%B6%E6%9E%84.png" alt="【策略最佳化架構演算法及其衍生】Actor-Critic架構" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生引入基線與優勢advantage函式a的作用"><a class="header" href="#策略最佳化架構演算法及其衍生引入基線與優勢advantage函式a的作用">【策略最佳化架構演算法及其衍生】引入基線與優勢（Advantage）函式A的作用</a></h2>
+<ul>
+<li>基礎版本的Actor-Critic架構存在<strong>高方差</strong>等問題。為了解決這些問題，A2C（Advantage Actor-Critic）方法在Actor-Critic的基礎上引入<strong>基線</strong>（Baseline），並進一步構造了<strong>優勢函式</strong>（Advantage Function）。</li>
+<li>（1）引入<strong>基線</strong>：基線通常採用狀態價值函式V(s)，即在狀態s下的預期回報。將基線設為V(s)，相當於在每個狀態s下設定了一個<strong>平均水平</strong>。</li>
+<li>（2）構造<strong>優勢函式</strong>：優勢函式衡量在給定狀態下，採取某一動作相對於“平均水平”的優劣，即某個動作a相對於特定狀態下其他動作的<strong>相對</strong>優勢。優勢函式關注的是執行某個動作的相對優勢，而非動作的絕對價值。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E5%BC%95%E5%85%A5%E5%9F%BA%E7%BA%BF%E4%B8%8E%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0A%E7%9A%84%E4%BD%9C%E7%94%A8.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E5%BC%95%E5%85%A5%E5%9F%BA%E7%BA%BF%E4%B8%8E%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0A%E7%9A%84%E4%BD%9C%E7%94%A8.png" alt="【策略最佳化架構演算法及其衍生】引入基線與優勢函式A的作用" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生gae廣義優勢估計generalized-advantage-estimation演算法"><a class="header" href="#策略最佳化架構演算法及其衍生gae廣義優勢估計generalized-advantage-estimation演算法">【策略最佳化架構演算法及其衍生】GAE（廣義優勢估計,Generalized Advantage Estimation）演算法</a></h2>
+<ul>
+<li><strong>GAE</strong>（Generalized Advantage Estimation, <strong>廣義優勢估計</strong>）演算法由<strong>RL巨佬John Schulman</strong>等發表。該演算法是<strong>PPO</strong>等演算法的關鍵組成部分。</li>
+<li>GAE演算法<strong>借鑑</strong>了TD(λ)演算法的思路，（TD(λ)如《大型模型演算法》5.3.3節所述）。TD(λ)演算法透過調節λ因子在偏差和方差之間取得平衡，GAE演算法也使用λ因子以達到類似的目的。</li>
+<li>GAE演算法計算時，通常採用<strong>遞迴</strong>求解的方式進行。</li>
+<li>GAE演算法的虛擬碼如下。演算法 6.1 GAE 演算法核心實現</li>
+</ul>
+<pre><code class="language-python">import numpy as np
+
+def compute_gae(rewards, values, gamma=0.99, lambda_=0.95):
+    """
+    引數:
+        rewards (list 或 np.ndarray): 每個時間步收集到的獎勵 r，形狀為 (T,)
+        values  (list 或 np.ndarray): 每個狀態的價值估計 V，形狀為 (T+1,)
+        gamma   (float): 折扣因子 γ
+        lambda_ (float): GAE 的衰減引數 λ
+    返回:
+        np.ndarray: 優勢估計 A，形狀為 (T,)。例如對於 T=5，A=[A0, A1, A2, A3, A4]
+    """
+    T = len(rewards)            # 時間步數 T，終止時間步為 t=T-1
+    advantages = np.zeros(T)    # 優勢估計陣列，例如 [A0, A1, A2, A3, A4]
+    gae = 0                     # 初始化 GAE 累計值為 0
+
+    # 反向從時間步 t=T-1 到 t=0 進行迭代計算，總共迭代 T 次
+    for t in reversed(range(T)):
+        # δ_t = r_t + γ * V(s_{t+1}) - V(s_t)
+        delta = rewards[t] + gamma * values[t + 1] - values[t]
+        # A_t = δ_t + γ * λ * A_{t+1}
+        gae = delta + gamma * lambda_ * gae
+        advantages[t] = gae
+
+    return advantages
+</code></pre>
+<p><a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GAE%EF%BC%88%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF%E4%BC%B0%E8%AE%A1%EF%BC%89%E7%AE%97%E6%B3%95.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GAE%EF%BC%88%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF%E4%BC%B0%E8%AE%A1%EF%BC%89%E7%AE%97%E6%B3%95.png" alt="【策略最佳化架構演算法及其衍生】GAE（廣義優勢估計）演算法" /></a></p>
+<h2 id="策略最佳化架構演算法及其衍生ppoproximal-policy-optimization演算法的演進"><a class="header" href="#策略最佳化架構演算法及其衍生ppoproximal-policy-optimization演算法的演進">【策略最佳化架構演算法及其衍生】PPO（Proximal Policy Optimization）演算法的演進</a></h2>
+<ul>
+<li><strong>PPO</strong>（Proximal Policy Optimization，近端策略最佳化），有多種<strong>變體</strong>，例如PPO-Penalty和PPO-Clip，這些演算法繼承了部分<strong>TRPO</strong>演算法的思想。</li>
+<li><strong>PPO-Clip</strong>因其更優的效果而獲得了更多關注和應用，因此<strong>通常</strong>所說的PPO即指<strong>PPO-Clip</strong>。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E7%AE%97%E6%B3%95%E7%9A%84%E6%BC%94%E8%BF%9B.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E7%AE%97%E6%B3%95%E7%9A%84%E6%BC%94%E8%BF%9B.png" alt="【策略最佳化架構演算法及其衍生】PPO演算法的演進" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生trpotrust-region-policy-optimization及其置信域"><a class="header" href="#策略最佳化架構演算法及其衍生trpotrust-region-policy-optimization及其置信域">【策略最佳化架構演算法及其衍生】TRPO（Trust Region Policy Optimization）及其置信域</a></h2>
+<ul>
+<li><strong>TRPO</strong>（Trust Region Policy Optimization，置信域策略最佳化），可以說是<strong>PPO的前身</strong>。</li>
+<li>該演算法是對策略梯度演算法的改進，基於<strong>兩個核心</strong>概念：置信域和重要性取樣（Importance Sampling）。雖然這兩個概念並非在TRPO中首次提出，但TRPO將它們與策略梯度演算法相結合，顯著提升了演算法的效果。</li>
+<li>TRPO的核心<strong>思想</strong>是在最大化目標函式J(θ)的同時，限制新舊策略之間的差異。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91TRPO%E5%8F%8A%E5%85%B6%E7%BD%AE%E4%BF%A1%E5%9F%9F.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91TRPO%E5%8F%8A%E5%85%B6%E7%BD%AE%E4%BF%A1%E5%9F%9F.png" alt="【策略最佳化架構演算法及其衍生】TRPO及其置信域" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生重要性取樣importance-sampling"><a class="header" href="#策略最佳化架構演算法及其衍生重要性取樣importance-sampling">【策略最佳化架構演算法及其衍生】重要性取樣（Importance sampling）</a></h2>
+<ul>
+<li>重要性取樣在諸如TRPO和PPO等強化學習演算法中具有關鍵作用，其主要功能是<strong>修正</strong>新舊策略之間的分佈差異，使得可以利用舊策略所採集的資料來最佳化新策略。</li>
+<li><strong>重要性取樣</strong>（Importance Sampling）是一種基於<strong>蒙特卡洛</strong>取樣思想的方法，經常被用於估計期望值和積分。該方法基於輔助分佈進行取樣，並透過重要性權重對估計值進行修正，從而提高取樣和估計的效率。</li>
+<li>重要性取樣需滿足該<strong>條件</strong>：如果在某個x上p(x)的機率值大於0，那麼p'(x)在同一個位置的機率也必須大於0（p'(x)不能為零，意味著該位置在p'(x)中也有可能性）。這是<strong>因為</strong>如果在p(x)非零的地方p'(x)= 0，那麼在這些x上的貢獻就無法透過p'(x)來取樣計算，一些x的取值會在積分中丟失。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7.png" alt="【策略最佳化架構演算法及其衍生】重要性取樣" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生ppo-clip"><a class="header" href="#策略最佳化架構演算法及其衍生ppo-clip">【策略最佳化架構演算法及其衍生】PPO-Clip</a></h2>
+<ul>
+<li>通常所說的PPO即指PPO-Clip（近端策略最佳化-剪裁）。</li>
+<li>PO-Clip的<strong>目標</strong>是最大化未來回報的期望，具體來說，透過最大化目標函式J(θ)來最佳化策略，PPO-Clip的目標函式如下圖。</li>
+<li>clip與min操作的<strong>意義</strong>：意義如下圖的曲線圖，為清晰起見，對式中的部分項用兩種縮放係數進行替換，可以分別稱為“線性”縮放係數和“剪裁”縮放<strong>係數</strong>。</li>
+</ul>
+<p><a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO-Clip.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO-Clip.png" alt="【策略最佳化架構演算法及其衍生】PPO-Clip" /></a></p>
+<h2 id="策略最佳化架構演算法及其衍生ppo訓練中策略模型的更新過程"><a class="header" href="#策略最佳化架構演算法及其衍生ppo訓練中策略模型的更新過程">【策略最佳化架構演算法及其衍生】PPO訓練中策略模型的更新過程</a></h2>
+<ul>
+<li>如圖簡要展示了通用場景下PPO的訓練流程及策略模型（Actor）引數θ的更新過程，其中價值模型（Critic）未在圖中展示。PPO的訓練流程主要包括以下<strong>兩個階段</strong>：</li>
+<li>（1）<strong>樣本收集</strong>：基於舊策略收集樣本，生成多條軌跡（經驗），並存入<strong>回放緩衝區</strong>，供後續訓練使用。</li>
+<li>（2）<strong>多輪PPO訓練</strong>：將回放緩衝區中的所有樣本隨機打散，並劃分為多個<strong>小批次</strong>（mini-batches），以便進行小批次訓練。針對每個小批次（圖中的“批次 1”、“批次 2”），分別進行一次訓練與引數更新，總計完成mini_batch次訓練。如果設定的ppo_epochs &gt; 1，則重複利用回放緩衝區中的所有樣本，再次隨機打散並切分為小批次，重複上述訓練過程ppo_epochs輪（圖中的“第 1 輪”、“第 2 輪”）。透過對這一大批次樣本的多輪訓練，顯著提升了樣本的重複利用率。在第二階段中，總計完成ppo_epochs×mini_batch次訓練與引數更新。</li>
+<li>以上兩個階段不斷<strong>迴圈</strong>執行，每一次迴圈稱為一個迭代（iteration）。經過多次迭代，直至完成所有PPO訓練任務。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E7%AD%96%E7%95%A5%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91PPO%E8%AE%AD%E7%BB%83%E4%B8%AD%E7%AD%96%E7%95%A5%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B.png" alt="【策略最佳化架構演算法及其衍生】PPO訓練中策略模型的更新過程" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生ppo的虛擬碼"><a class="header" href="#策略最佳化架構演算法及其衍生ppo的虛擬碼">【策略最佳化架構演算法及其衍生】PPO的虛擬碼</a></h2>
+<pre><code class="language-python">### 簡寫 R:rewards, V:values, Adv:advantages, J:objective, P:probability
+for iteration in range(num_iterations):  # 進行num_iterations個訓練迭代
+    #【1/2】收集樣本(prompt, response_old, logP_old, Adv, V_target)
+    prompt_batch, response_old_batch = [], []
+    logP_old_batch, Adv_batch, V_target_batch = [], [], []
+    for _ in range(num_examples):
+        logP_old, response_old  = actor_model(prompt)
+        V_old    = critic_model(prompt, response_old)
+        R        = reward_model(prompt, response_old)[-1]
+        logP_ref = ref_model(prompt, response_old)
+        
+        # KL距離懲罰。注意：上面的R只取了最後一個token對應的獎勵分數
+        KL = logP_old - logP_ref
+        R_with_KL = R - scale_factor * KL
+
+        # 透過GAE演算法計算優勢Adv
+        Adv = GAE_Advantage(R_with_KL, V_old, gamma, λ)
+        V_target = Adv + V_old
+
+        prompt_batch        += prompt
+        response_old_batch  += response_old
+        logP_old_batch      += logP_old
+        Adv_batch           += Adv
+        V_target_batch      += V_target
+
+    # 【2/2】多輪PPO訓練，多次引數更新
+    for _ in range(ppo_epochs):
+        mini_batches = shuffle_split( (prompt_batch, response_old_batch, 
+            logP_old_batch, Adv_batch, V_target_batch), mini_batch_size )
+        
+        for prompt, response_old, logP_old, Adv, V_target in mini_batches:
+            logits, logP_new = actor_model(prompt, response_old)
+            V_new            = critic_model(prompt, response_old)
+
+            # 策略機率比: ratio(θ) = π_θ(a|s) / π_θ_old (a|s)
+            ratios = exp(logP_new - logP_old)
+
+            # 計算策略模型Loss
+            L_clip = -mean( min( ratios * Adv,
+                                clip(ratios, 1 - ε, 1 + ε) * Adv ) )
+            
+            S_entropy = mean( compute_entropy(logits) )  # 計算策略的熵
+
+            Loss_V = mean((V_new - V_target) ** 2)   # 計算價值模型Loss
+
+            Loss = L_clip + C1 * Loss_V - C2 * S_entropy # 總損失
+            backward_update(Loss, L_clip, Loss_V) # 反向傳播; 更新模型引數
+</code></pre>
+<h2 id="策略最佳化架構演算法及其衍生ppo與grpogroup-relative-policy-optimization-72"><a class="header" href="#策略最佳化架構演算法及其衍生ppo與grpogroup-relative-policy-optimization-72">【策略最佳化架構演算法及其衍生】PPO與GRPO（Group Relative Policy Optimization） <sup>[<a href="references.html">72</a>]</sup></a></h2>
+<ul>
+<li><strong>GRPO</strong>（Group Relative Policy Optimization, 群體相對策略最佳化）是一種基於策略的強化學習演算法，由<strong>DeepSeek</strong>團隊提出，並已在DeepSeek、Qwen等模型的訓練中得到應用。</li>
+<li>傳統的PPO方法除了訓練策略模型外，還需額外構建一個規模相近的價值網路，這會顯著增加計算和視訊記憶體的<strong>開銷</strong>。</li>
+<li>如圖所示，GRPO<strong>摒棄</strong>了單獨的價值網路，並透過多項改進，在保留PPO核心思想的基礎上，顯著降低了訓練所需資源，同時確保了策略更新的高效性和穩定性。</li>
+<li>GRPO的<strong>核心思想</strong>在於利用群體相對優勢估計來取代傳統的價值模型。具體來說，GRPO透過取樣一組候選輸出，並將這些輸出的平均獎勵作為基線，來計算各個輸出的優勢值。這種方法不僅避免了對額外價值模型的依賴，同時也充分發揮了獎勵模型的比較特性，從而提高了訓練的效率和穩定性。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GRPO%26PPO.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91GRPO%26PPO.png" alt="【策略最佳化架構演算法及其衍生】GRPO&amp;PPO" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生確定性策略vs隨機性策略deterministic-policy-vs-stochastic-policy"><a class="header" href="#策略最佳化架構演算法及其衍生確定性策略vs隨機性策略deterministic-policy-vs-stochastic-policy">【策略最佳化架構演算法及其衍生】確定性策略vs隨機性策略（Deterministic policy vs. Stochastic policy）</a></h2>
+<ul>
+<li>強化學習的策略型別可以<strong>分為</strong>：確定性策略（Deterministic Policy）和隨機性策略（Stochastic Policy）。</li>
+<li>確定性策略：在每個狀態下，策略都會輸出一個<strong>確定</strong>的動作。</li>
+<li>隨機性策略：在每個狀態下，策略輸出的是動作的<strong>機率分佈</strong>。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5vs%E9%9A%8F%E6%9C%BA%E6%80%A7%E7%AD%96%E7%95%A5.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5vs%E9%9A%8F%E6%9C%BA%E6%80%A7%E7%AD%96%E7%95%A5.png" alt="【策略最佳化架構演算法及其衍生】確定性策略vs隨機性策略" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生確定性策略梯度dpg"><a class="header" href="#策略最佳化架構演算法及其衍生確定性策略梯度dpg">【策略最佳化架構演算法及其衍生】確定性策略梯度（DPG）</a></h2>
+<ul>
+<li><strong>確定性策略梯度</strong>（Deterministic Policy Gradient, <strong>DPG</strong>）演算法由<strong>RL大佬David Silver</strong>在DeepMind期間與其他研究者於2014年發表的論文中系統性闡述，該演算法旨在解決連續動作空間中的強化學習問題。</li>
+<li>DPG採用確定性策略，將狀態直接對映到具體的動作。</li>
+<li>DPG採用了演員-評委（Actor-Critic）架構。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%EF%BC%88DPG%EF%BC%89.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%EF%BC%88DPG%EF%BC%89.png" alt="【策略最佳化架構演算法及其衍生】確定性策略梯度（DPG）" /></a></li>
+</ul>
+<h2 id="策略最佳化架構演算法及其衍生ddpgdeep-deterministic-policy-gradient"><a class="header" href="#策略最佳化架構演算法及其衍生ddpgdeep-deterministic-policy-gradient">【策略最佳化架構演算法及其衍生】DDPG（Deep Deterministic Policy Gradient）</a></h2>
+<ul>
+<li><strong>深度確定性策略梯度</strong>（Deep Deterministic Policy Gradient, <strong>DDPG</strong>）是確定性策略梯度（DPG）演算法的改進版本，<strong>結合</strong>了深度Q網路（DQN）的思想，由DeepMind的研究團隊發表。</li>
+<li>DDPG在訓練過程中需要載入<strong>4個模型</strong>——包括2個策略網路（Actor）和2個評估網路（Critic）。</li>
+<li>知名的<strong>TD3</strong> ：雙延遲深度確定性策略梯度（Twin Delayed Deep Deterministic Policy Gradient, TD3）演算法是對DDPG（Deep Deterministic Policy Gradient）的顯著改進。在TD3的訓練過程中，需要載入<strong>6個模型</strong>——包括2個策略網路（Actor）和4個評估網路（Critic）。這些網路分工明確、相互配合，透過延遲更新目標網路等技巧，有效提升了訓練的穩定性和效能。
+<a href="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91DDPG.png"><img src="images/%E3%80%90%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E6%9E%B6%E6%9E%84%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E3%80%91DDPG.png" alt="【策略最佳化架構演算法及其衍生】DDPG" /></a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="part-06-rl-basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="part-08-rlhf-rlaif.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="part-06-rl-basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="part-08-rlhf-rlaif.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
